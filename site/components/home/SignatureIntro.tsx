@@ -99,7 +99,7 @@ function SignatureSvg() {
       viewBox="0 0 320 154"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`svg-sign -top-1/10 -right-1/6 absolute w-3/5 pointer-events-none${
+      className={`svg-sign absolute pointer-events-none -top-[6%] right-0 w-1/2 sm:-top-1/10 sm:-right-1/6 sm:w-3/5${
         drawing ? " is-drawing" : ""
       }`}
       aria-hidden="true"
@@ -140,8 +140,8 @@ export default function SignatureIntro() {
         >
           <span>
             {zh
-              ? "我在探索如何以匠心与品味塑造 AI 时代的工作流，打造下一代数字产品。"
-              : "I explore how to shape AI-era workflows with craft and taste, building the next generation of digital products."}
+              ? "我们拒绝多余的修辞，只谈存在本身。YZS 是年轻灵魂的留白区——一个探索「无我」与「存在」边界的青年视觉品牌。"
+              : 'We reject unnecessary rhetoric and speak only of existence itself. YZS is a blank canvas for young souls — a youth visual brand exploring the boundary between "selflessness" and "being".'}
           </span>
         </p>
         <p
@@ -149,34 +149,18 @@ export default function SignatureIntro() {
           style={{ fontFamily: "'tiktok', sans-serif" }}
         >
           <span>
-            {zh ? "我正在打造 " : "I’m building "}
+            {zh
+              ? "我们生活在一个「过度感知」的时代。情绪被算法放大，色彩被符号化，连「真实」都被包装成消费品。"
+              : 'We live in an era of "over-perception". Emotions are amplified by algorithms, colors are symbolized, and even "authenticity" is packaged as a commodity. '}
             <a
               target="_blank"
               rel="noopener noreferrer"
               className={INTRO_LINK_CLASS}
-              href="https://reunimos.cc"
+              href="https://caliyang.dpdns.org"
             >
-              reunimos™
+              YZS
             </a>
-            {zh ? "，此前曾参与阿里巴巴 " : ", and previously worked on Alibaba "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              className={INTRO_LINK_CLASS}
-              href="https://www.alipan.com/"
-            >
-              {zh ? "阿里云盘" : "aDrive"}
-            </a>
-            {zh ? "、" : ", "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              className={INTRO_LINK_CLASS}
-              href="https://www.teambition.com/"
-            >
-              Teambition
-            </a>
-            {zh ? " 与 100offer 的设计工作。" : ", and 100offer."}
+            {zh ? " 不提供答案，只提供空白。" : " offers no answers — only blank space."}
           </span>
         </p>
       </div>

@@ -180,8 +180,8 @@ export default function Header() {
         past ? "text-white" : "text-l1"
       }`}
     >
-      {/* 顶行 */}
-      <div className="flex justify-between items-center px-4 lg:px-14 py-4 lg:py-7 text-base">
+      {/* 顶行（移动端加半透明底 + 模糊：固定 logo 不再与滚动正文/图片互叠） */}
+      <div className="flex justify-between items-center px-4 lg:px-14 py-4 lg:py-7 text-base max-lg:bg-b1/70 max-lg:backdrop-blur-md">
         <TransitionLink
           href="/"
           className={`${dotted} p-2 font-sans font-bold uppercase pointer-events-auto ${ARROW_FULLSCREEN_DOM_COLOR_TRANSITION} `}
@@ -265,8 +265,8 @@ export default function Header() {
         )}
       </div>
 
-      {/* 底行 */}
-      <div className="flex justify-between px-4 lg:px-14 py-4 lg:py-7">
+      {/* 底行（移动端隐藏时钟/坐标 HUD：无背景的固定文字会压住滚动正文） */}
+      <div className="flex justify-between px-4 lg:px-14 py-4 lg:py-7 max-lg:hidden">
         {isHome && nearBottom ? (
           <AsciiScramble
             key="footer-credit"

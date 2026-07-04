@@ -203,6 +203,7 @@ export const YZS_WORKS: YzsWork[] = [
   },
   {
     slug: "yzs-merch",
+    // NBSP 连接 Merch Series，防止移动端在英文词组中间断行
     title: "YZS® 周边系列 / Merch Series",
     date: "2026",
     description: "周边设计 / 品牌延伸",

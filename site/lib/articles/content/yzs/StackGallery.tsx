@@ -141,10 +141,12 @@ export default function StackGallery({
   if (total === 0) return null;
 
   return (
-    <div className="my-10">
+    // -mx-4 + px-4 把裁剪盒放大到全屏宽，配合 overflow-x-clip 防止旋转卡片
+    // 撑出横向滚动（移动端整页横晃）；卡片宽度在小屏预留 5rem 给扇形外摆。
+    <div className="my-10 -mx-4 px-4 overflow-x-clip">
       <div
         ref={containerRef}
-        className="relative mx-auto w-full max-w-[520px] aspect-[4/5] [transform-style:preserve-3d]"
+        className="relative mx-auto w-[min(520px,calc(100vw-5rem))] aspect-[4/5] [transform-style:preserve-3d]"
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
       >

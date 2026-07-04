@@ -31,39 +31,43 @@ export default function HomeFooter() {
   const footerRef = useWebGLSectionRef("footer");
   const { lang } = useLanguage();
   const zh = lang === "zh";
+  // CJK 全字面字形在 leading-none 下相邻行墨迹盒几乎相触，中文稍加行距
+  const rowClass = zh
+    ? `${FOOTER_ROW_CLASS} !leading-[1.12]`
+    : FOOTER_ROW_CLASS;
   return (
     <footer
       id="contact"
       ref={footerRef}
       className="z-10 relative flex flex-col justify-center p-6 lg:p-16 w-full h-dvh lg:h-screen pointer-events-none"
     >
-      <div className={FOOTER_ROW_CLASS} style={WDTH_120}>
+      <div className={rowClass} style={WDTH_120}>
         <AsciiScramble
           key={`f1a-${lang}`}
-          text={zh ? "让我们" : "Let's"}
+          text={zh ? "感知" : "Perception"}
           startDelayMs={300}
           className="col-span-6 md:col-span-5 xl:col-span-4 md:col-start-2 xl:col-start-3 text-left pointer-events-auto"
         />
         <AsciiScramble
           key={`f1b-${lang}`}
-          text={zh ? "一起" : "Create"}
+          text={zh ? "归零" : "Reset"}
           startDelayMs={300}
           reverse
           className="col-span-6 md:col-span-5 xl:col-span-4 text-right pointer-events-auto"
         />
       </div>
-      <div className={FOOTER_ROW_CLASS} style={WDTH_120}>
+      <div className={rowClass} style={WDTH_120}>
         <AsciiScramble
           key={`f2-${lang}`}
-          text={zh ? "创造" : "Something"}
+          text={zh ? "一切" : "Everything"}
           startDelayMs={300}
           className="col-span-12 md:col-start-2 xl:col-start-3 text-left pointer-events-auto"
         />
       </div>
-      <div className={FOOTER_ROW_CLASS} style={WDTH_120}>
+      <div className={rowClass} style={WDTH_120}>
         <AsciiScramble
           key={`f3-${lang}`}
-          text={zh ? "非凡之作" : "Extraordinary"}
+          text={zh ? "重新开始" : "Begins Anew"}
           startDelayMs={300}
           reverse
           className="col-span-12 md:col-end-12 xl:col-end-11 text-right pointer-events-auto"

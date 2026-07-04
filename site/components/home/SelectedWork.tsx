@@ -70,8 +70,10 @@ function WorkCard({ item }: { item: WorkItem }) {
           </span>
         )}
       </WebGLImageSlot>
-      <div className="flex justify-between items-center gap-3 min-w-0 text-xs lg:text-sm uppercase">
-        <span className="flex-1 min-w-0 truncate">{displayName}</span>
+      <div className="flex justify-between items-start gap-3 min-w-0 text-xs lg:text-sm uppercase">
+        <span className="flex-1 min-w-0 lg:truncate max-lg:line-clamp-2">
+          {displayName}
+        </span>
         <div className="flex items-center gap-2 sm:gap-3 font-mono-2 tabular-nums whitespace-nowrap shrink-0">
           <span>{item.year}</span>
           {item.type !== "post" && (

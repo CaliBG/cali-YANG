@@ -15,8 +15,9 @@ import "./globals.css";
 
 // 静态导出到子路径时 Next 不会给 metadata icon 自动加 basePath，手动加。
 export const metadata: Metadata = {
-  title: "ZISHUO©2026",
-  description: "Digital Product Designer & Builder © 2026",
+  title: "YZS©2026 — Yet Zero Sense",
+  description:
+    "YZS — Yet Zero Sense | 杨子硕 Zishuo Yang · 感知归零，一切重新开始 · Perception reset, everything begins anew © 2026",
   icons: {
     icon: [{ url: asset("/icon.svg"), sizes: "any", type: "image/svg+xml" }],
     apple: [

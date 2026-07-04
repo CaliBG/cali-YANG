@@ -22,6 +22,17 @@ export interface WorkItem {
 
 const WORK_ITEMS_RAW: WorkItem[] = [
   {
+    name: "YZS® Merch Series",
+    nameZh: "YZS® 周边系列",
+    imageUrl: "/work/yzs_w06.jpg",
+    hoverImageUrl: "/work/yzs_w06_h.jpg",
+    href: "/yzs-merch",
+    year: "2026",
+    type: "post",
+    gridClass:
+      "col-span-12 lg:col-start-2 lg:col-span-5 xl:col-start-2 xl:col-span-4",
+  },
+  {
     name: "43+1 — Force & Balance",
     nameZh: "43+1 — 力量与平衡",
     imageUrl: "/work/yzs_w01.jpg",
@@ -29,9 +40,8 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/force-balance",
     year: "2025",
     type: "post",
-    // 竖图：中幅错落对排（与 #02 同排左右呼应），避免原 8 列全宽过大
     gridClass:
-      "col-span-12 lg:col-start-2 lg:col-span-5 xl:col-start-2 xl:col-span-4",
+      "col-span-12 lg:col-start-8 lg:col-span-5 xl:col-start-8 xl:col-span-4",
   },
   {
     name: "Memory of the Flesh",
@@ -41,9 +51,7 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/memory-of-the-flesh",
     year: "2025",
     type: "post",
-    // 竖图：与 #01 同排右侧，略低错位由行内自然高差形成
-    gridClass:
-      "col-span-12 lg:col-start-8 lg:col-span-5 xl:col-start-8 xl:col-span-4",
+    gridClass: "col-span-12 lg:col-start-1 lg:col-span-6 xl:col-span-5",
   },
   {
     name: "Pain",
@@ -53,7 +61,8 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/pain",
     year: "2025",
     type: "post",
-    gridClass: "col-span-12 lg:col-start-1 lg:col-span-6 xl:col-span-5",
+    gridClass:
+      "col-span-12 lg:col-span-6 xl:col-span-5 lg:col-start-7 xl:col-start-7",
   },
   {
     name: "Deep Sea Breathing",
@@ -64,7 +73,7 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     year: "2025",
     type: "post",
     gridClass:
-      "col-span-12 lg:col-span-6 xl:col-span-5 lg:col-start-7 xl:col-start-7",
+      "col-span-6 lg:col-start-5 lg:col-span-4 xl:col-start-6 xl:col-span-3",
   },
   {
     name: "Imprint — Flowing Traces",
@@ -72,17 +81,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     imageUrl: "/work/yzs_w05.jpg", // 无 hover 图（源站仅一张）
     href: "/imprint-flowing-traces",
     year: "2025",
-    type: "post",
-    gridClass:
-      "col-span-6 lg:col-start-5 lg:col-span-4 xl:col-start-6 xl:col-span-3",
-  },
-  {
-    name: "YZS® Merch Series",
-    nameZh: "YZS® 周边系列",
-    imageUrl: "/work/yzs_w06.jpg",
-    hoverImageUrl: "/work/yzs_w06_h.jpg",
-    href: "/yzs-merch",
-    year: "2026",
     type: "post",
     gridClass:
       "col-span-6 lg:col-start-9 lg:col-span-4 xl:col-start-10 xl:col-span-3",
@@ -105,8 +103,9 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/indigo-lion",
     year: "2025",
     type: "post",
+    // 移动端全宽收尾（避免末位半宽孤卡 + 右列空置）
     gridClass:
-      "col-span-6 lg:col-start-5 lg:col-span-4 xl:col-start-5 xl:col-span-3",
+      "col-span-12 lg:col-start-5 lg:col-span-4 xl:col-start-5 xl:col-span-3",
   },
 ];
 

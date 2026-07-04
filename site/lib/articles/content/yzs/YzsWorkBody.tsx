@@ -30,8 +30,10 @@ function VideoFigure({
   src: string;
   caption?: string;
 }) {
-  // 竖屏检测：元数据加载后按 videoWidth/videoHeight 判定
-  const [portrait, setPortrait] = useState(false);
+  // 元数据加载后记录真实宽高比：竖屏限高居中，且用 aspect-ratio 同步收紧
+  // 宽度（避免 object-fit 产生上下 letterbox 灰边）。
+  const [ratio, setRatio] = useState<{ w: number; h: number } | null>(null);
+  const portrait = ratio ? ratio.h > ratio.w : false;
 
   return (
     <figure className="my-0 flex min-w-0 flex-col">
@@ -41,16 +43,20 @@ function VideoFigure({
         playsInline
         preload="metadata"
         onLoadedMetadata={(e) =>
-          setPortrait(e.currentTarget.videoHeight > e.currentTarget.videoWidth)
+          setRatio({
+            w: e.currentTarget.videoWidth,
+            h: e.currentTarget.videoHeight,
+          })
         }
+        style={ratio ? { aspectRatio: `${ratio.w} / ${ratio.h}` } : undefined}
         className={
           portrait
-            ? "mx-auto h-[min(64svh,600px)] w-auto max-w-full rounded-xl bg-line"
+            ? "mx-auto max-h-[min(64svh,600px)] w-auto max-w-full rounded-xl"
             : "w-full rounded-lg"
         }
       />
       {caption && (
-        <figcaption className="mx-auto mt-3 max-w-prose text-l3 text-sm leading-relaxed">
+        <figcaption className="mx-auto mt-3 max-w-prose text-l2 text-sm leading-relaxed">
           {caption}
         </figcaption>
       )}
@@ -88,12 +94,12 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
         )}
       </div>
 
-      {/* 金句 */}
+      {/* 金句（移动端 22px 保持 pull-quote 层级；NBSP 防破折号折行成孤行） */}
       <blockquote
-        className="my-10 py-2 border-l-2 border-(--label-1) pl-5 text-l1 text-lg lg:text-2xl leading-relaxed whitespace-pre-line"
+        className="my-10 py-2 border-l-2 border-(--label-1) pl-5 text-l1 text-[22px] lg:text-2xl leading-normal lg:leading-relaxed whitespace-pre-line"
         style={{ fontFamily: "'tiktok', sans-serif" }}
       >
-        {pick(work.quote)}
+        {pick(work.quote).replace(/ —/g, " —")}
       </blockquote>
 
       {/* 图片：多图走源站同款叠放画廊；单图平铺（可 lightbox 放大） */}
@@ -109,7 +115,7 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
       {/* 视频（多条时桌面端并排两列；竖屏限高居中） */}
       {work.videos && work.videos.length > 0 && (
         <div
-          className={`my-8 grid items-start gap-6 ${
+          className={`my-8 grid items-start gap-10 lg:gap-6 ${
             work.videos.length > 1 ? "lg:grid-cols-2" : ""
           }`}
         >
