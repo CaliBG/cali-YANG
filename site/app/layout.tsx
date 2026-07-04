@@ -19,9 +19,16 @@ export const metadata: Metadata = {
   description:
     "YZS — Yet Zero Sense | 杨子硕 Zishuo Yang · 感知归零，一切重新开始 · Perception reset, everything begins anew © 2026",
   icons: {
-    icon: [{ url: asset("/icon.svg"), sizes: "any", type: "image/svg+xml" }],
+    // ?v=2：favicon 有独立且顽固的浏览器缓存，换图必须换 URL 才能强制刷新
+    icon: [
+      { url: asset("/icon.svg?v=2"), sizes: "any", type: "image/svg+xml" },
+    ],
     apple: [
-      { url: asset("/apple-icon.png"), sizes: "512x512", type: "image/png" },
+      {
+        url: asset("/apple-icon.png?v=2"),
+        sizes: "512x512",
+        type: "image/png",
+      },
     ],
   },
 };
