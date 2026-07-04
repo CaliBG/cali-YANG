@@ -1,76 +1,33 @@
-// 作品详情页数据注册表（docs/14-detail-pages.md §2.2 各页元数据）
-// 单一动态路由 app/(mdx)/[slug]/page.tsx 消费；/2026 由 app/2026 独立处理（passcode）。
+// 作品详情页数据注册表 —— 站主杨子硕的 8 个作品
+// 单一动态路由 app/(mdx)/[slug]/page.tsx 消费；正文由 YzsWorkBody 通用渲染器
+// 按 works-data.ts 数据渲染（双语，跟随 Header LANG 切换）。
+// 原 haoqi 站 6 篇文章（reunimos 等）已从注册表移除（内容文件保留在 content/ 未引用）。
 
-import type { ComponentType } from "react";
-import ReunimosBody from "./content/reunimos";
-import InspireMonoBody from "./content/inspire-mono";
-import WasmDesignUtilsBody from "./content/wasm-design-utils";
-import AdriveBody from "./content/adrive";
-import ShoreIconBody from "./content/shore-icon";
-import TeambitionBody from "./content/teambition";
+import { createElement, type ComponentType } from "react";
+import YzsWorkBody from "./content/yzs/YzsWorkBody";
+import { YZS_WORKS } from "./content/yzs/works-data";
 
 export interface ArticleDefinition {
   slug: string;
   /** <title> 与标题区 H1 */
   title: string;
-  /** 标题区日期行，如 "May 31, 2026" */
+  /** 标题区日期行 */
   date: string;
-  /** 分割线下方描述/年份行（adrive 无） */
+  /** 分割线下方描述行 */
   description?: string;
-  /** ArticleFooter Last Updated（6 页均与 date 同值，疑点 2） */
+  /** ArticleFooter Last Updated */
   updated: string;
   Body: ComponentType;
 }
 
-export const ARTICLES: ArticleDefinition[] = [
-  {
-    slug: "reunimos",
-    title: "Reunimos™",
-    date: "May 31, 2026",
-    description: "2024-2026",
-    updated: "May 31, 2026",
-    Body: ReunimosBody,
-  },
-  {
-    slug: "inspire_mono",
-    title: "Inspire Mono",
-    date: "May 07, 2026",
-    description: "2025",
-    updated: "May 07, 2026",
-    Body: InspireMonoBody,
-  },
-  {
-    slug: "wasm_design_utils",
-    title: "Wasm design utils",
-    date: "May 31, 2026",
-    description: "2025",
-    updated: "May 31, 2026",
-    Body: WasmDesignUtilsBody,
-  },
-  {
-    slug: "adrive",
-    title: "aDrive 阿里云盘",
-    date: "Jan 07, 2022",
-    updated: "Jan 07, 2022",
-    Body: AdriveBody,
-  },
-  {
-    slug: "shore_icon",
-    title: "Shore Icon",
-    date: "Mar 01, 2022",
-    description: "2022",
-    updated: "Mar 01, 2022",
-    Body: ShoreIconBody,
-  },
-  {
-    slug: "teambition",
-    title: "Teambition",
-    date: "May 31, 2026",
-    description: "2018-2020",
-    updated: "May 31, 2026",
-    Body: TeambitionBody,
-  },
-];
+export const ARTICLES: ArticleDefinition[] = YZS_WORKS.map((work) => ({
+  slug: work.slug,
+  title: work.title,
+  date: work.date,
+  description: work.description,
+  updated: work.date,
+  Body: () => createElement(YzsWorkBody, { work }),
+}));
 
 export function getArticle(slug: string): ArticleDefinition | undefined {
   return ARTICLES.find((a) => a.slug === slug);

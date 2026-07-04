@@ -1,7 +1,7 @@
 // WORK_ITEMS 数据 —— 站主杨子硕（Cali Yang）的作品集
 // 来源：https://caliyang.dpdns.org（YZS — Yet Zero Sense）8 个作品
 // 缩略图存于 public/work/yzs_wXX.jpg（主图）/ yzs_wXX_h.jpg（hover 图）；
-// 条目外链到作品集站 #work 区（新窗口打开）。
+// 条目内链到站内详情页 /<slug>（走全屏过渡路由）。
 // name 为英文，nameZh 为中文（由 SelectedWork 按语言切换显示）。
 
 import { asset } from "@/lib/asset";
@@ -20,15 +20,13 @@ export interface WorkItem {
   gridClass: string;
 }
 
-const PORTFOLIO_URL = "https://caliyang.dpdns.org/#work";
-
 const WORK_ITEMS_RAW: WorkItem[] = [
   {
     name: "43+1 — Force & Balance",
     nameZh: "43+1 — 力量与平衡",
     imageUrl: "/work/yzs_w01.jpg",
     hoverImageUrl: "/work/yzs_w01_h.jpg",
-    href: PORTFOLIO_URL,
+    href: "/force-balance",
     year: "2025",
     type: "post",
     gridClass: "col-span-12 lg:col-span-8 lg:col-start-3",
@@ -38,7 +36,7 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     nameZh: "皮囊记忆",
     imageUrl: "/work/yzs_w02.jpg",
     hoverImageUrl: "/work/yzs_w02_h.jpg",
-    href: PORTFOLIO_URL,
+    href: "/memory-of-the-flesh",
     year: "2025",
     type: "post",
     gridClass: "col-span-12 lg:col-span-8 lg:col-start-5",
@@ -48,7 +46,7 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     nameZh: "痛",
     imageUrl: "/work/yzs_w03.jpg",
     hoverImageUrl: "/work/yzs_w03_h.jpg",
-    href: PORTFOLIO_URL,
+    href: "/pain",
     year: "2025",
     type: "post",
     gridClass: "col-span-12 lg:col-start-1 lg:col-span-6 xl:col-span-5",
@@ -58,7 +56,7 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     nameZh: "深海呼吸",
     imageUrl: "/work/yzs_w04.jpg",
     hoverImageUrl: "/work/yzs_w04_h.jpg",
-    href: PORTFOLIO_URL,
+    href: "/deep-sea-breathing",
     year: "2025",
     type: "post",
     gridClass:
@@ -68,7 +66,7 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     name: "Imprint — Flowing Traces",
     nameZh: "拓印-流动的痕",
     imageUrl: "/work/yzs_w05.jpg", // 无 hover 图（源站仅一张）
-    href: PORTFOLIO_URL,
+    href: "/imprint-flowing-traces",
     year: "2025",
     type: "post",
     gridClass:
@@ -79,7 +77,7 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     nameZh: "YZS® 周边系列",
     imageUrl: "/work/yzs_w06.jpg",
     hoverImageUrl: "/work/yzs_w06_h.jpg",
-    href: PORTFOLIO_URL,
+    href: "/yzs-merch",
     year: "2026",
     type: "post",
     gridClass:
@@ -89,7 +87,7 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     name: "Quiet Index",
     nameZh: "安静指数",
     imageUrl: "/work/yzs_w07.jpg", // 视频作品，缩略图为抽帧；无 hover 图
-    href: PORTFOLIO_URL,
+    href: "/quiet-index",
     year: "2025",
     type: "post",
     gridClass:
@@ -100,7 +98,7 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     nameZh: "靛狮·域守",
     imageUrl: "/work/yzs_w08.jpg",
     hoverImageUrl: "/work/yzs_w08_h.jpg",
-    href: PORTFOLIO_URL,
+    href: "/indigo-lion",
     year: "2025",
     type: "post",
     gridClass:
