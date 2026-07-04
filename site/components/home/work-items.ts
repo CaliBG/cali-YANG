@@ -2,6 +2,7 @@
 // 11 项；第 0 项密码保护（/2026），未解锁时被过滤 → SSR 只有 10 个 article。
 
 import { revealBrandLabel } from "@/lib/passcode";
+import { asset } from "@/lib/asset";
 
 export interface WorkItem {
   name: string;
@@ -15,7 +16,7 @@ export interface WorkItem {
   gridClass: string;
 }
 
-export const WORK_ITEMS: WorkItem[] = [
+const WORK_ITEMS_RAW: WorkItem[] = [
   {
     name: revealBrandLabel(), // "TikTok"
     imageUrl: "/work/tt01.png",
@@ -129,3 +130,10 @@ export const WORK_ITEMS: WorkItem[] = [
       "col-span-6 lg:col-start-9 lg:col-span-4 xl:col-start-10 xl:col-span-3",
   },
 ];
+
+// 给所有 public/ 缩略图路径加 basePath 前缀（静态导出到子路径需要）。
+export const WORK_ITEMS: WorkItem[] = WORK_ITEMS_RAW.map((item) => ({
+  ...item,
+  imageUrl: asset(item.imageUrl),
+  hoverImageUrl: item.hoverImageUrl ? asset(item.hoverImageUrl) : undefined,
+}));

@@ -1,12 +1,10 @@
 "use client";
 
 // PasscodeUnlockScreen（docs/14-content/2026.md，模块 4278 / 58156 / 28116）
-// - 4 位码，输满自动 POST /api/passcode {scope,code}
+// 静态导出版：无服务端，改为纯客户端校验——
+// - 4 位码，输满自动与 CLIENT_PASSCODE 比对
 // - 失败：整排 x 轴 shake [0,-10,10,-8,8,-4,4,0] 0.5s easeInOut，清空重输
-// - 成功：文案 "Access granted"，600ms 后 router.refresh()（服务端按 cookie 重新
-//   下发 /2026）+ startNavigation(returnTo, {replace:true}) 走全屏过渡
-// 线上是 /unlock/[scope] 路由 + 服务端 rewrite；还原版直接在 /2026 服务端分支渲染，
-// URL 表现一致（线上 rewrite 后地址栏同样停留在 /2026）。
+// - 成功：文案 "Access granted"，600ms 后回调 onUnlock() 由父组件切到正文
 
 import {
   useCallback,
@@ -15,12 +13,10 @@ import {
   useState,
   type ChangeEvent,
 } from "react";
-import { useRouter } from "next/navigation";
-import {
-  PASSCODE,
-  notifyPasscodeAccessChanged,
-  submitPasscodeUnlock,
-} from "@/lib/passcode";
+import { PASSCODE } from "@/lib/passcode";
+
+// 静态站客户端口令（原服务端默认值同样是 "0000"）。4 位，与 PASSCODE.slotCount 一致。
+const CLIENT_PASSCODE = "0000";
 
 const SHAKE_OFFSETS_PX = [0, -10, 10, -8, 8, -4, 4, 0];
 
@@ -29,11 +25,12 @@ type UnlockStatus = "idle" | "checking" | "success";
 export default function PasscodeUnlockScreen({
   scope,
   returnTo,
+  onUnlock,
 }: {
   scope: string;
   returnTo: string;
+  onUnlock: () => void;
 }) {
-  const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const rowRef = useRef<HTMLDivElement | null>(null);
   const [code, setCode] = useState("");
@@ -63,28 +60,14 @@ export default function PasscodeUnlockScreen({
   }, []);
 
   const submit = useCallback(
-    async (value: string) => {
+    (value: string) => {
       setStatus("checking");
-      let ok = false;
-      try {
-        const res = await submitPasscodeUnlock(scope, value);
-        // 现有 /api/passcode 路由对错误码返回 200 {ok:false}，需读 body 判定
-        const data = (await res.json().catch(() => null)) as {
-          ok?: boolean;
-        } | null;
-        ok = res.ok && data?.ok !== false;
-      } catch {
-        ok = false;
-      }
-      if (ok) {
-        notifyPasscodeAccessChanged();
+      if (value === CLIENT_PASSCODE) {
         setStatus("success");
-        // 线上流程是 refresh + startNavigation(returnTo,{replace:true})（unlock 页
-        // 与 returnTo 路径不同）；还原版解锁屏就渲染在 /2026 本身，同路径导航会让
-        // TransitionOrchestrator 停在 wait 阶段（等 pathname 变化），故只 refresh，
-        // 服务端按新 cookie 直接换下正文。
+        // 成功后 600ms 交回父组件切到正文（原线上为 router.refresh() 让服务端
+        // 按 cookie 重新下发；静态站改为客户端 state 切换）。
         setTimeout(() => {
-          router.refresh();
+          onUnlock();
         }, 600);
       } else {
         setStatus("idle");
@@ -93,7 +76,7 @@ export default function PasscodeUnlockScreen({
         inputRef.current?.focus();
       }
     },
-    [scope, router, shake]
+    [onUnlock, shake]
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

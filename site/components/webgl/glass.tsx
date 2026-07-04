@@ -24,6 +24,7 @@ import {
   type OpaquePolicy,
   type WebGLSectionName,
 } from "./store";
+import { asset } from "@/lib/asset";
 
 export const DRACO_DECODER_PATH =
   "https://www.gstatic.com/draco/versioned/decoders/1.5.5/";
@@ -210,8 +211,10 @@ export function GlassModel({
   const { gl } = useThree();
   const env = useSceneEnv();
   const glass = useGlassContext();
+  // model 传入可能是相对（"model/x.gltf"）或绝对（"/model/x.gltf"），
+  // 统一归一化为 /model/... 后再加 basePath 前缀，且与 useGLTF.preload 的 key 一致。
   const gltf = useGLTF(
-    model.startsWith("/") ? model : `/${model}`,
+    asset(model.startsWith("/") ? model : `/${model}`),
     DRACO_DECODER_PATH
   );
 
@@ -490,6 +493,6 @@ export function GlassModel({
   );
 }
 
-useGLTF.preload("/model/hello.gltf", DRACO_DECODER_PATH);
-useGLTF.preload("/model/cursor.glb", DRACO_DECODER_PATH);
-useGLTF.preload("/model/cnt.gltf", DRACO_DECODER_PATH);
+useGLTF.preload(asset("/model/hello.gltf"), DRACO_DECODER_PATH);
+useGLTF.preload(asset("/model/cursor.glb"), DRACO_DECODER_PATH);
+useGLTF.preload(asset("/model/cnt.gltf"), DRACO_DECODER_PATH);

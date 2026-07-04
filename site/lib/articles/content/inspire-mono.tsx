@@ -7,6 +7,7 @@ import Lede from "@/components/mdx/Lede";
 import MdxA from "@/components/mdx/MdxA";
 import MdxImg from "@/components/mdx/MdxImg";
 import MdxImageGrid from "@/components/mdx/MdxImageGrid";
+import { asset } from "@/lib/asset";
 
 const IMG_BASE = "https://mysite2026-blog-cyn6.vercel.app/blog/mono";
 
@@ -50,7 +51,7 @@ export default function InspireMonoBody() {
         </p>
       </Lede>
       <a
-        href="/fonts/InspireMono.zip"
+        href={asset("/fonts/InspireMono.zip")}
         className="flex justify-center items-center bg-line lg:[@media(hover:hover)]:hover:bg-l3 my-6 px-5 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-b1 w-full min-w-0 h-[52px] font-sans font-medium text-l1 text-sm no-underline transition-[background-color,color] duration-300 ease-66 shrink-0"
         download="InspireMono.zip"
       >

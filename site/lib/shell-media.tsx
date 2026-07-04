@@ -16,6 +16,7 @@ import {
   useState,
 } from "react";
 import { isPlainKeydown } from "./keys";
+import { BASE_PATH } from "./asset";
 
 interface ShellMediaContextValue {
   fontsAssetReady: boolean;
@@ -60,7 +61,7 @@ export function ShellMediaProvider({
     let cancelled = false;
     (async () => {
       try {
-        const base = window.location.origin.split("#")[0];
+        const base = window.location.origin.split("#")[0] + BASE_PATH;
         for (const [family, path, weight] of FONT_DEFS) {
           const face = new FontFace(family, `url("${base}${path}")`, {
             display: "block",
@@ -117,7 +118,7 @@ export function ShellMediaProvider({
     audio.addEventListener("error", onError);
     timer = setTimeout(() => fail("BGM load timed out"), 45000);
 
-    audio.src = `${window.location.origin.split("#")[0]}/bgm.mp3`;
+    audio.src = `${window.location.origin.split("#")[0]}${BASE_PATH}/bgm.mp3`;
     audio.load();
 
     return () => {

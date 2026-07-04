@@ -9,14 +9,18 @@ import CursorOverlay from "@/components/webgl/CursorOverlay";
 import FontGate from "@/components/FontGate";
 import Header from "@/components/Header";
 import ScrollShell from "@/components/ScrollShell";
+import { asset } from "@/lib/asset";
 import "./globals.css";
 
+// 静态导出到子路径时 Next 不会给 metadata icon 自动加 basePath，手动加。
 export const metadata: Metadata = {
   title: "HAOQI©2026",
   description: "Digital Product Designer & Builder © 2026",
   icons: {
-    icon: [{ url: "/icon.svg", sizes: "any", type: "image/svg+xml" }],
-    apple: [{ url: "/apple-icon.png", sizes: "512x512", type: "image/png" }],
+    icon: [{ url: asset("/icon.svg"), sizes: "any", type: "image/svg+xml" }],
+    apple: [
+      { url: asset("/apple-icon.png"), sizes: "512x512", type: "image/png" },
+    ],
   },
 };
 

@@ -14,9 +14,10 @@ import { HYPER_VERT, HYPER_FRAG } from "./shaders";
 import { LightRig, useSceneEnv } from "./scene-env";
 import { frameState, TrackedRect } from "./store";
 import { DRACO_DECODER_PATH } from "./glass";
+import { asset } from "@/lib/asset";
 
 const DEFAULTS = {
-  model: "/model/cursor.glb",
+  model: asset("/model/cursor.glb"),
   refMarginPx: 120,
   accentColor: "#009dff",
   stripeColorA: "#009dff",

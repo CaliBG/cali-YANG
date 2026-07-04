@@ -9,10 +9,10 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { STICKER_VERT, STICKER_FRAG } from "./shaders";
 import { useSceneEnv } from "./scene-env";
 import { frameState, type WebGLSectionName } from "./store";
+import { asset } from "@/lib/asset";
 
-const STICKER_URLS = Array.from(
-  { length: 12 },
-  (_, i) => `/sticker_img/s_${String(i + 1).padStart(2, "0")}.png`
+const STICKER_URLS = Array.from({ length: 12 }, (_, i) =>
+  asset(`/sticker_img/s_${String(i + 1).padStart(2, "0")}.png`)
 );
 
 // s5：粒子参数

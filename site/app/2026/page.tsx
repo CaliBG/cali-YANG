@@ -1,12 +1,13 @@
+"use client";
+
 // /2026 —— passcode 保护页（docs/14-content/2026.md）
-// - 未解锁：渲染 PasscodeUnlockScreen（线上为 rewrite 到 /unlock/[scope]，URL 仍是
-//   /2026；此处服务端直接分支，表现一致）
-// - 已解锁：真实正文在线上完全由服务端 gated，未出现在任何可抓取产物中，无法逆向
-//   还原（docs/14 疑点 4）→ 放带注释的占位区块，待站主补写。
+// 静态导出版：无服务端。改为客户端 state gate——
+// - 未解锁：渲染 PasscodeUnlockScreen，客户端校验口令（见 PasscodeUnlockScreen）
+// - 已解锁：显示带注释的占位区块（真实正文原本由服务端 gated，无法逆向还原）
 // - 已知信息：主页 Selected Work 对应条目为 charCode 混淆的 "TikTok"（2022-2026），
 //   未解锁标题显示 ■■■■■■。
 
-import { cookies } from "next/headers";
+import { useState } from "react";
 import PasscodeUnlockScreen from "./PasscodeUnlockScreen";
 import {
   ARTICLE_DATE_CLASS,
@@ -16,15 +17,17 @@ import {
 } from "@/lib/articles/prose";
 import Lede from "@/components/mdx/Lede";
 
-// 与 app/api/passcode/route.ts 的 COOKIE_NAME 保持一致（该文件不可改、常量未导出）
-const ACCESS_COOKIE_NAME = "hq_access_2026";
-
-export default async function Page2026() {
-  const jar = await cookies();
-  const unlocked = jar.get(ACCESS_COOKIE_NAME)?.value === "1";
+export default function Page2026() {
+  const [unlocked, setUnlocked] = useState(false);
 
   if (!unlocked) {
-    return <PasscodeUnlockScreen scope="2026" returnTo="/2026" />;
+    return (
+      <PasscodeUnlockScreen
+        scope="2026"
+        returnTo="/2026"
+        onUnlock={() => setUnlocked(true)}
+      />
+    );
   }
 
   return (
