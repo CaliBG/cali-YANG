@@ -199,8 +199,8 @@ export default function Header() {
           />
         </TransitionLink>
 
-        {/* 桌面按钮组 */}
-        <div className="hidden lg:flex flex-wrap justify-between items-center gap-x-3 gap-y-2 pointer-events-auto basis-1/2 xl:basis-1/3">
+        {/* 桌面按钮组（5 个按钮，加宽容器并禁止换行保证同一行） */}
+        <div className="hidden lg:flex flex-nowrap justify-between items-center gap-x-3 whitespace-nowrap pointer-events-auto basis-1/2 xl:basis-2/5">
           <button
             type="button"
             className={`${dotted} p-2 uppercase cursor-pointer`}
