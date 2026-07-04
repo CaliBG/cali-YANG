@@ -29,7 +29,9 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/force-balance",
     year: "2025",
     type: "post",
-    gridClass: "col-span-12 lg:col-span-8 lg:col-start-3",
+    // 竖图：中幅错落对排（与 #02 同排左右呼应），避免原 8 列全宽过大
+    gridClass:
+      "col-span-12 lg:col-start-2 lg:col-span-5 xl:col-start-2 xl:col-span-4",
   },
   {
     name: "Memory of the Flesh",
@@ -39,7 +41,9 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/memory-of-the-flesh",
     year: "2025",
     type: "post",
-    gridClass: "col-span-12 lg:col-span-8 lg:col-start-5",
+    // 竖图：与 #01 同排右侧，略低错位由行内自然高差形成
+    gridClass:
+      "col-span-12 lg:col-start-8 lg:col-span-5 xl:col-start-8 xl:col-span-4",
   },
   {
     name: "Pain",
