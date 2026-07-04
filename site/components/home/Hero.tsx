@@ -15,29 +15,36 @@ import {
   PASSCODE_LOCKED_SCRAMBLE_CLASS,
 } from "@/lib/passcode";
 import ProtectedBrand, { useBrandUnlocked } from "./ProtectedBrand";
+import { useLanguage } from "@/lib/language";
 
 const HERO_META_DELAY = 300;
 const HERO_META_LETTER_DELAY = 10;
 
 function HeroBrandLine() {
   const unlocked = useBrandUnlocked();
+  const { lang } = useLanguage();
 
   const parts = useMemo<ScramblePart[]>(
     () => [
-      "I'm Haoqi Wen, leading Design Engineering and AI exploration at ",
+      lang === "zh"
+        ? "我是杨子硕，在 "
+        : "I'm Zishuo Yang, leading Design Engineering and AI exploration at ",
       {
         length: passcodeLockedSlotCount(),
         scramble: unlocked ? revealBrandLabel() : passcodeLockedPlaceholderText(),
         className: unlocked ? undefined : PASSCODE_LOCKED_SCRAMBLE_CLASS,
         settled: <ProtectedBrand />,
       },
-      ", engineering, and AI at scale. Outside work, I build design tools for team efficiency.",
+      lang === "zh"
+        ? " 主导设计工程与 AI 探索，推动工程与 AI 的规模化落地。工作之外，我打造提升团队效率的设计工具。"
+        : ", engineering, and AI at scale. Outside work, I build design tools for team efficiency.",
     ],
-    [unlocked]
+    [unlocked, lang]
   );
 
   return (
     <AsciiScramble
+      key={`brand-${lang}`}
       parts={parts}
       startDelayMs={HERO_META_DELAY}
       letterDelayMs={HERO_META_LETTER_DELAY}
@@ -48,6 +55,8 @@ function HeroBrandLine() {
 
 export default function Hero() {
   const bannerRef = useWebGLSectionRef("banner");
+  const { lang } = useLanguage();
+  const zh = lang === "zh";
   return (
     <div
       ref={bannerRef}
@@ -56,19 +65,26 @@ export default function Hero() {
       <div className="flex flex-col order-2 lg:order-1 lg:grid lg:grid-cols-12 col-span-12 font-mono text-base">
         <span className="hidden lg:block lg:col-span-3 xl:col-span-2 lg:col-start-1 xl:col-start-1 p-2 font-sans font-medium text-[4svw] sm:text-2xl lg:text-3xl leading-tight">
           <AsciiScramble
-            text="Design &"
+            key={`meta1a-${lang}`}
+            text={zh ? "设计 &" : "Design &"}
             startDelayMs={HERO_META_DELAY}
             letterDelayMs={HERO_META_LETTER_DELAY}
           />
           <br />
           <AsciiScramble
-            text="Engineering"
+            key={`meta1b-${lang}`}
+            text={zh ? "工程" : "Engineering"}
             startDelayMs={HERO_META_DELAY}
             letterDelayMs={HERO_META_LETTER_DELAY}
           />
         </span>
         <AsciiScramble
-          text="Thinking in systems. Designing with care."
+          key={`meta2-${lang}`}
+          text={
+            zh
+              ? "系统化思考，用心设计。"
+              : "Thinking in systems. Designing with care."
+          }
           startDelayMs={HERO_META_DELAY}
           letterDelayMs={HERO_META_LETTER_DELAY}
           className="hidden lg:block lg:col-span-3 xl:col-span-2 lg:col-start-4 xl:col-start-5 p-2 text-balance"
@@ -79,9 +95,21 @@ export default function Hero() {
         className="flex flex-col self-end order-1 lg:order-2 col-span-12 px-2 font-bold text-[7.2svw] lg:text-[6svw] 2xl:text-[5svw] xl:text-[5.6svw] uppercase leading-none"
         style={{ fontVariationSettings: '"wdth" 120' }}
       >
-        <AsciiScramble text="I bring" startDelayMs={300} />
-        <AsciiScramble text="craft & taste" startDelayMs={500} />
-        <AsciiScramble text="to digital work" startDelayMs={700} />
+        <AsciiScramble
+          key={`h1-${lang}`}
+          text={zh ? "我以" : "I bring"}
+          startDelayMs={300}
+        />
+        <AsciiScramble
+          key={`h2-${lang}`}
+          text={zh ? "匠心与品味" : "craft & taste"}
+          startDelayMs={500}
+        />
+        <AsciiScramble
+          key={`h3-${lang}`}
+          text={zh ? "打磨数字作品" : "to digital work"}
+          startDelayMs={700}
+        />
       </div>
     </div>
   );

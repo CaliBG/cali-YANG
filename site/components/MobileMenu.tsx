@@ -2,11 +2,13 @@
 
 // 移动端全屏菜单（docs/11-shell.md §8.7，17630-17661 行）
 // menuOpen 时渲染；背景是全屏遮罩 Canvas（idle 时 open=menuOpen）。
-// 项：Home（TransitionLink "/"，startDelay 300）、Work（400）、Contact（500）。
+// 项：Home（TransitionLink "/"，startDelay 300）、Work（400）、Contact（500）、
+// 语言切换（600，中/英）。
 
 import AsciiScramble from "./AsciiScramble";
 import TransitionLink from "./TransitionLink";
 import { useFullscreenTransition } from "@/lib/fullscreen-transition";
+import { useLanguage } from "@/lib/language";
 import {
   DOTTED_BORDER_BASE,
   DOTTED_BORDER_BASE_WHITE,
@@ -20,6 +22,8 @@ export default function MobileMenu({
   onAnchor: (anchor: string) => void;
 }) {
   const { setMenuOpen } = useFullscreenTransition();
+  const { lang, toggleLang } = useLanguage();
+  const zh = lang === "zh";
   const dotted = white ? DOTTED_BORDER_BASE_WHITE : DOTTED_BORDER_BASE;
 
   return (
@@ -29,7 +33,12 @@ export default function MobileMenu({
         className={`${dotted} p-2 uppercase pointer-events-auto`}
         onClick={() => setMenuOpen(false)}
       >
-        <AsciiScramble text="Home" startDelayMs={300} scrambleColors={false} />
+        <AsciiScramble
+          key={`m-home-${lang}`}
+          text={zh ? "首页" : "Home"}
+          startDelayMs={300}
+          scrambleColors={false}
+        />
       </TransitionLink>
       <button
         type="button"
@@ -39,7 +48,12 @@ export default function MobileMenu({
           onAnchor("#selected-work");
         }}
       >
-        <AsciiScramble text="Work" startDelayMs={400} scrambleColors={false} />
+        <AsciiScramble
+          key={`m-work-${lang}`}
+          text={zh ? "作品" : "Work"}
+          startDelayMs={400}
+          scrambleColors={false}
+        />
       </button>
       <button
         type="button"
@@ -50,8 +64,21 @@ export default function MobileMenu({
         }}
       >
         <AsciiScramble
-          text="Contact"
+          key={`m-contact-${lang}`}
+          text={zh ? "联系" : "Contact"}
           startDelayMs={500}
+          scrambleColors={false}
+        />
+      </button>
+      <button
+        type="button"
+        className={`${dotted} p-2 uppercase cursor-pointer pointer-events-auto`}
+        onClick={toggleLang}
+      >
+        <AsciiScramble
+          key={`m-lang-${lang}`}
+          text={zh ? "LANG[中]" : "LANG[EN]"}
+          startDelayMs={600}
           scrambleColors={false}
         />
       </button>

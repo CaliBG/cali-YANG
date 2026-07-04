@@ -11,6 +11,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import WebGLImageSlot from "@/components/webgl/WebGLImageSlot";
 import { asset } from "@/lib/asset";
+import { useLanguage } from "@/lib/language";
 import { useInViewport } from "./use-in-viewport";
 
 const SIGN_STYLE = `
@@ -118,6 +119,8 @@ function SignatureSvg() {
 }
 
 export default function SignatureIntro() {
+  const { lang } = useLanguage();
+  const zh = lang === "zh";
   return (
     <div className="grid grid-cols-12 px-4 lg:px-14 py-18 lg:py-24 lg:pb-28 w-full">
       <div className="relative col-span-12 sm:col-span-4 lg:col-span-3 p-2">
@@ -136,8 +139,9 @@ export default function SignatureIntro() {
           style={{ fontFamily: "'tiktok', sans-serif" }}
         >
           <span>
-            I explore how to shape AI-era workflows with craft and taste,
-            building the next generation of digital products.
+            {zh
+              ? "我在探索如何以匠心与品味塑造 AI 时代的工作流，打造下一代数字产品。"
+              : "I explore how to shape AI-era workflows with craft and taste, building the next generation of digital products."}
           </span>
         </p>
         <p
@@ -145,7 +149,7 @@ export default function SignatureIntro() {
           style={{ fontFamily: "'tiktok', sans-serif" }}
         >
           <span>
-            I’m building{" "}
+            {zh ? "我正在打造 " : "I’m building "}
             <a
               target="_blank"
               rel="noopener noreferrer"
@@ -154,16 +158,16 @@ export default function SignatureIntro() {
             >
               reunimos™
             </a>
-            , and previously worked on Alibaba{" "}
+            {zh ? "，此前曾参与阿里巴巴 " : ", and previously worked on Alibaba "}
             <a
               target="_blank"
               rel="noopener noreferrer"
               className={INTRO_LINK_CLASS}
               href="https://www.alipan.com/"
             >
-              aDrive
+              {zh ? "阿里云盘" : "aDrive"}
             </a>
-            ,{" "}
+            {zh ? "、" : ", "}
             <a
               target="_blank"
               rel="noopener noreferrer"
@@ -172,7 +176,7 @@ export default function SignatureIntro() {
             >
               Teambition
             </a>
-            , and 100offer.
+            {zh ? " 与 100offer 的设计工作。" : ", and 100offer."}
           </span>
         </p>
       </div>

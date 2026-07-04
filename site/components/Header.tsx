@@ -15,7 +15,9 @@ import RotatingGlobe from "./RotatingGlobe";
 import ScrollProgress from "./ScrollProgress";
 import SoundToggle from "./SoundToggle";
 import ThemeToggle from "./ThemeToggle";
+import LangToggle from "./LangToggle";
 import TransitionLink from "./TransitionLink";
+import { useLanguage } from "@/lib/language";
 import { useArrowFullscreenPastThreshold } from "@/lib/arrow-fullscreen";
 import { useFullscreenTransition } from "@/lib/fullscreen-transition";
 import { isPlainKeydown } from "@/lib/keys";
@@ -170,6 +172,8 @@ export default function Header() {
     []
   );
 
+  const { lang } = useLanguage();
+
   return (
     <header
       className={`z-50 fixed inset-0 flex flex-col justify-between font-mono-2 pointer-events-none ${ARROW_FULLSCREEN_DOM_COLOR_TRANSITION} ${
@@ -184,7 +188,7 @@ export default function Header() {
           style={{ fontVariationSettings: '"wght" 700, "wdth" 120' }}
         >
           <AsciiScramble
-            text="haoqi"
+            text="zishuo"
             startDelayMs={300}
             scrambleColors={false}
           />
@@ -203,7 +207,8 @@ export default function Header() {
             onClick={() => scrollToAnchor("#selected-work")}
           >
             <AsciiScramble
-              text="Work"
+              key={`work-${lang}`}
+              text={lang === "zh" ? "作品" : "Work"}
               startDelayMs={300}
               scrambleColors={false}
             />
@@ -214,13 +219,15 @@ export default function Header() {
             onClick={() => scrollToAnchor("#contact")}
           >
             <AsciiScramble
-              text="Contact"
+              key={`contact-${lang}`}
+              text={lang === "zh" ? "联系" : "Contact"}
               startDelayMs={300}
               scrambleColors={false}
             />
           </button>
           <ThemeToggle dottedClass={dotted} {...hintHandlers} />
           <SoundToggle dottedClass={dotted} {...hintHandlers} />
+          <LangToggle dottedClass={dotted} />
         </div>
 
         {/* 移动端汉堡 */}
@@ -263,7 +270,7 @@ export default function Header() {
         {isHome && nearBottom ? (
           <AsciiScramble
             key="footer-credit"
-            text={`Haoqi (c) ${new Date().getFullYear()}`}
+            text={`Zishuo Yang (c) ${new Date().getFullYear()}`}
             letterDelayMs={40}
             scrambleColors={false}
             className="p-2 uppercase"

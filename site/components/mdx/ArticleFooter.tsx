@@ -162,36 +162,72 @@ export default function ArticleFooter({ updated }: { updated: string }) {
         </div>
         <div className="flex flex-col items-start gap-1 font-mono">
           <a
-            href="https://twitter.com/wenhaoqi"
+            href="https://xhslink.com/m/9VQT99pmKGj"
             target="_blank"
             rel="noopener noreferrer"
             className={FOOTER_ITEM_CLASS}
           >
             <AsciiScramble
-              text="Twitter/X"
+              text="RedNote"
               startDelayMs={300}
               letterDelayMs={20}
             />
           </a>
           <a
-            href="https://github.com/wenhaoqiasd"
+            href="https://b23.tv/C6YHUGG"
             target="_blank"
             rel="noopener noreferrer"
             className={FOOTER_ITEM_CLASS}
           >
             <AsciiScramble
-              text="GitHub"
+              text="Bilibili"
+              startDelayMs={320}
+              letterDelayMs={20}
+            />
+          </a>
+          <a
+            href="https://music.163.com/#/artist?id=121587079"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={FOOTER_ITEM_CLASS}
+          >
+            <AsciiScramble
+              text="NetEase Music"
               startDelayMs={340}
               letterDelayMs={20}
             />
           </a>
           <a
-            href="https://www.figma.com/@wenhaoqi"
+            href="https://www.youtube.com/@yzs-cali-yang"
             target="_blank"
             rel="noopener noreferrer"
             className={FOOTER_ITEM_CLASS}
           >
-            <AsciiScramble text="Figma" startDelayMs={380} letterDelayMs={20} />
+            <AsciiScramble
+              text="YouTube"
+              startDelayMs={360}
+              letterDelayMs={20}
+            />
+          </a>
+          <a
+            href="https://www.instagram.com/caliyang0693"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={FOOTER_ITEM_CLASS}
+          >
+            <AsciiScramble
+              text="Instagram"
+              startDelayMs={380}
+              letterDelayMs={20}
+            />
+          </a>
+          <a
+            href="https://www.douyin.com/user/MS4wLjABAAAAwZDZH1-khE631mUgvp1U0ZsJM7w-yoLCMUymkTEPzxiA1Y5peo-hNZLApZ4LORoi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={FOOTER_ITEM_CLASS}
+          >
+            <AsciiScramble text="Douyin" startDelayMs={400} letterDelayMs={20} />
           </a>
         </div>
       </div>

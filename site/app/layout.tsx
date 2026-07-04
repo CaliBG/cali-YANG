@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeModeProvider } from "@/lib/theme-mode";
+import { LanguageProvider } from "@/lib/language";
 import { ShellMediaProvider } from "@/lib/shell-media";
 import { PointerProvider } from "@/lib/pointer";
 import { PasscodeAccessProvider } from "@/lib/passcode";
@@ -14,7 +15,7 @@ import "./globals.css";
 
 // 静态导出到子路径时 Next 不会给 metadata icon 自动加 basePath，手动加。
 export const metadata: Metadata = {
-  title: "HAOQI©2026",
+  title: "ZISHUO©2026",
   description: "Digital Product Designer & Builder © 2026",
   icons: {
     icon: [{ url: asset("/icon.svg"), sizes: "any", type: "image/svg+xml" }],
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        <LanguageProvider>
         <ThemeModeProvider>
           <ShellMediaProvider>
             <PointerProvider>
@@ -46,6 +48,7 @@ export default function RootLayout({
             </PointerProvider>
           </ShellMediaProvider>
         </ThemeModeProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
