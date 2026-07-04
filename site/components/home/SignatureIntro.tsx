@@ -98,7 +98,7 @@ function SignatureSvg() {
       viewBox="0 0 320 154"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`svg-sign -top-1/32 -right-1/6 absolute w-3/5 pointer-events-none${
+      className={`svg-sign -top-1/10 -right-1/6 absolute w-3/5 pointer-events-none${
         drawing ? " is-drawing" : ""
       }`}
       aria-hidden="true"
