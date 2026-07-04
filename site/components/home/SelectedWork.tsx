@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import TransitionLink from "@/components/TransitionLink";
 import WebGLImageSlot from "@/components/webgl/WebGLImageSlot";
 import { usePasscodeAccessLookup } from "@/lib/passcode";
+import { useLanguage } from "@/lib/language";
 import { WORK_ITEMS, type WorkItem } from "./work-items";
 
 // 模块级 aspect-ratio 缓存（"W / H" 字符串），避免重复预载与布局闪动
@@ -44,9 +45,12 @@ function useImageAspectRatio(src: string): string {
 
 function WorkCard({ item }: { item: WorkItem }) {
   const ratio = useImageAspectRatio(item.imageUrl);
+  const { lang } = useLanguage();
+  // 展示名按语言切换；WebGL 图层 key 恒用英文 name 保持纹理注册稳定
+  const displayName = lang === "zh" && item.nameZh ? item.nameZh : item.name;
 
   const external = /^https?:\/\//.test(item.href);
-  const ariaLabel = `${item.name} - ${item.year}${external ? " (external)" : ""}`;
+  const ariaLabel = `${displayName} - ${item.year}${external ? " (external)" : ""}`;
 
   const inner = (
     <>
@@ -67,7 +71,7 @@ function WorkCard({ item }: { item: WorkItem }) {
         )}
       </WebGLImageSlot>
       <div className="flex justify-between items-center gap-3 min-w-0 text-xs lg:text-sm uppercase">
-        <span className="flex-1 min-w-0 truncate">{item.name}</span>
+        <span className="flex-1 min-w-0 truncate">{displayName}</span>
         <div className="flex items-center gap-2 sm:gap-3 font-mono-2 tabular-nums whitespace-nowrap shrink-0">
           <span>{item.year}</span>
           {item.type !== "post" && (

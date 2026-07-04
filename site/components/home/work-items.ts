@@ -1,11 +1,15 @@
-// WORK_ITEMS 数据（docs/13-homepage.md §6.1，模块 83039，d59f 行 5850–5949）
-// 11 项；第 0 项密码保护（/2026），未解锁时被过滤 → SSR 只有 10 个 article。
+// WORK_ITEMS 数据 —— 站主杨子硕（Cali Yang）的作品集
+// 来源：https://caliyang.dpdns.org（YZS — Yet Zero Sense）8 个作品
+// 缩略图存于 public/work/yzs_wXX.jpg（主图）/ yzs_wXX_h.jpg（hover 图）；
+// 条目外链到作品集站 #work 区（新窗口打开）。
+// name 为英文，nameZh 为中文（由 SelectedWork 按语言切换显示）。
 
-import { revealBrandLabel } from "@/lib/passcode";
 import { asset } from "@/lib/asset";
 
 export interface WorkItem {
   name: string;
+  /** 中文名（语言切换用；缺省回退 name） */
+  nameZh?: string;
   imageUrl: string;
   hoverImageUrl?: string;
   href: string;
@@ -16,118 +20,91 @@ export interface WorkItem {
   gridClass: string;
 }
 
+const PORTFOLIO_URL = "https://caliyang.dpdns.org/#work";
+
 const WORK_ITEMS_RAW: WorkItem[] = [
   {
-    name: revealBrandLabel(), // "TikTok"
-    imageUrl: "/work/tt01.png",
-    hoverImageUrl: "/work/tt02.png",
-    href: "/2026",
-    year: "2022-2026",
+    name: "43+1 — Force & Balance",
+    nameZh: "43+1 — 力量与平衡",
+    imageUrl: "/work/yzs_w01.jpg",
+    hoverImageUrl: "/work/yzs_w01_h.jpg",
+    href: PORTFOLIO_URL,
+    year: "2025",
     type: "post",
-    passcodeProtected: true,
     gridClass: "col-span-12 lg:col-span-8 lg:col-start-3",
   },
   {
-    name: "Reunimos™",
-    imageUrl: "/work/reunimos01.png",
-    hoverImageUrl: "/work/reunimos02.png",
-    href: "/reunimos",
-    year: "2024-2026",
+    name: "Memory of the Flesh",
+    nameZh: "皮囊记忆",
+    imageUrl: "/work/yzs_w02.jpg",
+    hoverImageUrl: "/work/yzs_w02_h.jpg",
+    href: PORTFOLIO_URL,
+    year: "2025",
     type: "post",
-    codingProject: true,
     gridClass: "col-span-12 lg:col-span-8 lg:col-start-5",
   },
   {
-    name: "Inspire Mono",
-    imageUrl: "/work/inspire_mono_01.png",
-    hoverImageUrl: "/work/inspire_mono_02.png",
-    href: "/inspire_mono",
+    name: "Pain",
+    nameZh: "痛",
+    imageUrl: "/work/yzs_w03.jpg",
+    hoverImageUrl: "/work/yzs_w03_h.jpg",
+    href: PORTFOLIO_URL,
     year: "2025",
     type: "post",
-    codingProject: true,
     gridClass: "col-span-12 lg:col-start-1 lg:col-span-6 xl:col-span-5",
   },
   {
-    name: "Wasm design utils",
-    imageUrl: "/work/wasm01.png",
-    hoverImageUrl: "/work/wasm02.png",
-    href: "/wasm_design_utils",
+    name: "Deep Sea Breathing",
+    nameZh: "深海呼吸",
+    imageUrl: "/work/yzs_w04.jpg",
+    hoverImageUrl: "/work/yzs_w04_h.jpg",
+    href: PORTFOLIO_URL,
     year: "2025",
     type: "post",
-    codingProject: true,
     gridClass:
       "col-span-12 lg:col-span-6 xl:col-span-5 lg:col-start-7 xl:col-start-7",
   },
   {
-    name: "VectorSymbols",
-    imageUrl: "/work/vs01.png",
-    hoverImageUrl: "/work/vs02.png",
-    href: "https://www.figma.com/community/plugin/1255914175202017737/vectorsymbols",
-    year: "2023",
-    type: "tools",
-    codingProject: true,
+    name: "Imprint — Flowing Traces",
+    nameZh: "拓印-流动的痕",
+    imageUrl: "/work/yzs_w05.jpg", // 无 hover 图（源站仅一张）
+    href: PORTFOLIO_URL,
+    year: "2025",
+    type: "post",
     gridClass:
       "col-span-6 lg:col-start-5 lg:col-span-4 xl:col-start-6 xl:col-span-3",
   },
   {
-    name: "DarkSide",
-    imageUrl: "/work/ds01.png",
-    hoverImageUrl: "/work/ds02.png",
-    href: "https://www.figma.com/community/plugin/986289377230504703/darkside",
-    year: "2021",
-    type: "tools",
-    codingProject: true,
+    name: "YZS® Merch Series",
+    nameZh: "YZS® 周边系列",
+    imageUrl: "/work/yzs_w06.jpg",
+    hoverImageUrl: "/work/yzs_w06_h.jpg",
+    href: PORTFOLIO_URL,
+    year: "2026",
+    type: "post",
     gridClass:
       "col-span-6 lg:col-start-9 lg:col-span-4 xl:col-start-10 xl:col-span-3",
   },
   {
-    name: "aDrive 阿里云盘",
-    imageUrl: "/work/ali01.png",
-    hoverImageUrl: "/work/ali02.png",
-    href: "/adrive",
-    year: "2020-2022",
+    name: "Quiet Index",
+    nameZh: "安静指数",
+    imageUrl: "/work/yzs_w07.jpg", // 视频作品，缩略图为抽帧；无 hover 图
+    href: PORTFOLIO_URL,
+    year: "2025",
     type: "post",
     gridClass:
       "col-span-12 lg:col-start-1 lg:col-span-4 xl:col-start-1 xl:col-span-3",
   },
   {
-    name: "Shore Icon",
-    imageUrl: "/work/si.png",
-    hoverImageUrl: "/work/si02.png",
-    href: "/shore_icon",
-    year: "2022",
+    name: "Indigo Lion, Guardian of Place",
+    nameZh: "靛狮·域守",
+    imageUrl: "/work/yzs_w08.jpg",
+    hoverImageUrl: "/work/yzs_w08_h.jpg",
+    href: PORTFOLIO_URL,
+    year: "2025",
     type: "post",
     gridClass:
       "col-span-6 lg:col-start-5 lg:col-span-4 xl:col-start-5 xl:col-span-3",
-  },
-  {
-    name: "Teambition",
-    imageUrl: "/work/c4.png", // 无 hover 图（刻意行为，docs §12.5）
-    href: "/teambition",
-    year: "2018-2020",
-    type: "post",
-    gridClass:
-      "col-span-6 lg:col-start-9 lg:col-span-4 xl:col-start-9 xl:col-span-3",
-  },
-  {
-    name: "FoF: See Hear Touch",
-    imageUrl: "/work/s01.png",
-    hoverImageUrl: "/work/s02.png",
-    href: "https://friends.figma.com/events/details/figma-shanghai-presents-see-hear-touch/",
-    year: "2022",
-    type: "event",
-    gridClass:
-      "col-span-6 lg:col-start-5 lg:col-span-4 xl:col-start-6 xl:col-span-3",
-  },
-  {
-    name: "FoF: Design System",
-    imageUrl: "/work/sd01.png",
-    hoverImageUrl: "/work/sd02.png",
-    href: "https://friends.figma.com/events/details/figma-shanghai-presents-design-system/",
-    year: "2021",
-    type: "event",
-    gridClass:
-      "col-span-6 lg:col-start-9 lg:col-span-4 xl:col-start-10 xl:col-span-3",
   },
 ];
 
