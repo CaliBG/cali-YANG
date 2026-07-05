@@ -322,12 +322,12 @@ export const YZS_WORKS: YzsWork[] = [
     intro: {
       zh: [
         "「同框」是一款让前后摄像头同时取景的 iOS 相机应用——后置镜头记录眼前的世界，前置镜头记录看世界的你。拍摄者不再缺席于自己的画面，两个视角在同一瞬间被保留下来。",
-        "应用基于 AVCaptureMultiCamSession 实现前后镜头同步预览、拍照与录像。默认画中画布局中，前摄小窗可自由拖拽并吸附到四角与边缘中点，单击即可互换主副画面（带触觉反馈）；另有上下分屏与左右分屏两种构图可选，并支持 3s / 10s 倒计时录制与录制时长实时显示。",
+        "应用基于 AVCaptureMultiCamSession 实现前后镜头同步预览、拍照与录像。默认画中画布局中，前摄小窗可自由拖拽并吸附到四角与边缘中点，单击即可互换主副画面（带触觉反馈）；另有上下分屏与左右分屏两种构图可选，并支持 3s / 10s 倒计时录制与录制时长实时显示；Vlog 模式内置提词器，讲稿随录制自动滚动。",
         "拍照时前后画面自动合成一张长图存入相册，录像则分别保存前后两段视频，方便二次剪辑。从相机调度、手势交互、本地化架构到 StoreKit 内购体系，整个应用由我独立设计与开发完成。",
       ],
       en: [
         '"Tongkuang" (In the Same Frame) is an iOS camera app that captures with both cameras at once — the rear lens records the world in front of you, while the front lens records you watching it. The photographer is no longer absent from their own picture: both perspectives are kept in the same instant.',
-        "Built on AVCaptureMultiCamSession, the app previews, shoots, and records with front and rear cameras simultaneously. In the default picture-in-picture layout, the front-camera window can be freely dragged and snaps to corners and edge midpoints; a single tap swaps the primary and secondary views with haptic feedback. Top/bottom and side-by-side split layouts are also available, along with 3s / 10s countdown recording and a live duration display.",
+        "Built on AVCaptureMultiCamSession, the app previews, shoots, and records with front and rear cameras simultaneously. In the default picture-in-picture layout, the front-camera window can be freely dragged and snaps to corners and edge midpoints; a single tap swaps the primary and secondary views with haptic feedback. Top/bottom and side-by-side split layouts are also available, along with 3s / 10s countdown recording, a live duration display, and a Vlog mode with a built-in teleprompter that scrolls your script while you record.",
         "Photos are automatically composed into a single tall image saved to the photo library, while videos are saved as separate front and rear clips for flexible editing. From camera session management, gesture interaction, and the localization architecture to the StoreKit in-app purchase system, the entire app was designed and developed independently by me.",
       ],
     },
@@ -344,7 +344,14 @@ export const YZS_WORKS: YzsWork[] = [
       en: "iOS app / Indie development (iOS 16+, multi-cam devices)",
     },
     team: { zh: "杨子硕 Cali-Yang", en: "Zishuo Yang (Cali-Yang)" },
-    images: [`${P}/tongkuang-layouts.jpg`, `${P}/tongkuang-features.jpg`],
+    images: [
+      `${P}/tongkuang-1.jpg`,
+      `${P}/tongkuang-2.jpg`,
+      `${P}/tongkuang-3.jpg`,
+      `${P}/tongkuang-4.jpg`,
+      `${P}/tongkuang-5.jpg`,
+      `${P}/tongkuang-6.jpg`,
+    ],
   },
 ];
 
