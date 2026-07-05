@@ -314,6 +314,38 @@ export const YZS_WORKS: YzsWork[] = [
       },
     ],
   },
+  {
+    slug: "tongkuang",
+    title: "同框 / Tongkuang — 前后双摄相机",
+    date: "2026",
+    description: "iOS 应用 / 独立开发",
+    intro: {
+      zh: [
+        "「同框」是一款让前后摄像头同时取景的 iOS 相机应用——后置镜头记录眼前的世界，前置镜头记录看世界的你。拍摄者不再缺席于自己的画面，两个视角在同一瞬间被保留下来。",
+        "应用基于 AVCaptureMultiCamSession 实现前后镜头同步预览、拍照与录像。默认画中画布局中，前摄小窗可自由拖拽并吸附到四角与边缘中点，单击即可互换主副画面（带触觉反馈）；另有上下分屏与左右分屏两种构图可选，并支持 3s / 10s 倒计时录制与录制时长实时显示。",
+        "拍照时前后画面自动合成一张长图存入相册，录像则分别保存前后两段视频，方便二次剪辑。从相机调度、手势交互、本地化架构到 StoreKit 内购体系，整个应用由我独立设计与开发完成。",
+      ],
+      en: [
+        '"Tongkuang" (In the Same Frame) is an iOS camera app that captures with both cameras at once — the rear lens records the world in front of you, while the front lens records you watching it. The photographer is no longer absent from their own picture: both perspectives are kept in the same instant.',
+        "Built on AVCaptureMultiCamSession, the app previews, shoots, and records with front and rear cameras simultaneously. In the default picture-in-picture layout, the front-camera window can be freely dragged and snaps to corners and edge midpoints; a single tap swaps the primary and secondary views with haptic feedback. Top/bottom and side-by-side split layouts are also available, along with 3s / 10s countdown recording and a live duration display.",
+        "Photos are automatically composed into a single tall image saved to the photo library, while videos are saved as separate front and rear clips for flexible editing. From camera session management, gesture interaction, and the localization architecture to the StoreKit in-app purchase system, the entire app was designed and developed independently by me.",
+      ],
+    },
+    quote: {
+      zh: "前置与后置，同一瞬间——\n拍摄者不再缺席于\n自己的画面",
+      en: "Front and rear, the same instant —\nthe photographer is no longer absent\nfrom their own picture",
+    },
+    material: {
+      zh: "Swift、SwiftUI、AVFoundation（MultiCam）、CoreMotion、StoreKit",
+      en: "Swift, SwiftUI, AVFoundation (MultiCam), CoreMotion, StoreKit",
+    },
+    type: {
+      zh: "iOS 应用 / 独立开发（iOS 16+，需多摄机型）",
+      en: "iOS app / Indie development (iOS 16+, multi-cam devices)",
+    },
+    team: { zh: "杨子硕 Cali-Yang", en: "Zishuo Yang (Cali-Yang)" },
+    images: [`${P}/tongkuang-layouts.jpg`, `${P}/tongkuang-features.jpg`],
+  },
 ];
 
 export function getYzsWork(slug: string): YzsWork | undefined {

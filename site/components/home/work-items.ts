@@ -103,9 +103,21 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/indigo-lion",
     year: "2025",
     type: "post",
-    // 移动端全宽收尾（避免末位半宽孤卡 + 右列空置）
     gridClass:
       "col-span-12 lg:col-start-5 lg:col-span-4 xl:col-start-5 xl:col-span-3",
+  },
+  {
+    name: "Tongkuang — Dual Camera App",
+    nameZh: "同框 — 前后双摄 App",
+    imageUrl: "/work/yzs_w09.jpg",
+    hoverImageUrl: "/work/yzs_w09_h.jpg",
+    href: "/tongkuang",
+    year: "2026",
+    type: "tools",
+    codingProject: true,
+    // 补齐末行第三列（lg 9-12 / xl 9-11），移动端全宽收尾
+    gridClass:
+      "col-span-12 lg:col-start-9 lg:col-span-4 xl:col-start-9 xl:col-span-3",
   },
 ];
 
