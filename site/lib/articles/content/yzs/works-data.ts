@@ -20,6 +20,10 @@ export interface YzsWork {
   inspiration?: BiText;
   team?: BiText;
   images: string[];
+  /** 叠放画廊卡片宽高比(如竖屏截图 "1290 / 2796");缺省 4:5 */
+  galleryAspect?: string;
+  /** 叠放画廊卡片最大宽度 px;缺省 520 */
+  galleryMaxWidth?: number;
   videos?: Array<{ src: string; caption?: BiText }>;
   /** 额外外部演示（如 GitHub 互动 demo） */
   demoLink?: { href: string; label: BiText };
@@ -344,6 +348,8 @@ export const YZS_WORKS: YzsWork[] = [
       en: "iOS app / Indie development (iOS 16+, multi-cam devices)",
     },
     team: { zh: "杨子硕 Cali-Yang", en: "Zishuo Yang (Cali-Yang)" },
+    galleryAspect: "1290 / 2796",
+    galleryMaxWidth: 400,
     images: [
       `${P}/tongkuang-1.jpg`,
       `${P}/tongkuang-2.jpg`,
