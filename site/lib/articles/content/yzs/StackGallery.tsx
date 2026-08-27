@@ -18,9 +18,14 @@ const CARD_TRANSITION =
 export default function StackGallery({
   images,
   alt,
+  aspect = "4 / 5",
+  maxWidth = 520,
 }: {
   images: string[];
   alt: string;
+  /** 卡片宽高比(CSS aspect-ratio 值);竖屏截图类作品传原始比例避免裁切 */
+  aspect?: string;
+  maxWidth?: number;
 }) {
   const { lang } = useLanguage();
   const containerRef = useRef<HTMLDivElement | null>(null);

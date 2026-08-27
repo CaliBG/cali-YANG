@@ -107,6 +107,8 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
         <StackGallery
           images={work.images.map((src) => asset(src))}
           alt={work.title}
+          aspect={work.galleryAspect}
+          maxWidth={work.galleryMaxWidth}
         />
       ) : work.images.length === 1 ? (
         <MdxImg src={asset(work.images[0])} alt={work.title} />

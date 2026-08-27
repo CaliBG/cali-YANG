@@ -103,7 +103,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/indigo-lion",
     year: "2025",
     type: "post",
-    // 移动端全宽收尾（避免末位半宽孤卡 + 右列空置）
     gridClass:
       "col-span-12 lg:col-start-5 lg:col-span-4 xl:col-start-5 xl:col-span-4",
   },
