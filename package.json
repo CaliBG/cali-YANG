@@ -1,14 +1,12 @@
 {
-  "name": "haoqi-restore",
+  "name": "yzs-portfolio",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "杨子硕个人作品集网站 YZS©2026 (Yet Zero Sense)",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npm --prefix site run dev",
+    "build": "npm --prefix site run build",
+    "start": "npm --prefix site run start"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "playwright": "^1.61.1",
     "puppeteer-core": "^22.15.0"

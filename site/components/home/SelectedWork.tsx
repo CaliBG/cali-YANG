@@ -7,7 +7,7 @@
 //   由背景 Canvas 渲染（uRect 裁剪 + hover 点阵交替 + 负片入场，§6.3）
 // - 内链 TransitionLink（走揭幕遮罩路由），外链普通 <a target=_blank>
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import TransitionLink from "@/components/TransitionLink";
 import WebGLImageSlot from "@/components/webgl/WebGLImageSlot";
 import { usePasscodeAccessLookup } from "@/lib/passcode";
@@ -52,6 +52,27 @@ function WorkCard({ item }: { item: WorkItem }) {
   const external = /^https?:\/\//.test(item.href);
   const ariaLabel = `${displayName} - ${item.year}${external ? " (external)" : ""}`;
 
+  // 严格解析宽高比，防止手机长图（370/800）等比例拉伸撑满整屏
+  const numRatio = useMemo(() => {
+    const parts = ratio.split("/").map((s) => parseFloat(s.trim()));
+    if (parts.length === 2 && parts[1] > 0) return parts[0] / parts[1];
+    return 1;
+  }, [ratio]);
+
+  // 根据不同作品类型设定最协调的显示宽度，保证高度适中（~360px-460px）
+  const cardSizingClass = useMemo(() => {
+    if (numRatio < 0.6) {
+      // 手机长竖屏（如 Tongkuang / AILY / Quiet Index）：限制宽度在 200px-230px，呈现自然真机尺寸
+      return "w-full max-w-[210px] sm:max-w-[220px] lg:max-w-[230px] mx-auto";
+    }
+    if (numRatio > 1.1) {
+      // 平板横屏（如 Magic Note）：限制在 380px-420px，高约 300px
+      return "w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[420px] mx-auto";
+    }
+    // 常规艺术品与装置（ratio 0.6-1.1）：限制在 280px-310px，高约 380px
+    return "w-full max-w-[270px] sm:max-w-[290px] lg:max-w-[310px] mx-auto";
+  }, [numRatio]);
+
   const inner = (
     <>
       <WebGLImageSlot
@@ -91,26 +112,28 @@ function WorkCard({ item }: { item: WorkItem }) {
   );
 
   return (
-    <article className={item.gridClass}>
-      {external ? (
-        <a
-          href={item.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group block space-y-3 p-2"
-          aria-label={ariaLabel}
-        >
-          {inner}
-        </a>
-      ) : (
-        <TransitionLink
-          href={item.href}
-          className="group block space-y-3 p-2"
-          aria-label={ariaLabel}
-        >
-          {inner}
-        </TransitionLink>
-      )}
+    <article className={`${item.gridClass} flex flex-col justify-start`}>
+      <div className={cardSizingClass}>
+        {external ? (
+          <a
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block space-y-3 p-2"
+            aria-label={ariaLabel}
+          >
+            {inner}
+          </a>
+        ) : (
+          <TransitionLink
+            href={item.href}
+            className="group block space-y-3 p-2"
+            aria-label={ariaLabel}
+          >
+            {inner}
+          </TransitionLink>
+        )}
+      </div>
     </article>
   );
 }

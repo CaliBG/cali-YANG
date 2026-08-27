@@ -102,7 +102,7 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
         {pick(work.quote).replace(/ —/g, " —")}
       </blockquote>
 
-      {/* 图片：多图走源站同款叠放画廊；单图平铺（可 lightbox 放大） */}
+      {/* 图片展示区：顶部可互动叠放画廊（自适应画幅与完整展现） */}
       {work.images.length > 1 ? (
         <StackGallery
           images={work.images.map((src) => asset(src))}
@@ -111,6 +111,34 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
       ) : work.images.length === 1 ? (
         <MdxImg src={asset(work.images[0])} alt={work.title} />
       ) : null}
+
+      {/* 完整照片展示区：100% 原始完整尺寸平铺，无裁切，支持点击全屏放大查看 */}
+      {work.images.length > 1 && (
+        <section className="my-16">
+          <div className="mb-8 flex items-center justify-between border-b border-line pb-3">
+            <h3 className="font-mono-2 text-xs uppercase tracking-widest text-l3">
+              {zh ? "完整作品图集 · 全尺寸展示" : "Full Gallery · Complete Dimensions"}
+            </h3>
+            <span className="font-mono-2 text-xs text-l3">
+              {work.images.length} {zh ? "张照片 · 点击可放大" : "photos · click to zoom"}
+            </span>
+          </div>
+
+          <div className="flex flex-col items-center gap-10 sm:gap-14 w-full">
+            {work.images.map((src, idx) => (
+              <figure key={src} className="w-full flex flex-col items-center">
+                <div className="w-full max-w-2xl flex justify-center">
+                  <MdxImg
+                    src={asset(src)}
+                    alt={`${work.title} - ${idx + 1}`}
+                    title={`${work.title} · ${idx + 1} / ${work.images.length}`}
+                  />
+                </div>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* 视频（多条时桌面端并排两列；竖屏限高居中） */}
       {work.videos && work.videos.length > 0 && (

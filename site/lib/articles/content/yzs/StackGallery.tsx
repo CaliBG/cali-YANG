@@ -27,11 +27,48 @@ export default function StackGallery({
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
   const total = images.length;
 
-  // order：底→顶的卡片索引序列（源站 stack 数组）
+  // order：底→顶的卡片索引序列（源站 stack 数组，末位为顶牌，故初始逆序让第 0 张在顶）
   const [order, setOrder] = useState<number[]>(() =>
-    images.map((_, i) => i)
+    images.map((_, i) => total - 1 - i)
   );
   const [hovering, setHovering] = useState(false);
+  const [containerStyle, setContainerStyle] = useState<{ width: string; aspectRatio: string }>({
+    width: "min(460px, calc(100vw - 4rem))",
+    aspectRatio: "4 / 5",
+  });
+
+  useEffect(() => {
+    if (!images[0]) return;
+    const img = new Image();
+    img.onload = () => {
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      if (w > 0 && h > 0) {
+        const r = w / h;
+        const ratioStr = `${w} / ${h}`;
+        if (r < 0.6) {
+          // 手机长竖屏（如 370/800）：宽度自适应收拢在 260px-280px，高度约 560px-600px，完整展现机身界面，绝不裁切！
+          setContainerStyle({
+            width: "min(280px, calc(100vw - 3rem))",
+            aspectRatio: ratioStr,
+          });
+        } else if (r > 1.1) {
+          // 平板横屏（如 534/400）：展开至宽屏 640px，高度约 480px
+          setContainerStyle({
+            width: "min(640px, calc(100vw - 4rem))",
+            aspectRatio: ratioStr,
+          });
+        } else {
+          // 常规艺术品与装置（如 3:4、4:5）
+          setContainerStyle({
+            width: "min(460px, calc(100vw - 4rem))",
+            aspectRatio: ratioStr,
+          });
+        }
+      }
+    };
+    img.src = images[0];
+  }, [images]);
 
   const drag = useRef({
     active: false,
@@ -146,7 +183,11 @@ export default function StackGallery({
     <div className="my-10 -mx-4 px-4 overflow-x-clip">
       <div
         ref={containerRef}
-        className="relative mx-auto w-[min(520px,calc(100vw-5rem))] aspect-[4/5] [transform-style:preserve-3d]"
+        className="relative mx-auto [transform-style:preserve-3d]"
+        style={{
+          width: containerStyle.width,
+          aspectRatio: containerStyle.aspectRatio,
+        }}
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
       >
@@ -158,7 +199,7 @@ export default function StackGallery({
               ref={(el) => {
                 cardRefs.current[i] = el;
               }}
-              className="absolute inset-0 overflow-hidden rounded-2xl bg-line shadow-lg cursor-grab select-none [transform-origin:center_bottom] will-change-transform"
+              className="absolute inset-0 overflow-hidden rounded-2xl bg-line shadow-lg cursor-grab select-none [transform-origin:center_bottom] will-change-transform flex items-center justify-center"
               style={{
                 zIndex: stackPos,
                 transform: transformFor(stackPos),
@@ -169,11 +210,11 @@ export default function StackGallery({
               onTouchStart={onPointerDown(i)}
               onClick={onClick(i)}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element -- 源站同款原生 img cover */}
+              {/* eslint-disable-next-line @next/next/no-img-element -- 原始完整比例，绝不裁切 */}
               <img
                 src={src}
                 alt={alt}
-                className="w-full h-full object-cover pointer-events-none"
+                className="w-full h-full object-contain pointer-events-none"
                 draggable={false}
                 loading={stackPos >= total - 4 ? "eager" : "lazy"}
               />

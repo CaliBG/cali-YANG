@@ -105,7 +105,43 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     type: "post",
     // 移动端全宽收尾（避免末位半宽孤卡 + 右列空置）
     gridClass:
-      "col-span-12 lg:col-start-5 lg:col-span-4 xl:col-start-5 xl:col-span-3",
+      "col-span-12 lg:col-start-5 lg:col-span-4 xl:col-start-5 xl:col-span-4",
+  },
+  {
+    name: "Tongkuang Dual Camera",
+    nameZh: "同框 — 前后双摄相机",
+    imageUrl: "/work/yzs_w09.png",
+    hoverImageUrl: "/work/yzs_w09_h.png",
+    href: "/tongkuang",
+    year: "2026",
+    type: "post",
+    codingProject: true,
+    gridClass:
+      "col-span-12 lg:col-start-9 lg:col-span-4 xl:col-start-9 xl:col-span-4",
+  },
+  {
+    name: "Magic Note",
+    nameZh: "魔本 Magic Note — 会回应的手写日记",
+    imageUrl: "/work/yzs_w10.png",
+    hoverImageUrl: "/work/yzs_w10_h.png",
+    href: "/magic-note",
+    year: "2026",
+    type: "post",
+    codingProject: true,
+    gridClass:
+      "col-span-12 lg:col-start-1 lg:col-span-6 xl:col-start-1 xl:col-span-6",
+  },
+  {
+    name: "AILY AI Assistant",
+    nameZh: "AILY — 多引擎 AI 助手",
+    imageUrl: "/work/yzs_w11.png",
+    hoverImageUrl: "/work/yzs_w11_h.png",
+    href: "/aily",
+    year: "2026",
+    type: "post",
+    codingProject: true,
+    gridClass:
+      "col-span-12 lg:col-start-7 lg:col-span-6 xl:col-start-7 xl:col-span-6",
   },
 ];
 

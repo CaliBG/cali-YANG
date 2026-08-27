@@ -314,6 +314,153 @@ export const YZS_WORKS: YzsWork[] = [
       },
     ],
   },
+  {
+    slug: "tongkuang",
+    title: "同框 — 前后双摄相机 / Tongkuang Dual Camera",
+    date: "Feb 2026",
+    description: "iOS 原生应用 / 独立设计与开发",
+    intro: {
+      zh: [
+        "同框（Tongkuang）是一款前后双摄同时取景的 iOS 原生相机应用。基于 AVCaptureMultiCamSession 深度开发，前后镜头同时预览、拍照与录像，把「你看到的画面」和「你当下的反应」装进同一次快门，一镜到底，无需任何后期剪辑与拼接。",
+        "针对开箱录制需反复翻转镜头、口播拍摄需额外架设提词器、按下录制键后台音乐被强行掐断等日常创作痛点，同框在单台 iPhone 上实现了完整闭环：支持画中画（PIP）、上下与左右分屏三种布局，悬浮小窗可自由拖拽吸附与单击互换；内置视线同轴悬浮提词器（滚动调速与脚本自存）、后台伴奏音乐同步录制、多焦段无级变焦，以及意外断电与闪退时的素材恢复保险机制。",
+        "在架构与隐私哲学上，同框恪守「零数据收集」与「零第三方 SDK」原则：无需注册登录账号，无任何网络跟踪埋点，所有的双摄视频与照片全流程只保留在用户本机的相册与沙盒中，让创作重归纯粹与踏实。",
+      ],
+      en: [
+        "Tongkuang is an iOS camera application that records with your iPhone's front and back cameras at the same time. Leveraging AVCaptureMultiCamSession, it simultaneously captures your live reaction and what you are seeing in a single take — entirely eliminating the need for post-production editing.",
+        "Designed to eliminate common video creation headaches — constantly flipping the camera for unboxings, buying bulky teleprompter rigs for talking-head videos, or having music cut off the moment you hit record — Tongkuang solves it all on a single device: customizable picture-in-picture (PIP), stacked and split-screen layouts with draggable floating windows, a transparent teleprompter, uninterrupted background music recording, smooth 0.5×–10× zoom, and crash-proof footage recovery.",
+        "Built on a strict privacy-first architecture, Tongkuang requires no account sign-up, embeds zero third-party tracking SDKs, and performs no background data collection. Every frame captured stays exclusively within your local photo library.",
+      ],
+    },
+    quote: {
+      zh: "把「你看到的」和「你自己」，\n装进同一次快门",
+      en: "Your reaction and what you're seeing —\ncaptured together in a single take",
+    },
+    material: {
+      zh: "Swift、AVFoundation、AVCaptureMultiCamSession、iOS 原生框架",
+      en: "Swift, AVFoundation, AVCaptureMultiCamSession, iOS Native Frameworks",
+    },
+    type: {
+      zh: "iOS 独立相机应用 / 视听交互与系统设计",
+      en: "iOS Independent Camera App / Audiovisual Interaction & System Design",
+    },
+    inspiration: {
+      zh: "双摄视线同轴叙事、即兴 Vlog 与极简口播录制工作流",
+      en: "Dual-perspective Visual Storytelling, Improvisational Vlog & Streamlined Video Workflow",
+    },
+    team: { zh: "独立设计与独立开发 · 杨子硕 Cali-Yang", en: "Independent Design & Development · Zishuo Yang (Cali-Yang)" },
+    images: [
+      `${P}/work09-1.png`,
+      `${P}/work09-2.png`,
+      `${P}/work09-3.png`,
+      `${P}/work09-4.png`,
+      `${P}/work09-5.png`,
+    ],
+    demoLink: {
+      href: "https://calibg.github.io/privacy/",
+      label: {
+        zh: "隐私政策与技术支持 (Privacy Policy & Support)",
+        en: "Privacy Policy & Support",
+      },
+    },
+  },
+  {
+    slug: "magic-note",
+    title: "魔本 Magic Note — 会回应的手写日记 / Magic Note",
+    date: "Feb 2026",
+    description: "iPadOS 应用 / 独立设计与开发",
+    intro: {
+      zh: [
+        "魔本（Magic Note）是一本「会回应」的手写日记：用 Apple Pencil 在纸页上写下一段思绪、画草图或绘制思维导图，停笔片刻——墨迹在纸页间徐徐晕染吸收，一段同样带有手写质感的回应便悄然浮现。它不提供空洞的客套，而是给出切中要害的具象建议，并抛出至少一个促使思考向深处漫溯的问题。",
+        "打字与语音虽然迅捷，却往往快到大脑来不及真正沉浸；手写与草绘，才是人类最直接、最能唤醒深层专注的思考媒介。魔本并非让用户被动等待对话框的答案，而是围绕手写展开思考的廓清：内置离线端侧开源小模型（支持一键下载更强模型），手写识别在 iPad 端侧全闭环运行，内容永不离机；亦可接入任意 OpenAI 兼容云端大模型并开启视觉模式，让 AI 直观「看懂」草图架构。",
+        "双指捏合即可将整段手写对话一键凝炼为日程清单并同步至提醒事项，亦可导出为整张高清长图或纯文本备忘录。买断制、无订阅、零数据收集，魔本专为用笔推敲早期产品原型的设计师、梳理生活节奏的学生，以及习惯于在笔尖触感中延展创意的创作者而生。",
+      ],
+      en: [
+        "Magic Note is a notebook that writes back: put down a thought, a sketch, or a mind map with your Apple Pencil, then pause — your ink absorbs into the page, and a reply surfaces in handwritten ink. Rather than empty pleasantries, it offers concrete suggestions and questions that push your thinking deeper.",
+        "Typing and voice are fast — so fast your brain barely engages. Handwriting and sketching are the most direct, deeply engaging ways to think. Magic Note is built around clarifying ideas as you write rather than passively waiting in a chat box: equipped with a built-in offline open-source model (with one-tap downloads for larger weights), fully on-device handwriting recognition, and optional cloud API integration with Vision Mode to interpret hand-drawn mind maps.",
+        "Pinch with two fingers to distill the handwritten dialogue into an actionable plan exported to Reminders, or render the entire conversation into a tall image. With a pay-once lifetime model, zero ads, and no data tracking, Magic Note is crafted for designers shaping early product ideas, students making plans, and anyone who thinks best with a pen in hand.",
+      ],
+    },
+    quote: {
+      zh: "在笔尖与纸页的停顿之间，\n思考开始向深处漫溯",
+      en: "In the pauses between pen and paper,\nthinking begins to wander deeper",
+    },
+    material: {
+      zh: "Swift、PencilKit、llama.cpp、GGUF 本地端侧大模型、Vision API",
+      en: "Swift, PencilKit, llama.cpp, On-device GGUF Models, Vision API",
+    },
+    type: {
+      zh: "iPadOS 触控手写交互 / 端侧 AI 日记应用",
+      en: "iPadOS Apple Pencil Interaction / On-device AI Notebook",
+    },
+    inspiration: {
+      zh: "《哈利·波特》会回话的日记本、手写笔迹沉浸感与纸质笔记本触感",
+      en: "Tom Riddle's Diary in Harry Potter, Tactile Immediacy of Handwriting on Paper",
+    },
+    team: { zh: "独立设计与独立开发 · 杨子硕 Cali-Yang", en: "Independent Design & Development · Zishuo Yang (Cali-Yang)" },
+    images: [
+      `${P}/work10-1.png`,
+      `${P}/work10-2.png`,
+      `${P}/work10-3.png`,
+      `${P}/work10-4.png`,
+      `${P}/work10-5.png`,
+    ],
+    demoLink: {
+      href: "https://calibg.github.io/privacy/",
+      label: {
+        zh: "查看隐私政策与产品说明 (Privacy Policy & Info)",
+        en: "Privacy Policy & Info",
+      },
+    },
+  },
+  {
+    slug: "aily",
+    title: "AILY — 多引擎 AI 助手 / AILY AI Assistant",
+    date: "Feb 2026",
+    description: "iOS 原生应用 / 独立设计与开发",
+    intro: {
+      zh: [
+        "AILY 是一款把「完全离线端侧大模型」与「全网前沿云端 API」装进同一个对话框的 iOS 智能助手。无需联网，在飞行模式、地铁、航班机舱或海外无漫游环境下，AI 依然能敏捷回应。对话数据全流程仅存在设备本地，零每条计费，零隐私泄露风险。",
+        "应用内置基于 llama.cpp 构建的端侧引擎，提供包含 20 款主流开源小模型的离线模型库（千问 Qwen、Gemma、Llama、Phi、SmolLM、DeepSeek 蒸馏等），支持按网络地区智能路由一键下载，并搭载内存预警看门狗机制，在模型超出设备承载前主动提示切换，同时支持从「文件」App 自定义导入 GGUF 权重；更深度集成 Apple Intelligence 端侧模型引擎，提供系统级极速私密体验。",
+        "当需要更前沿的复杂推理时，用户可输入自己的 API Key 直连 Claude、GPT、DeepSeek、Kimi、智谱 GLM、通义千问、Gemini、Grok 或本地局域网 Ollama 服务。预设常用端点配置，Key 经由 iOS Keychain 硬件加密且仅直连官方接口，无中转服务器与加价。买断制、无订阅、零数据收集，重新定义个人随身 AI 交互体验。",
+      ],
+      en: [
+        "AILY runs state-of-the-art large language models directly on your iPhone — no internet connection required. In airplane mode, on the subway, or during overseas travel without a cellular plan, your personal AI keeps answering with zero latency and zero per-message cost, ensuring your thoughts never leave your device.",
+        "Powered by llama.cpp on-device inference, AILY features a curated 20-model offline library spanning from 0.5 GB pocket models to 4 GB+ flagships (Qwen, Gemma, Llama, Phi, SmolLM, DeepSeek distills), complemented by intelligent region-routing downloads, custom GGUF file imports, and an active memory guard that prevents system thrashing. It also integrates Apple Intelligence on-device models for instantaneous, native reasoning.",
+        "When frontier-level reasoning is required, simply bring your own API keys to connect Claude, GPT, DeepSeek, Kimi, GLM, Qwen, Gemini, Grok, or a local Ollama server. Keys are secured in the iOS Keychain and talk directly to official provider endpoints with no intermediary proxies. With a pay-once lifetime architecture, vision photo input, and absolute zero tracking, AILY makes AI truly personal and sovereign.",
+      ],
+    },
+    quote: {
+      zh: "把大模型装进口袋，\n在无网之地，智慧依然随行",
+      en: "Carrying frontier intelligence in your pocket —\nwherever you go, even completely offline",
+    },
+    material: {
+      zh: "Swift、SwiftUI、llama.cpp、GGUF 本地推理、Apple Intelligence、Keychain",
+      en: "Swift, SwiftUI, llama.cpp, On-device GGUF Inference, Apple Intelligence, Keychain",
+    },
+    type: {
+      zh: "iOS 端侧与云端多引擎 AI 助手 / 系统工具设计",
+      en: "iOS Multi-Engine AI Assistant / System & Interaction Design",
+    },
+    inspiration: {
+      zh: "数据主权哲学、边缘计算本地化与极简大模型对话交互",
+      en: "Data Sovereignty, Edge Computing & Streamlined LLM Dialog Interaction",
+    },
+    team: { zh: "独立设计与独立开发 · 杨子硕 Cali-Yang", en: "Independent Design & Development · Zishuo Yang (Cali-Yang)" },
+    images: [
+      `${P}/work11-1.png`,
+      `${P}/work11-2.png`,
+      `${P}/work11-3.png`,
+      `${P}/work11-4.png`,
+      `${P}/work11-5.png`,
+    ],
+    demoLink: {
+      href: "https://calibg.github.io/privacy/",
+      label: {
+        zh: "查看隐私政策与产品说明 (Privacy Policy & Info)",
+        en: "Privacy Policy & Info",
+      },
+    },
+  },
 ];
 
 export function getYzsWork(slug: string): YzsWork | undefined {
