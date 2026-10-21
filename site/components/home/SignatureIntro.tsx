@@ -156,7 +156,7 @@ export default function SignatureIntro() {
               target="_blank"
               rel="noopener noreferrer"
               className={INTRO_LINK_CLASS}
-              href="https://caliyang.dpdns.org"
+              href={asset("/")}
             >
               YZS
             </a>

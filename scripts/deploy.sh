@@ -185,7 +185,7 @@ done <<< "$REMOTE_REFS"
 [[ "$REMOTE_PAGES_SHA" == "$PAGES_SHA" ]] || fail "远端 gh-pages 已发生变化，不能确认构建副本一致，请检查并重新发布。"
 check_source
 
-echo "✅ GitHub 源码与构建副本已同步，原域名、Cloudflare 发布地址与 Netlify 的 release.json 均已核验为 $SOURCE_SHA。"
+echo "✅ GitHub 源码与构建副本已同步，原域名、Cloudflare 发布地址与 Netlify 的 release.json 均已核验为 ${SOURCE_SHA}。"
 echo "   Cloudflare 主站：https://caliyang.dpdns.org/ （须先完成一次性域名绑定）"
 echo "   Cloudflare 发布地址：$CLOUDFLARE_URL/"
 echo "   Netlify 独立备用站：$NETLIFY_URL/"
