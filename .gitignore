@@ -4,3 +4,6 @@ out/
 .env.local
 .DS_Store
 tsconfig.tsbuildinfo
+
+# Cloudflare CLI local cache
+.wrangler/
