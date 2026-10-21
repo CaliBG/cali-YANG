@@ -70,8 +70,10 @@ Cloudflare 目标账户 ID 为 `45ad8957fbf9355fa9bb4693f34207c7`，Pages 项目
 
 ```bash
 CLOUDFLARE_ACCOUNT_ID=45ad8957fbf9355fa9bb4693f34207c7 \
-  npx --yes wrangler@4.151.3 pages project create caliyang-portfolio --production-branch main
+  npx --yes wrangler@4.151.3 pages project create caliyang-portfolio --production-branch main --force
 ```
+
+Wrangler 4.151.3 在创建全新项目时默认尝试转到 Workers；上面的 `--force` 仅用于首次明确创建静态 Pages 项目。项目建成后，日常发布无需该选项。
 
 本站文件数量超过控制台拖拽上传的 1,000 文件限制，因此统一使用 Wrangler 上传。Pages 免费版允许 20,000 文件、每个文件最大 25 MiB，脚本会在任何远端发布前检查；保留完整交互、视频和演示文稿，无需拆站或改为外部媒体链接。
 
