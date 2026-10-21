@@ -306,7 +306,10 @@ export const YZS_WORKS: YzsWork[] = [
       zh: "非遗再生 / 地域文化装置",
       en: "Intangible heritage regeneration / Regional installation",
     },
-    team: { zh: "杨子硕 Cali-Yang", en: "Zishuo Yang (Cali-Yang)" },
+    team: {
+      zh: "黄雪颖、陈芷铟、曹新玉、申一辰、杨子硕",
+      en: "黄雪颖, 陈芷铟, 曹新玉, 申一辰, 杨子硕 (Cali-Yang)",
+    },
     images: [`${P}/work08.jpg`, `${P}/work08-2.jpg`, `${P}/work08-3.jpg`],
     videos: [
       {
