@@ -193,8 +193,8 @@ export const YZS_WORKS: YzsWork[] = [
     },
     type: { zh: "交互装置 / 时间感知", en: "Interactive installation / Time perception" },
     team: {
-      zh: "杨子硕、黄雪颖、申一辰、邱敏婧、崔晴瑜",
-      en: "Zishuo Yang, Huang Xueying, Shen Yichen, Qiu Minjing, Cui Qingyu",
+      zh: "杨子硕、于昕依、喻畅、万嘉瑶、王梓淇、黄雪颖、邱敏婧、申一辰、崔晴瑜",
+      en: "杨子硕 (Cali-Yang), 于昕依, 喻畅, 万嘉瑶, 王梓淇, 黄雪颖, 邱敏婧, 申一辰, 崔晴瑜",
     },
     images: [`${P}/work05.jpg`],
     demoLink: {
