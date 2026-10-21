@@ -1,6 +1,6 @@
 "use client";
 
-import {useRef,useState} from "react";
+import {useState} from "react";
 import {asset} from "@/lib/asset";
 import {useLanguage} from "@/lib/language";
 import {useShellMedia} from "@/lib/shell-media";
@@ -16,11 +16,7 @@ const modes=[
   {id:"screen",name:["录屏双拍","Screen + camera"],title:["屏幕里的内容，镜头里的你。","Your screen, with you in the picture."],text:["为演示、讲解与实时反应设计，把屏幕内容和相机小窗放在一起。","Designed for walkthroughs, explanations and reactions, combining screen content with a camera window."],image:"screen-camera-selfie.webp",detail:["持续迭代：部分 iPhone 的跨 App 相机仍在修复中。","In development: cross-app camera capture is still being fixed on some iPhones."]},
   {id:"vlog",name:["Vlog","Vlog"],title:["看着镜头，把故事说完整。","Keep your eyes on the story."],text:["让提词器融入拍摄界面。调节滚动速度、保存常用脚本，减少口播时的中断。","A teleprompter inside the camera. Adjust scrolling speed and save scripts to stay focused while speaking."],image:"vlog.webp",detail:["滚动提词 · 速度可调 · 保存脚本","Scrolling prompts · adjustable speed · saved scripts"]},
 ];
-const deck=[
-  {page:"36",scene:0,name:["双摄的瞬间","Two perspectives"],cover:"story-intro.webp"},
-  {page:"39",scene:2,name:["一部相机的起点","A camera takes shape"],cover:"story-design.webp"},
-  {page:"40",scene:3,name:["展开完整设计","The full picture"],cover:"design-expanded.webp"},
-];
+
 
 function Chapter({number,title,children,id}:{number:string;title:string;children?:React.ReactNode;id:string}){
   return <div className={styles.chapterHeading}><span className={styles.eyebrow}>{number}</span><h2 id={id}>{title}</h2>{children&&<p>{children}</p>}</div>;
@@ -29,11 +25,9 @@ function Chapter({number,title,children,id}:{number:string;title:string;children
 export default function TongkuangCaseStudy(){
   const {lang}=useLanguage(),zh=lang==="zh",language=zh?0:1;
   const {setSoundEnabled}=useShellMedia();
-  const [mode,setMode]=useState(0),[slide,setSlide]=useState(1),[playingDeck,setPlayingDeck]=useState(false);
-  const [clip,setClip]=useState(0),[videoError,setVideoError]=useState(false);
-  const videoRef=useRef<HTMLVideoElement>(null);
+  const [mode,setMode]=useState(0),[playingDeck,setPlayingDeck]=useState(false);
+  const [videoError,setVideoError]=useState(false);
   const selected=modes[mode];
-  const selectSlide=(next:number)=>{setSlide(next);setPlayingDeck(false);};
   return <div className={styles.caseStudy}>
     <header className={styles.caseHero}>
       <div className={styles.heroCopy}>
@@ -53,7 +47,7 @@ export default function TongkuangCaseStudy(){
       {[[zh?"我的角色":"Role",zh?"独立设计与开发":"Independent design & development"],[zh?"设计范围":"Scope",zh?"产品 / 交互 / 应用 / 官网":"Product / interaction / app / website"],[zh?"平台":"Platforms","iOS · Android · HarmonyOS"],[zh?"核心技术":"Built with","Swift · AVFoundation"]].map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
     </dl>
     <nav className={styles.chapterNav} aria-label={zh?"项目章节":"Project chapters"}>
-      {[["concept",zh?"设计起点":"The idea"],["modes",zh?"三种模式":"Three modes"],["motion",zh?"交互演示":"In motion"],["keynote", "Keynote"],["resources",zh?"探索项目":"Explore"]].map(([id,label])=><a key={id} href={`#tk-${id}`} onClick={event=>{const target=document.getElementById(`tk-${id}`);if(target){event.preventDefault();scrollToMdxAnchorTarget(target);history.replaceState(null,"",`#tk-${id}`);}}}>{label}</a>)}
+      {[["concept",zh?"设计起点":"The idea"],["modes",zh?"三种模式":"Three modes"],["motion",zh?"交互演示":"In motion"],["keynote",zh?"设计展开":"Design in motion"],["film",zh?"作品视频":"Film"],["presentation",zh?"分享会文稿":"Presentation"],["resources",zh?"探索项目":"Explore"]].map(([id,label])=><a key={id} href={`#tk-${id}`} onClick={event=>{const target=document.getElementById(`tk-${id}`);if(target){event.preventDefault();scrollToMdxAnchorTarget(target);history.replaceState(null,"",`#tk-${id}`);}}}>{label}</a>)}
     </nav>
 
     <section className={styles.concept}>
@@ -74,20 +68,24 @@ export default function TongkuangCaseStudy(){
 
     <div id="tk-motion"><ScrollStory scene="0"/></div>
 
+    <div id="tk-keynote"><ScrollStory scene="2"/></div>
+
     <section className={styles.videoSection}>
-      <Chapter id="tk-film" number="03 / THE FILM" title={zh?"让画面自己说话。":"See it in motion."}>{zh?"来自原始演示的两段短片。点按播放，可全屏观看。":"Two short clips from the original presentation. Play to watch, or open fullscreen."}</Chapter>
-      <div className={styles.segmented}>{[zh?"双摄实拍 · 6.6 秒":"Dual-camera footage · 6.6 s",zh?"设计演示 · 6 秒":"Design demo · 6 s"].map((label,index)=><button key={index} type="button" aria-pressed={clip===index} onClick={()=>{videoRef.current?.pause();setClip(index);setVideoError(false);}}>{label}</button>)}</div>
-      <video ref={videoRef} key={clip} controls playsInline preload="none" poster={media(clip===0?"story-intro.webp":"design-expanded.webp")} src={media(`interactive/${clip===0?"intro":"design"}.mp4`)} onPlay={()=>setSoundEnabled(false)} onError={()=>setVideoError(true)} aria-label={zh?"同框演示短片":"Tongkuang presentation clip"}/>
-      {videoError&&<p role="status">{zh?"视频暂时无法播放。":"Video could not load. "}<a href={media(`interactive/${clip===0?"intro":"design"}.mp4`)} target="_blank" rel="noopener noreferrer">{zh?"在独立窗口打开 ↗":"Open the clip separately ↗"}</a></p>}
+      <Chapter id="tk-film" number="03 / THE FILM" title={zh?"听我讲讲同框。":"The story behind Tongkuang."}>{zh?"完整作品视频 · 1 分 51 秒。点按播放，可全屏观看。":"The complete project film · 1 min 51 sec. Play to watch, or open fullscreen."}</Chapter>
+      <video controls playsInline preload="none" poster={media("film-poster.webp")} src={media("tongkuang-film.mp4")} onPlay={()=>setSoundEnabled(false)} onError={()=>setVideoError(true)} aria-label={zh?"同框完整作品视频":"Tongkuang complete project film"}/>
+      {videoError&&<p role="status">{zh?"视频暂时无法播放。":"Video could not load. "}<a href={media("tongkuang-film.mp4")} target="_blank" rel="noopener noreferrer">{zh?"在独立窗口打开 ↗":"Open the film separately ↗"}</a></p>}
     </section>
 
     <section className={styles.deckSection}>
-      <Chapter id="tk-keynote" number="04 / THE PRESENTATION" title={zh?"从一部相机，展开完整过程。":"From one camera to the full picture."}>{zh?"保留 Keynote 第 36、39、40 页的原始画面与动画。选择一个章节，再点播放。":"Original visuals and animations from Keynote slides 36, 39 and 40. Choose a chapter, then play."}</Chapter>
+      <Chapter id="tk-presentation" number="04 / THE PRESENTATION" title={zh?"从需求，到真正上架。":"From an idea to a released app."}>{zh?"同框作品分享会 · 完整 43 页。保留原始内容、翻页与动画，点击下方打开文稿。":"The Tongkuang project presentation · all 43 slides, with the original content, transitions and animations. Open the deck below to explore."}</Chapter>
       <div className={styles.deckStage}>
-        {playingDeck?<iframe key={slide} src={media(`keynote/#${deck[slide].scene}`)} title={`Tongkuang Keynote · ${deck[slide].page}`} allow="autoplay; fullscreen" allowFullScreen/>:<><img src={media(deck[slide].cover)} width={1280} height={720} alt={deck[slide].name[language]} loading="lazy" decoding="async"/><button className={styles.playButton} type="button" onClick={()=>{setSoundEnabled(false);setPlayingDeck(true);}}><span aria-hidden="true">▷</span>{zh?"播放原始动画":"Play original animation"}</button></>}
+        {playingDeck?<iframe src={media("presentation/")} title={zh?"同框作品分享会 · 完整 43 页":"Tongkuang project presentation · 43 slides"} allow="autoplay; fullscreen" allowFullScreen/>:<div className={styles.presentationCover}><span className={styles.eyebrow}>TONGKUANG / 43 SLIDES</span><h3>{zh?<>一个 App，<br/>从头讲起。</>:<>One app.<br/>The whole process.</>}</h3><p>{zh?"需求 · 设计 · 开发 · 发布":"Idea · Design · Development · Release"}</p><button type="button" onClick={()=>{setSoundEnabled(false);setPlayingDeck(true);}}>{zh?"打开分享会文稿":"Open the presentation"} <span aria-hidden="true">↗</span></button></div>}
       </div>
-      <div className={styles.deckControls}><button type="button" disabled={slide===0} onClick={()=>selectSlide(slide-1)} aria-label={zh?"上一页":"Previous slide"}>←</button><span className={styles.mono}>{deck[slide].page} / 43</span><button type="button" disabled={slide===2} onClick={()=>selectSlide(slide+1)} aria-label={zh?"下一页":"Next slide"}>→</button><a className={styles.textLink} href={media(`keynote/#${deck[slide].scene}`)} target="_blank" rel="noopener noreferrer">{zh?"独立窗口观看":"Open presentation"} ↗</a></div>
-      <div className={styles.deckChapters}>{deck.map((item,index)=><button key={item.page} type="button" aria-pressed={slide===index} onClick={()=>selectSlide(index)}><span className={styles.mono}>{item.page}</span><span>{item.name[language]}</span><span aria-hidden="true">↗</span></button>)}</div>
+      <div className={styles.deckControls}>
+        <span className={styles.presentationHint}>{zh?"点击画面推进动画，使用方向键翻页。":"Click to advance animations. Use arrow keys to navigate."}</span>
+        {playingDeck&&<button type="button" className={styles.closePresentation} onClick={()=>setPlayingDeck(false)}>{zh?"关闭文稿":"Close deck"}</button>}
+        <a className={styles.textLink} href={media("presentation/")} target="_blank" rel="noopener noreferrer">{zh?"独立窗口打开":"Open in a new window"} ↗</a>
+      </div>
     </section>
 
     <section className={styles.gallerySection}>

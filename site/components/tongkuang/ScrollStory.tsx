@@ -65,15 +65,16 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
     return()=>{disposed=true;observer.disconnect();sizes.disconnect();rendererRef.current=null;renderer?.destroy();root?.remove();};
   },[container,scene,retry]);
 
-  return <section ref={sectionRef} className={`${styles.scrollStory} ${featured?styles.featured:""}`} aria-label={zh?"同框随滚动展开的交互演示":"Tongkuang scroll-controlled showcase"}>
+  return <section ref={sectionRef} className={`${styles.scrollStory} ${featured?styles.featured:""}`} aria-label={scene==="0"?(zh?"双摄滚动交互演示":"Dual-camera scroll experience"):(zh?"同框设计展开交互":"Tongkuang design scroll showcase")}>
     <div className={styles.stickyStory}>
       <div className={styles.storyHeading}>
-        <div><span className={styles.eyebrow}>{featured?"SELECTED WORK / 01":"INTERACTIVE / 01"}</span>
-          <h2>{featured?"Tongkuang / 同框":zh?"同一刻，两个视角。":"One moment. Two perspectives."}</h2></div>
-        {featured?<TransitionLink href="/tongkuang" className={styles.textLink}>{zh?"探索完整项目":"Explore the project"} <span aria-hidden="true">↗</span></TransitionLink>:<span className={styles.mono}>{zh?"来自第 36 页":"From slide 36"}</span>}
+        <div><span className={styles.eyebrow}>{featured?"SELECTED WORK / 01":scene==="0"?"INTERACTIVE / 01":"INTERACTIVE / 02"}</span>
+          <h2>{featured?"Tongkuang / 同框":scene==="0"?(zh?"同一刻，两个视角。":"One moment. Two perspectives."):(zh?"从一部相机，展开完整过程。":"From one camera to the full picture.")}</h2></div>
+        {featured?<TransitionLink href="/tongkuang" className={styles.textLink}>{zh?"探索完整项目":"Explore the project"} <span aria-hidden="true">↗</span></TransitionLink>:<span className={styles.mono}>{scene==="0"?(zh?"来自第 36 页":"From slide 36"):(zh?"来自第 39–40 页":"From slides 39–40")}</span>}
       </div>
       <div ref={stageRef} className={styles.storyStage} data-progress={percent} aria-busy={!ready&&!failed}>
         <img src={asset(`/projects/tongkuang/${scene==="0"?"story-intro":"design-expanded"}.webp`)} alt={zh?"同框：从一部相机展开为设计、开发与发布的完整过程":"Tongkuang: camera, design, development and release"} loading="lazy" decoding="async" width={1280} height={720} hidden={ready}/>
+        {featured&&<a href={asset("/tongkuang/")} className={styles.storyLink} aria-label={zh?"查看同框完整作品":"View the full Tongkuang project"}><span>{zh?"查看完整作品":"View full project"} ↗</span></a>}
         {failed&&<button type="button" className={styles.retry} onClick={()=>setRetry(value=>value+1)}>{zh?"重新载入动画":"Reload animation"}</button>}
       </div>
       <div className={styles.storyCaption}>
