@@ -28,7 +28,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const article = getArticle(slug);
-  return article ? { title: article.title } : {};
+  return article ? {
+    title: article.title,
+    ...(slug === "tongkuang" ? {
+      description: "同框 Tongkuang — 两个视角，一个故事。杨子硕的独立相机产品设计与开发：体验三种拍摄模式、滚动交互、视频与 Keynote 演示。",
+      alternates: {canonical:"https://caliyang.dpdns.org/tongkuang/"},
+      openGraph: {title:article.title, description:"Product, interaction, camera and storytelling — an independent project by Zishuo Yang.", images:["https://caliyang.dpdns.org/projects/tongkuang/design-expanded.webp"]},
+    } : {}),
+  } : {};
 }
 
 export default async function ArticlePage({
@@ -41,13 +48,14 @@ export default async function ArticlePage({
   if (!article) notFound();
 
   const Body = article.Body;
+  const isTongkuang = slug === "tongkuang";
 
   return (
     <>
-      <MdxTableOfContents />
-      <article data-mdx-article="true" className={ARTICLE_SHELL_CLASS}>
-        <div className={ARTICLE_PROSE_CLASS}>
-          <header className="pt-[10vh]">
+      {!isTongkuang && <MdxTableOfContents />}
+      <article data-mdx-article="true" className={isTongkuang ? "mx-auto w-full max-w-[1280px] px-6 pb-20 lg:px-10" : ARTICLE_SHELL_CLASS}>
+        <div className={isTongkuang ? undefined : ARTICLE_PROSE_CLASS}>
+          {!isTongkuang && <header className="pt-[10vh]">
             <h1
               className={ARTICLE_TITLE_CLASS}
               style={{ fontVariationSettings: '"wdth" 120' }}
@@ -59,7 +67,7 @@ export default async function ArticlePage({
             {article.description ? (
               <p className={ARTICLE_DESCRIPTION_CLASS}>{article.description}</p>
             ) : null}
-          </header>
+          </header>}
           <Body />
           <ArticleFooter updated={article.updated} />
         </div>

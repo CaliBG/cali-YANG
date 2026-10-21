@@ -6,6 +6,7 @@
 import { createElement, type ComponentType } from "react";
 import YzsWorkBody from "./content/yzs/YzsWorkBody";
 import { YZS_WORKS } from "./content/yzs/works-data";
+import TongkuangCaseStudy from "@/components/tongkuang/TongkuangCaseStudy";
 
 export interface ArticleDefinition {
   slug: string;
@@ -25,8 +26,8 @@ export const ARTICLES: ArticleDefinition[] = YZS_WORKS.map((work) => ({
   title: work.title,
   date: work.date,
   description: work.description,
-  updated: work.date,
-  Body: () => createElement(YzsWorkBody, { work }),
+  updated: work.slug === "tongkuang" ? "2026-10-21" : work.date,
+  Body: work.slug === "tongkuang" ? TongkuangCaseStudy : () => createElement(YzsWorkBody, { work }),
 }));
 
 export function getArticle(slug: string): ArticleDefinition | undefined {

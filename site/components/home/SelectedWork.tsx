@@ -13,6 +13,7 @@ import WebGLImageSlot from "@/components/webgl/WebGLImageSlot";
 import { usePasscodeAccessLookup } from "@/lib/passcode";
 import { useLanguage } from "@/lib/language";
 import { WORK_ITEMS, type WorkItem } from "./work-items";
+import ScrollStory from "@/components/tongkuang/ScrollStory";
 
 // 模块级 aspect-ratio 缓存（"W / H" 字符串），避免重复预载与布局闪动
 const ratioCache = new Map<string, string>();
@@ -159,11 +160,12 @@ export default function SelectedWork() {
   }, []);
 
   const items = WORK_ITEMS.filter(
-    (item) => !item.passcodeProtected || lookup(item.href)
+    (item) => item.href !== "/tongkuang" && (!item.passcodeProtected || lookup(item.href))
   );
 
   return (
     <section id="selected-work" className="px-4 lg:px-14 py-18 lg:py-24 w-full">
+      <ScrollStory scene="2" featured />
       <div
         ref={gridRef}
         className="grid grid-cols-12 w-full"
