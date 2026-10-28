@@ -34,6 +34,10 @@ export async function generateMetadata({
       description: "同框 Tongkuang — 两个视角，一个故事。杨子硕的独立相机产品设计与开发：体验三种拍摄模式、滚动交互、视频与 Keynote 演示。",
       alternates: {canonical:"https://caliyang.dpdns.org/tongkuang/"},
       openGraph: {title:article.title, description:"Product, interaction, camera and storytelling — an independent project by Zishuo Yang.", images:["https://caliyang.dpdns.org/projects/tongkuang/design-expanded.webp"]},
+    } : slug === "vanod" ? {
+      description: "Vanod 品牌与数字产品设计 — 官网、65 页视觉识别手册、App 界面、小组件、品牌动效与 Slate 硬件概念。杨子硕的独立设计与开发项目。",
+      alternates: {canonical:"https://caliyang.dpdns.org/vanod/"},
+      openGraph: {title:article.title, description:"Vanod — visual identity, website, app interfaces, widgets and a hardware wallet concept by Zishuo Yang.", images:["https://caliyang.dpdns.org/projects/vanod/hero.webp"]},
     } : {}),
   } : {};
 }
@@ -48,14 +52,14 @@ export default async function ArticlePage({
   if (!article) notFound();
 
   const Body = article.Body;
-  const isTongkuang = slug === "tongkuang";
+  const isCaseStudy = slug === "tongkuang" || slug === "vanod";
 
   return (
     <>
-      {!isTongkuang && <MdxTableOfContents />}
-      <article data-mdx-article="true" className={isTongkuang ? "mx-auto w-full max-w-[1280px] px-6 pb-20 lg:px-10" : ARTICLE_SHELL_CLASS}>
-        <div className={isTongkuang ? undefined : ARTICLE_PROSE_CLASS}>
-          {!isTongkuang && <header className="pt-[10vh]">
+      {!isCaseStudy && <MdxTableOfContents />}
+      <article data-mdx-article="true" className={isCaseStudy ? "mx-auto w-full max-w-[1280px] px-6 pb-20 lg:px-10" : ARTICLE_SHELL_CLASS}>
+        <div className={isCaseStudy ? undefined : ARTICLE_PROSE_CLASS}>
+          {!isCaseStudy && <header className="pt-[10vh]">
             <h1
               className={ARTICLE_TITLE_CLASS}
               style={{ fontVariationSettings: '"wdth" 120' }}

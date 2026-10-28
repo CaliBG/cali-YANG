@@ -7,6 +7,7 @@ import { createElement, type ComponentType } from "react";
 import YzsWorkBody from "./content/yzs/YzsWorkBody";
 import { YZS_WORKS } from "./content/yzs/works-data";
 import TongkuangCaseStudy from "@/components/tongkuang/TongkuangCaseStudy";
+import VanodCaseStudy from "@/components/vanod/VanodCaseStudy";
 
 export interface ArticleDefinition {
   slug: string;
@@ -21,14 +22,21 @@ export interface ArticleDefinition {
   Body: ComponentType;
 }
 
-export const ARTICLES: ArticleDefinition[] = YZS_WORKS.map((work) => ({
+export const ARTICLES: ArticleDefinition[] = [...YZS_WORKS.map((work) => ({
   slug: work.slug,
   title: work.title,
   date: work.date,
   description: work.description,
   updated: work.slug === "tongkuang" ? "2026-10-21" : work.date,
   Body: work.slug === "tongkuang" ? TongkuangCaseStudy : () => createElement(YzsWorkBody, { work }),
-}));
+})), {
+  slug: "vanod",
+  title: "Vanod — 品牌与数字产品设计",
+  date: "2026-10-28",
+  description: "从视觉识别到交易界面、小组件与 Slate 硬件概念的完整设计项目",
+  updated: "2026-10-28",
+  Body: VanodCaseStudy,
+}];
 
 export function getArticle(slug: string): ArticleDefinition | undefined {
   return ARTICLES.find((a) => a.slug === slug);
