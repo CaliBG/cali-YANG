@@ -9,7 +9,7 @@ import styles from "./feature.module.css";
 const views = [
   { id: "identity", file: "hero.webp", size: [1536, 1024], label: ["视觉形象", "Identity"], caption: ["从一个 V 出发 延伸到品牌与硬件", "From a single V to a complete brand and hardware concept"] },
   { id: "website", file: "website-ui.webp", size: [1440, 900], label: ["网页设计", "Website"], caption: ["行情与交易体验的网页设计", "A web experience for markets and simulated trading"] },
-  { id: "vi", file: "construction.webp", size: [1440, 900], label: ["VI 规范", "Brand guidelines"], caption: ["中英文双册 各 34 页 统一网格下的品牌与小组件设计", "Chinese and English editions, 34 pages each, uniting identity and widgets on one grid"] },
+  { id: "vi", file: "construction.webp", size: [1440, 900], label: ["VI 规范", "Brand guidelines"], caption: ["中英文双册 各 38 页 统一网格下的品牌与小组件设计", "Chinese and English editions, 38 pages each, uniting identity and widgets on one grid"] },
   { id: "ui", file: "app-ui.webp", size: [1440, 900], label: ["UI 设计", "App interface"], caption: ["连接行情 资产与硬件钱包的移动界面", "A mobile interface connecting markets, assets and a hardware wallet"] },
 ];
 

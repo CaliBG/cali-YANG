@@ -80,7 +80,7 @@ export default function VanodCaseStudy() {
         [zh ? "我的角色" : "Role", zh ? "独立设计与开发" : "Independent design & development"],
         [zh ? "设计范围" : "Scope", zh ? "品牌  官网  UI  动效  硬件概念" : "Identity / Web / UI / Motion / Hardware concept"],
         [zh ? "产品形态" : "Formats", zh ? "移动应用  网页  桌面小组件" : "Mobile / Web / Widgets"],
-        [zh ? "品牌手册" : "Guidelines", zh ? "中英两册  每册 34 页" : "Chinese and English  /  34 pages each"],
+        [zh ? "品牌手册" : "Guidelines", zh ? "中英两册  每册 38 页" : "Chinese and English  /  38 pages each"],
       ].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
     </dl>
 
@@ -103,7 +103,7 @@ export default function VanodCaseStudy() {
 
     <section id="vanod-identity" className={styles.chapter}>
       <Chapter number="02 / VISUAL IDENTITY" title={zh ? "从标志到一套语言" : "A symbol becomes a system"}>
-        {zh ? "V 的尺规构造、品牌色和字体建立识别，12 栏网格把这些元素组织成一致的页面。中英文各 34 页，品牌色与标志错误用法分别归为一页，更多空间留给 UI 与小组件。" : "The constructed V, palette and typography establish the identity. A 12-column grid gives every page a consistent structure. Separate 34-page Chinese and English editions bring colour and logo misuse onto one page each, leaving more room for interfaces and widgets."}
+        {zh ? "V 的尺规构造、品牌色和字体建立识别，12 栏网格把这些元素组织成一致的页面。中英文各 38 页，品牌色与标志错误用法分别归为一页，保留 UI 与小组件的展示空间，并补齐跨平台字体、操作状态、对比度和制作交付规范。" : "The constructed V, palette and typography establish the identity. A 12-column grid gives every page a consistent structure. Separate 38-page Chinese and English editions bring colour and logo misuse onto one page each, preserving room for interfaces and widgets while adding platform type, action states, contrast and production guidance."}
       </Chapter>
       <div className={styles.identityTabs} role="tablist" aria-label={zh ? "品牌规范预览" : "Preview brand standards"}>
         {identityPages.map((page, index) => <button key={page.id} type="button" role="tab" id={`vanod-tab-${page.id}`} aria-selected={identityIndex === index} aria-controls="vanod-identity-panel" tabIndex={identityIndex === index ? 0 : -1} onClick={() => setIdentityIndex(index)} onKeyDown={event => {
@@ -121,11 +121,11 @@ export default function VanodCaseStudy() {
       </div>
       <div className={styles.guidelineLink}>
         <span>{zh ? "标志制图  色彩  字体  使用示例  UI  小组件  样机" : "Construction / Colour / Type / Usage / UI / Widgets / Mockups"}</span>
-        <a href={PDF} target="_blank" rel="noopener noreferrer">{zh ? "中文版品牌手册  34 页 PDF" : "Chinese edition  34-page PDF"} ↗</a>
+        <a href={PDF} target="_blank" rel="noopener noreferrer">{zh ? "中文版品牌手册  38 页 PDF" : "Chinese edition  38-page PDF"} ↗</a>
       </div>
       <div className={styles.guidelineLink}>
         <span>{zh ? "两种语言共用网格与页序 图中界面和注释也完整翻译" : "Matching grids and page order, with fully translated interfaces and annotations"}</span>
-        <a href={PDF_EN} target="_blank" rel="noopener noreferrer">{zh ? "英文版品牌手册  34 页 PDF" : "English edition  34-page PDF"} ↗</a>
+        <a href={PDF_EN} target="_blank" rel="noopener noreferrer">{zh ? "英文版品牌手册  38 页 PDF" : "English edition  38-page PDF"} ↗</a>
       </div>
     </section>
 
@@ -175,7 +175,7 @@ export default function VanodCaseStudy() {
       <h2>{zh ? "继续探索 Vanod" : "Explore Vanod"}</h2>
       <div className={styles.resourceLinks}>
         <a href={WEBSITE} target="_blank" rel="noopener noreferrer"><span>{zh ? "产品官网" : "Product website"}<small>{zh ? "在线查看网页与交互" : "Explore the website and interactions"}</small></span><span aria-hidden="true">↗</span></a>
-        <a href={zh ? PDF : PDF_EN} target="_blank" rel="noopener noreferrer"><span>{zh ? "品牌手册" : "Brand guidelines"}<small>{zh ? "中文版  34 页 PDF" : "English edition  34-page PDF"}</small></span><span aria-hidden="true">↗</span></a>
+        <a href={zh ? PDF : PDF_EN} target="_blank" rel="noopener noreferrer"><span>{zh ? "品牌手册" : "Brand guidelines"}<small>{zh ? "中文版  38 页 PDF" : "English edition  38-page PDF"}</small></span><span aria-hidden="true">↗</span></a>
       </div>
       <p className={styles.projectNote}>{zh ? "项目持续开发中。网页与应用目前展示行情和模拟下单；UI 图版使用示例数据。Slate 硬件、包装与随身配件为概念设计样机。" : "An ongoing project. The website and app currently present market data and simulated orders; UI specimens use sample data. Slate hardware, packaging and accessories are concept mockups."}</p>
       <TransitionLink href="/" className={styles.backLink}>← {zh ? "返回作品集" : "Back to the portfolio"}</TransitionLink>
