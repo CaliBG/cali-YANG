@@ -1,0 +1,2 @@
+# Keep PDF delivery files binary so their bytes remain unchanged.
+*.pdf binary

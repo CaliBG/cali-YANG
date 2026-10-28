@@ -11,9 +11,10 @@ import styles from "./vanod.module.css";
 const media = (file: string) => asset(`/projects/vanod/${file}`);
 const WEBSITE = "https://calibg.github.io/vanod/";
 const PDF = media("Vanod-Brand-Guidelines.pdf");
+const CONSTRUCTION_PDF = media("Vanod-V-Construction.pdf");
 
 const identityPages = [
-  { id: "construction", file: "construction.webp", label: ["标志构造", "Logo construction"], note: ["用同一套几何关系连接图标与品牌字标", "One geometric language for the symbol and wordmark"] },
+  { id: "construction", file: "construction.webp", label: ["尺规制图", "Exact construction"], note: ["用尺规作图定位七个顶点 精确复绘 V 的原始轮廓", "Reconstructing the seven-vertex V with straightedge and compass"] },
   { id: "colors", file: "colors.webp", label: ["品牌色彩", "Brand palette"], note: ["深石墨与雾紫建立辨识度 让涨跌色保留自己的含义", "Graphite and lilac define the brand while market colours keep their meaning"] },
   { id: "typography", file: "typography.webp", label: ["字体规范", "Typography"], note: ["品牌字标保留定制轮廓 正文以苹方保持清晰", "A custom wordmark paired with clear PingFang typography"] },
 ] as const;
@@ -76,7 +77,7 @@ export default function VanodCaseStudy() {
         [zh ? "我的角色" : "Role", zh ? "独立设计与开发" : "Independent design & development"],
         [zh ? "设计范围" : "Scope", zh ? "品牌  官网  UI  动效  硬件概念" : "Identity / Web / UI / Motion / Hardware concept"],
         [zh ? "产品形态" : "Formats", zh ? "移动应用  网页  桌面小组件" : "Mobile / Web / Widgets"],
-        [zh ? "品牌手册" : "Guidelines", zh ? "65 页视觉规范" : "65 pages of visual standards"],
+        [zh ? "品牌手册" : "Guidelines", zh ? "69 页视觉规范" : "69 pages of visual standards"],
       ].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
     </dl>
 
@@ -99,7 +100,7 @@ export default function VanodCaseStudy() {
 
     <section id="vanod-identity" className={styles.chapter}>
       <Chapter number="02 / VISUAL IDENTITY" title={zh ? "从标志到一套语言" : "A symbol becomes a system"}>
-        {zh ? "向前倾斜的 V 是整个品牌的起点。它融入 Vanod 字标，也延伸到图标、版式与动效。65 页手册把每一次使用中的比例、颜色与边界讲清楚。" : "The forward-leaning V begins the identity. It joins the Vanod wordmark and carries through the icons, layouts and motion. A 65-page manual defines the proportions, colours and boundaries of its use."}
+        {zh ? "向前倾斜的 V 是整个品牌的起点。它融入 Vanod 字标，也延伸到图标、版式与动效。69 页手册把每一次使用中的比例、颜色与边界讲清楚，并用尺规制图说明 V 的基准、模数和七个顶点如何逐步定位。" : "The forward-leaning V begins the identity. It joins the Vanod wordmark and carries through the icons, layouts and motion. The 69-page manual defines its proportions, colours and usage, with a straightedge-and-compass construction that locates all seven vertices from reference axes and a shared unit."}
       </Chapter>
       <div className={styles.identityTabs} role="tablist" aria-label={zh ? "品牌规范预览" : "Preview brand standards"}>
         {identityPages.map((page, index) => <button key={page.id} type="button" role="tab" id={`vanod-tab-${page.id}`} aria-selected={identityIndex === index} aria-controls="vanod-identity-panel" tabIndex={identityIndex === index ? 0 : -1} onClick={() => setIdentityIndex(index)} onKeyDown={event => {
@@ -117,7 +118,11 @@ export default function VanodCaseStudy() {
       </div>
       <div className={styles.guidelineLink}>
         <span>{zh ? "标志制图  色彩  字体  使用示例  UI  小组件  样机" : "Construction / Colour / Type / Usage / UI / Widgets / Mockups"}</span>
-        <a href={PDF} target="_blank" rel="noopener noreferrer">{zh ? "完整品牌手册  65 页 PDF" : "Full brand guidelines  65-page PDF"} ↗</a>
+        <a href={PDF} target="_blank" rel="noopener noreferrer">{zh ? "完整品牌手册  69 页 PDF" : "Full brand guidelines  69-page PDF"} ↗</a>
+      </div>
+      <div className={styles.guidelineLink}>
+        <span>{zh ? "从垂直平分线、相似三角形到圆规移距 按步骤复绘原始 V" : "Rebuild the original V through perpendicular bisectors, similar triangles and compass transfer"}</span>
+        <a href={CONSTRUCTION_PDF} target="_blank" rel="noopener noreferrer">{zh ? "V 标志尺规制图  6 页 PDF" : "V construction guide  6-page PDF"} ↗</a>
       </div>
     </section>
 
@@ -167,7 +172,7 @@ export default function VanodCaseStudy() {
       <h2>{zh ? "继续探索 Vanod" : "Explore Vanod"}</h2>
       <div className={styles.resourceLinks}>
         <a href={WEBSITE} target="_blank" rel="noopener noreferrer"><span>{zh ? "产品官网" : "Product website"}<small>{zh ? "在线查看网页与交互" : "Explore the website and interactions"}</small></span><span aria-hidden="true">↗</span></a>
-        <a href={PDF} target="_blank" rel="noopener noreferrer"><span>{zh ? "品牌手册" : "Brand guidelines"}<small>{zh ? "完整 65 页  PDF" : "Complete 65-page PDF"}</small></span><span aria-hidden="true">↗</span></a>
+        <a href={PDF} target="_blank" rel="noopener noreferrer"><span>{zh ? "品牌手册" : "Brand guidelines"}<small>{zh ? "完整 69 页  PDF" : "Complete 69-page PDF"}</small></span><span aria-hidden="true">↗</span></a>
       </div>
       <p className={styles.projectNote}>{zh ? "项目持续开发中。网页与应用目前展示行情和模拟下单；UI 图版使用示例数据。Slate 硬件、包装与随身配件为概念设计样机。" : "An ongoing project. The website and app currently present market data and simulated orders; UI specimens use sample data. Slate hardware, packaging and accessories are concept mockups."}</p>
       <TransitionLink href="/" className={styles.backLink}>← {zh ? "返回作品集" : "Back to the portfolio"}</TransitionLink>
