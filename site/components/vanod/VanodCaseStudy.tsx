@@ -11,7 +11,8 @@ import styles from "./vanod.module.css";
 const media = (file: string) => asset(`/projects/vanod/${file}`);
 const WEBSITE = "https://calibg.github.io/vanod/";
 const PDF = media("Vanod-Brand-Guidelines.pdf");
-const CONSTRUCTION_PDF = media("Vanod-V-Construction.pdf");
+const PDF_EN = media("Vanod-Brand-Guidelines-EN.pdf");
+const LOCALIZED_PLATES = new Set(["construction.webp", "colors.webp", "typography.webp", "app-ui.webp", "website-ui.webp", "widget-layout.webp", "widgets-square.webp"]);
 
 const identityPages = [
   { id: "construction", file: "construction.webp", label: ["尺规制图", "Exact construction"], note: ["用尺规作图定位七个顶点 精确复绘 V 的原始轮廓", "Reconstructing the seven-vertex V with straightedge and compass"] },
@@ -28,9 +29,11 @@ function Chapter({ number, title, children }: { number: string; title: string; c
 }
 
 function Plate({ file, alt, caption, width = 1440, height = 900 }: { file: string; alt: string; caption?: string; width?: number; height?: number }) {
+  const { lang } = useLanguage();
+  const localizedFile = lang === "en" && LOCALIZED_PLATES.has(file) ? file.replace(".webp", "-en.webp") : file;
   return <figure className={styles.plate}>
-    <a href={media(file)} target="_blank" rel="noopener noreferrer" aria-label={alt}>
-      <img src={media(file)} width={width} height={height} alt={alt} loading="lazy" decoding="async" />
+    <a href={media(localizedFile)} target="_blank" rel="noopener noreferrer" aria-label={alt}>
+      <img src={media(localizedFile)} width={width} height={height} alt={alt} loading="lazy" decoding="async" />
     </a>
     {caption && <figcaption>{caption}<span aria-hidden="true">↗</span></figcaption>}
   </figure>;
@@ -62,7 +65,7 @@ export default function VanodCaseStudy() {
           <p>{zh ? "Vanod 是一个持续开发中的 Web3 产品项目。从交易界面、品牌官网，到冷钱包连接与随身硬件，我为它建立了一套连贯的视觉与交互语言。" : "Vanod is an ongoing Web3 product project. From trading screens and the website to cold-wallet connections and a companion device, I designed a shared visual and interaction language."}</p>
           <div className={styles.links}>
             <a href={WEBSITE} target="_blank" rel="noopener noreferrer">{zh ? "访问 Vanod 官网" : "Visit the website"}<span aria-hidden="true">↗</span></a>
-            <a href={PDF} target="_blank" rel="noopener noreferrer">{zh ? "查看完整 VI" : "View brand guidelines"}<span aria-hidden="true">↗</span></a>
+            <a href={zh ? PDF : PDF_EN} target="_blank" rel="noopener noreferrer">{zh ? "查看中文版 VI" : "View English guidelines"}<span aria-hidden="true">↗</span></a>
           </div>
         </div>
       </div>
@@ -77,7 +80,7 @@ export default function VanodCaseStudy() {
         [zh ? "我的角色" : "Role", zh ? "独立设计与开发" : "Independent design & development"],
         [zh ? "设计范围" : "Scope", zh ? "品牌  官网  UI  动效  硬件概念" : "Identity / Web / UI / Motion / Hardware concept"],
         [zh ? "产品形态" : "Formats", zh ? "移动应用  网页  桌面小组件" : "Mobile / Web / Widgets"],
-        [zh ? "品牌手册" : "Guidelines", zh ? "69 页视觉规范" : "69 pages of visual standards"],
+        [zh ? "品牌手册" : "Guidelines", zh ? "中英两册  每册 34 页" : "Chinese and English  /  34 pages each"],
       ].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
     </dl>
 
@@ -100,7 +103,7 @@ export default function VanodCaseStudy() {
 
     <section id="vanod-identity" className={styles.chapter}>
       <Chapter number="02 / VISUAL IDENTITY" title={zh ? "从标志到一套语言" : "A symbol becomes a system"}>
-        {zh ? "向前倾斜的 V 是整个品牌的起点。它融入 Vanod 字标，也延伸到图标、版式与动效。69 页手册把每一次使用中的比例、颜色与边界讲清楚，并用尺规制图说明 V 的基准、模数和七个顶点如何逐步定位。" : "The forward-leaning V begins the identity. It joins the Vanod wordmark and carries through the icons, layouts and motion. The 69-page manual defines its proportions, colours and usage, with a straightedge-and-compass construction that locates all seven vertices from reference axes and a shared unit."}
+        {zh ? "V 的尺规构造、品牌色和字体建立识别，12 栏网格把这些元素组织成一致的页面。中英文各 34 页，品牌色与标志错误用法分别归为一页，更多空间留给 UI 与小组件。" : "The constructed V, palette and typography establish the identity. A 12-column grid gives every page a consistent structure. Separate 34-page Chinese and English editions bring colour and logo misuse onto one page each, leaving more room for interfaces and widgets."}
       </Chapter>
       <div className={styles.identityTabs} role="tablist" aria-label={zh ? "品牌规范预览" : "Preview brand standards"}>
         {identityPages.map((page, index) => <button key={page.id} type="button" role="tab" id={`vanod-tab-${page.id}`} aria-selected={identityIndex === index} aria-controls="vanod-identity-panel" tabIndex={identityIndex === index ? 0 : -1} onClick={() => setIdentityIndex(index)} onKeyDown={event => {
@@ -118,17 +121,17 @@ export default function VanodCaseStudy() {
       </div>
       <div className={styles.guidelineLink}>
         <span>{zh ? "标志制图  色彩  字体  使用示例  UI  小组件  样机" : "Construction / Colour / Type / Usage / UI / Widgets / Mockups"}</span>
-        <a href={PDF} target="_blank" rel="noopener noreferrer">{zh ? "完整品牌手册  69 页 PDF" : "Full brand guidelines  69-page PDF"} ↗</a>
+        <a href={PDF} target="_blank" rel="noopener noreferrer">{zh ? "中文版品牌手册  34 页 PDF" : "Chinese edition  34-page PDF"} ↗</a>
       </div>
       <div className={styles.guidelineLink}>
-        <span>{zh ? "从垂直平分线、相似三角形到圆规移距 按步骤复绘原始 V" : "Rebuild the original V through perpendicular bisectors, similar triangles and compass transfer"}</span>
-        <a href={CONSTRUCTION_PDF} target="_blank" rel="noopener noreferrer">{zh ? "V 标志尺规制图  6 页 PDF" : "V construction guide  6-page PDF"} ↗</a>
+        <span>{zh ? "两种语言共用网格与页序 图中界面和注释也完整翻译" : "Matching grids and page order, with fully translated interfaces and annotations"}</span>
+        <a href={PDF_EN} target="_blank" rel="noopener noreferrer">{zh ? "英文版品牌手册  34 页 PDF" : "English edition  34-page PDF"} ↗</a>
       </div>
     </section>
 
     <section id="vanod-interface" className={styles.chapter}>
       <Chapter number="03 / INTERFACE & WIDGETS" title={zh ? "重要的数字一眼就能找到" : "The numbers that matter at a glance"}>
-        {zh ? "价格、涨跌与操作各有位置。正文保持清晰，品牌感留给字标、色彩和细节。小组件沿用同一套规则，把需要的信息带到桌面。" : "Prices, changes and actions each have a place. Clear text does the everyday work; the wordmark, palette and details carry the identity. Widgets bring the same system to the home screen."}
+        {zh ? "价格是第一眼看见的信息，资产列表保持紧凑，操作留出足够空间。小组件是这套视觉系统的重点：长条、方形、自选列表与锁屏形式共享相同的层级和图表语言。" : "Prices lead, asset rows stay compact and actions have room to breathe. Widgets are a central expression of the system: wide, square, watchlist and lock-screen formats share the same hierarchy and chart language."}
       </Chapter>
       <Plate file="app-ui.webp" alt={zh ? "Vanod 移动应用行情与交易界面设计" : "Vanod mobile market and trading interface design"} caption={zh ? "移动应用 UI 设计" : "Mobile UI design specimen"} />
       <div className={styles.widgetIntro}>
@@ -172,7 +175,7 @@ export default function VanodCaseStudy() {
       <h2>{zh ? "继续探索 Vanod" : "Explore Vanod"}</h2>
       <div className={styles.resourceLinks}>
         <a href={WEBSITE} target="_blank" rel="noopener noreferrer"><span>{zh ? "产品官网" : "Product website"}<small>{zh ? "在线查看网页与交互" : "Explore the website and interactions"}</small></span><span aria-hidden="true">↗</span></a>
-        <a href={PDF} target="_blank" rel="noopener noreferrer"><span>{zh ? "品牌手册" : "Brand guidelines"}<small>{zh ? "完整 69 页  PDF" : "Complete 69-page PDF"}</small></span><span aria-hidden="true">↗</span></a>
+        <a href={zh ? PDF : PDF_EN} target="_blank" rel="noopener noreferrer"><span>{zh ? "品牌手册" : "Brand guidelines"}<small>{zh ? "中文版  34 页 PDF" : "English edition  34-page PDF"}</small></span><span aria-hidden="true">↗</span></a>
       </div>
       <p className={styles.projectNote}>{zh ? "项目持续开发中。网页与应用目前展示行情和模拟下单；UI 图版使用示例数据。Slate 硬件、包装与随身配件为概念设计样机。" : "An ongoing project. The website and app currently present market data and simulated orders; UI specimens use sample data. Slate hardware, packaging and accessories are concept mockups."}</p>
       <TransitionLink href="/" className={styles.backLink}>← {zh ? "返回作品集" : "Back to the portfolio"}</TransitionLink>
