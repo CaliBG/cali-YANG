@@ -1,8 +1,9 @@
-.overview{position:relative;margin:110px 0 140px;min-height:155svh;scroll-margin-top:82px}
+.overview{position:relative;margin:110px 0 140px;min-height:195svh;scroll-margin-top:82px}
 .stage{position:sticky;top:82px;padding:16px 0 22px;--arrival:1;--spread:0}
 .heading{margin-bottom:27px}
-.board{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:14px;border-radius:24px;background:#dededc;aspect-ratio:2.02;max-height:calc(100svh - 320px);min-height:360px;transform:scale(calc(1 - var(--spread)*.035));transform-origin:50% 60%}
-.tile{min-width:0;min-height:0;overflow:hidden;border:0;border-radius:13px;background:#fff;color:#181a19;padding:17px 18px;text-align:left;display:flex;flex-direction:column;gap:12px;transform:translate3d(calc(var(--x)*var(--spread)),calc(var(--y)*var(--spread)),0) rotate(calc(var(--angle)*var(--spread)));will-change:transform}
+/* Only artwork inside this rounded window is visible throughout the entrance. */
+.board{position:relative;isolation:isolate;overflow:clip;background:#dededc;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:14px;border-radius:24px;aspect-ratio:2.02;max-height:calc(100svh - 320px);min-height:360px}
+.tile{min-width:0;min-height:0;overflow:hidden;border:0;border-radius:13px;background:#fff;color:#181a19;padding:17px 18px;text-align:left;display:flex;flex-direction:column;gap:12px;transform:translate3d(calc(var(--x)*var(--remaining)),calc(var(--y)*var(--remaining)),0) rotate(calc(var(--angle)*var(--remaining)));will-change:transform}
 button.tile{position:relative;transition:box-shadow .25s ease}
 button.tile:hover{box-shadow:inset 0 0 0 2px #8c8e89}
 button.tile:hover .tileHeader>span:last-child{transform:translate(2px,-2px)}
@@ -11,10 +12,10 @@ button.tile:hover .tileHeader>span:last-child{transform:translate(2px,-2px)}
 .imageWell{display:flex;align-items:center;justify-content:center;flex:1;min-height:0;min-width:0}
 .imageWell img{display:block;width:100%;height:100%;object-fit:contain}
 .tileTitle{font-size:clamp(10px,.9vw,13px);font-weight:500;line-height:1.5;flex-shrink:0}
-.announcement{grid-column:1;grid-row:1/3;--x:-18px;--y:30px;--angle:-2deg;background:#efefef}
-.poster{grid-column:2;grid-row:1/3;--x:-8px;--y:-15px;--angle:1.5deg}
-.banner{grid-column:3/5;grid-row:1;--x:18px;--y:-18px;--angle:1.5deg}
-.identity{grid-column:3/5;grid-row:2;--x:18px;--y:27px;--angle:-1.5deg;display:grid;grid-template-columns:1.3fr .7fr;gap:15px;padding:22px 27px;background:#e9e8e2}
+.announcement{grid-column:1;grid-row:1/3;--remaining:var(--spread-0,var(--spread));--x:-75vw;--y:8svh;--angle:-5deg;background:#efefef}
+.poster{grid-column:2;grid-row:1/3;--remaining:var(--spread-1,var(--spread));--x:-8vw;--y:-100svh;--angle:3deg}
+.banner{grid-column:3/5;grid-row:1;--remaining:var(--spread-2,var(--spread));--x:80vw;--y:-12svh;--angle:4deg}
+.identity{grid-column:3/5;grid-row:2;--remaining:var(--spread-3,var(--spread));--x:10vw;--y:100svh;--angle:-4deg;display:grid;grid-template-columns:1.3fr .7fr;gap:15px;padding:22px 27px;background:#e9e8e2}
 .identity>div{display:flex;flex-direction:column;justify-content:center;align-items:start;min-width:0}
 .identityBrand{font-size:10px;letter-spacing:.06em}
 .identity p{font-size:clamp(24px,3.2vw,49px);line-height:.98;letter-spacing:-.055em;font-weight:500;margin:12px 0}
@@ -30,7 +31,7 @@ button.tile:hover .tileHeader>span:last-child{transform:translate(2px,-2px)}
  .stage{position:relative;top:0;padding:0;--arrival:1!important;--spread:0!important}
  .heading{margin-bottom:24px}
  .board{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(290px,auto) auto auto;aspect-ratio:auto;min-height:0;max-height:none;border-radius:18px;gap:9px;padding:9px}
- .tile{border-radius:10px;padding:12px 10px;gap:12px;will-change:auto}
+ .tile{border-radius:10px;padding:12px 10px;gap:12px;will-change:auto;transform:none}
  .announcement{grid-column:1;grid-row:1}.poster{grid-column:2;grid-row:1}
  .announcement .imageWell,.poster .imageWell{aspect-ratio:3/4}
  .banner{grid-column:1/3;grid-row:2}.banner .imageWell{aspect-ratio:3/1}
@@ -39,5 +40,5 @@ button.tile:hover .tileHeader>span:last-child{transform:translate(2px,-2px)}
  .tileHeader{font-size:6px}.tileTitle{font-size:10px}
  .caption{font-size:10px}.caption button{display:none}
 }
-@media(max-height:650px) and (min-width:701px){.overview{min-height:0}.stage{position:relative;top:0;--arrival:1!important;--spread:0!important}.board{max-height:none;min-height:340px}}
-@media(prefers-reduced-motion:reduce){.overview{min-height:0}.stage{position:relative;top:0;--arrival:1!important;--spread:0!important}.tile{will-change:auto}}
+@media(max-height:650px) and (min-width:701px){.overview{min-height:0}.stage{position:relative;top:0;--arrival:1!important;--spread:0!important}.board{max-height:none;min-height:340px}.tile{transform:none;will-change:auto}}
+@media(prefers-reduced-motion:reduce){.overview{min-height:0}.stage{position:relative;top:0;--arrival:1!important;--spread:0!important}.tile{transform:none;will-change:auto}}
