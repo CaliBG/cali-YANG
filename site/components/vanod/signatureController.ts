@@ -6,6 +6,7 @@ const clamp = (value: number) => Math.max(0, Math.min(1, value));
 export class VanodSignatureController {
   private video: HTMLVideoElement;
   private stage: HTMLElement;
+  private track: HTMLElement;
   private poster: HTMLImageElement;
   private replay: HTMLButtonElement;
   private hint: HTMLElement;
@@ -27,6 +28,7 @@ export class VanodSignatureController {
 
   constructor(private root: HTMLElement, private container: HTMLElement, private labels: { reduced: string; error: string; retry: string; replay: string }) {
     this.stage = root.querySelector<HTMLElement>('[data-motion-stage]')!;
+    this.track = root.closest<HTMLElement>('[data-signature-track]')!;
     this.video = root.querySelector<HTMLVideoElement>('video')!;
     this.poster = root.querySelector<HTMLImageElement>('[data-motion-poster]')!;
     this.replay = root.querySelector<HTMLButtonElement>('[data-motion-replay]')!;
@@ -97,14 +99,17 @@ export class VanodSignatureController {
     this.near = rect.bottom > -600 && rect.top < this.container.clientHeight + 600;
     if (!this.near) { this.stop(); return; }
     this.ensureMedia();
+    const stage = this.stage.getBoundingClientRect();
+    const centreOffset = stage.top - bounds.top + stage.height / 2;
+    const stickTop = Math.max(88, this.container.clientHeight / 2 - centreOffset);
+    this.track.style.setProperty('--signature-height', `${this.root.offsetHeight}px`);
+    this.root.style.setProperty('--signature-stick-top', `${stickTop}px`);
     if (!this.manual) {
-      // Begin as the stage enters the viewport; finish with the wordmark near
-      // the centre, while the resource footer is still below it.
-      const stage = this.stage.getBoundingClientRect();
-      const viewport = this.container.clientHeight;
-      const start = viewport * .96;
-      const end = viewport * .46 - Math.min(stage.height, viewport * .85) / 2;
-      this.target = clamp((start - (stage.top - viewportTop)) / Math.max(1, start - end));
+      // The wordmark stays still until its centre reaches the viewport centre.
+      // The section supplies scroll travel while CSS keeps the artwork in view.
+      const trackTop = this.track.getBoundingClientRect().top - viewportTop;
+      const travel = Math.max(1, this.track.clientHeight - this.root.offsetHeight);
+      this.target = clamp((stickTop - trackTop) / travel);
     }
     this.wake();
   };
@@ -210,6 +215,8 @@ export class VanodSignatureController {
     window.removeEventListener('pageshow', this.pageshow);
     this.preference.removeEventListener('change', this.applyPreference);
     this.root.classList.remove('motion-ready', 'motion-reduced', 'motion-unavailable');
+    this.root.style.removeProperty('--signature-stick-top');
+    this.track.style.removeProperty('--signature-height');
     this.video.removeAttribute('src'); this.video.load();
   }
 

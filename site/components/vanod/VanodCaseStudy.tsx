@@ -186,7 +186,7 @@ export default function VanodCaseStudy() {
       </div>
     </section>
 
-    <section className={motionStyles.signatureSection} id="vanod-signature" aria-label={zh ? "Vanod 交互字标" : "Vanod interactive wordmark"}>
+    <section className={motionStyles.signatureSection} id="vanod-signature" data-signature-track aria-label={zh ? "Vanod 交互字标" : "Vanod interactive wordmark"}>
       <VanodSignature />
     </section>
 
