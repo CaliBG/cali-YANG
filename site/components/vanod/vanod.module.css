@@ -11,8 +11,6 @@
 .heroTop { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
 .introReplay{color:var(--label-2);font-size:11px!important;white-space:nowrap;min-height:44px;border:0;background:none}.introReplay:hover{color:var(--label-1)}
 .websitePlate{margin-top:48px}
-.resourcesTop{display:flex;align-items:center;justify-content:space-between;gap:40px}
-.resourcesTop h2{margin:0 0 40px}
 .projectNumber { color: var(--label-3); font-size: 12px; font-variant-numeric: tabular-nums; }
 .wordmark { width: min(70%, 588px); margin: 50px 0 45px; }
 .wordmark img { display: block; width: 100%; height: auto; }
@@ -87,7 +85,7 @@
   .motionSection { gap: 5%; }
 }
 @media (max-width: 640px) {
-  .resourcesTop{display:block}.websitePlate{margin-top:32px}
+  .websitePlate{margin-top:32px}
   .caseStudy { padding-top: 58px; }
   .heroTop .eyebrow { max-width: 235px; font-size: 9px; }
   .wordmark { width: 85%; margin: 34px 0; }

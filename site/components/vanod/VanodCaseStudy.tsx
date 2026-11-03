@@ -186,8 +186,12 @@ export default function VanodCaseStudy() {
       </div>
     </section>
 
-    <footer className={styles.resources} id="vanod-signature">
-      <div className={styles.resourcesTop}><VanodSignature /><h2>{zh ? "继续探索 Vanod" : "Explore Vanod"}</h2></div>
+    <section className={motionStyles.signatureSection} id="vanod-signature" aria-label={zh ? "Vanod 交互字标" : "Vanod interactive wordmark"}>
+      <VanodSignature />
+    </section>
+
+    <footer className={styles.resources}>
+      <h2>{zh ? "继续探索 Vanod" : "Explore Vanod"}</h2>
       <div className={styles.resourceLinks}>
         <a href={WEBSITE} target="_blank" rel="noopener noreferrer"><span>{zh ? "产品官网" : "Product website"}<small>{zh ? "在线查看网页与交互" : "Explore the website and interactions"}</small></span><span aria-hidden="true">↗</span></a>
         <a href={zh ? PDF : PDF_EN} target="_blank" rel="noopener noreferrer"><span>{zh ? "品牌手册" : "Brand guidelines"}<small>{zh ? "中文版  38 页 PDF" : "English edition  38-page PDF"}</small></span><span aria-hidden="true">↗</span></a>

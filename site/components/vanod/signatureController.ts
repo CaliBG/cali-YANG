@@ -53,7 +53,7 @@ export class VanodSignatureController {
     window.addEventListener('pagehide', this.pagehide);
     window.addEventListener('pageshow', this.pageshow);
     this.preference.addEventListener('change', this.applyPreference);
-    this.observer = new IntersectionObserver(this.measure, {root:this.container,rootMargin:'300px 0px',threshold:0});
+    this.observer = new IntersectionObserver(this.measure, {root:this.container,rootMargin:'600px 0px',threshold:0});
     this.observer.observe(root);
     this.applyPreference();
   }
@@ -94,11 +94,17 @@ export class VanodSignatureController {
     const viewportTop = this.container.getBoundingClientRect().top;
     const rect = { top: bounds.top - viewportTop, bottom: bounds.bottom - viewportTop, height: bounds.height };
     // Reconcile visibility on every scroll, including anchor jumps.
-    this.near = rect.bottom > -300 && rect.top < this.container.clientHeight + 300;
+    this.near = rect.bottom > -600 && rect.top < this.container.clientHeight + 600;
     if (!this.near) { this.stop(); return; }
     this.ensureMedia();
     if (!this.manual) {
-      this.target = clamp((this.container.clientHeight * .88 - rect.top) / Math.max(1, Math.min(rect.height, this.container.clientHeight * .56)));
+      // Begin as the stage enters the viewport; finish with the wordmark near
+      // the centre, while the resource footer is still below it.
+      const stage = this.stage.getBoundingClientRect();
+      const viewport = this.container.clientHeight;
+      const start = viewport * .96;
+      const end = viewport * .46 - Math.min(stage.height, viewport * .85) / 2;
+      this.target = clamp((start - (stage.top - viewportTop)) / Math.max(1, start - end));
     }
     this.wake();
   };
