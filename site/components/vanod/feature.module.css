@@ -26,3 +26,5 @@
 @media(max-width:760px){.feature{margin-bottom:85px}.heading{align-items:flex-start;gap:16px}.heading>div{display:block}.eyebrow{display:block;font-size:10px;margin-bottom:10px}.heading h2{font-size:30px}.projectLink{font-size:12px;gap:10px;align-self:flex-end;min-height:36px}.stage{border-radius:8px}.bottom{display:block;padding-top:14px}.tabs{gap:6px 22px}.tabs button{font-size:12px}.meta{display:block;margin-top:15px}.brand>span{font-size:10px;margin-top:10px}.openProject{right:12px;bottom:12px;width:34px;height:34px;font-size:18px}}
 @media(max-width:760px),(max-height:540px){.stage{width:100%}}
 @media(prefers-reduced-motion:reduce){.feature *{transition:none!important;animation:none!important}}
+
+.stage[data-film=true]{aspect-ratio:16/9}

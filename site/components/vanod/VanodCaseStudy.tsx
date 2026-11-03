@@ -6,6 +6,7 @@ import { useLanguage } from "@/lib/language";
 import { useShellMedia } from "@/lib/shell-media";
 import { scrollToMdxAnchorTarget } from "@/components/mdx/anchors";
 import TransitionLink from "@/components/TransitionLink";
+import VanodFilm from "./VanodFilm";
 import styles from "./vanod.module.css";
 
 const media = (file: string) => asset(`/projects/vanod/${file}`);
@@ -85,11 +86,19 @@ export default function VanodCaseStudy() {
     </dl>
 
     <nav className={styles.chapterNav} aria-label={zh ? "Vanod 项目章节" : "Vanod project chapters"}>
-      {[["website", zh ? "官网设计" : "Website"], ["identity", zh ? "品牌系统" : "Identity"], ["interface", zh ? "UI 与小组件" : "UI & widgets"], ["motion", zh ? "标志动效" : "Motion"], ["hardware", zh ? "硬件延展" : "Hardware"]].map(([id, label]) => <a key={id} href={`#vanod-${id}`} onClick={event => {
+      {[["film", zh ? "品牌短片" : "Brand film"], ["website", zh ? "官网设计" : "Website"], ["identity", zh ? "品牌系统" : "Identity"], ["interface", zh ? "UI 与小组件" : "UI & widgets"], ["motion", zh ? "标志动效" : "Motion"], ["hardware", zh ? "硬件延展" : "Hardware"]].map(([id, label]) => <a key={id} href={`#vanod-${id}`} onClick={event => {
         const target = document.getElementById(`vanod-${id}`);
         if (target) { event.preventDefault(); scrollToMdxAnchorTarget(target); history.replaceState(null, "", `#vanod-${id}`); }
       }}>{label}</a>)}
     </nav>
+
+    <section id="vanod-film" className={styles.chapter}>
+      <Chapter number="FILM / 00:30" title={zh ? "让品牌动起来" : "A brand in motion"}>
+        {zh ? "从真实的日常场景，到不断变化的行情、小组件与 Slate。用一支短片，把界面、产品和品牌的动作连在一起。" : "From everyday moments to moving markets, widgets and Slate. A short film brings the interfaces, product and brand into one continuous rhythm."}
+      </Chapter>
+      <VanodFilm />
+      <div className={styles.filmCaption}><span>{zh ? "品牌概念短片 · 演示行情与硬件渲染" : "Concept film · illustrative market data and hardware renders"}</span><a href={media("vanod-brand-film-v4.mp4")} target="_blank" rel="noopener noreferrer">{zh ? "单独观看" : "Watch separately"} ↗</a></div>
+    </section>
 
     <section id="vanod-website" className={styles.chapter}>
       <div className={styles.chapterRow}>
@@ -154,7 +163,7 @@ export default function VanodCaseStudy() {
         </ol>
       </div>
       <div className={styles.motionMedia}>
-        <video controls playsInline preload="none" width={640} height={480} poster={media("motion-poster.webp")} src={media("vanod-motion.mp4")} onPlay={() => setSoundEnabled(false)} onError={() => setVideoError(true)} aria-label={zh ? "Vanod 标志从加载到确认再回弹的动画演示" : "Vanod loading, confirmation and recoil animation"} />
+        <video controls playsInline preload="none" width={640} height={480} poster={media("motion-poster.webp")} src={media("vanod-motion.mp4")} onPlay={event => { setSoundEnabled(false); document.querySelectorAll("video").forEach(video => { if (video !== event.currentTarget) video.pause(); }); }} onError={() => setVideoError(true)} aria-label={zh ? "Vanod 标志从加载到确认再回弹的动画演示" : "Vanod loading, confirmation and recoil animation"} />
         <p>{zh ? "点击播放完整动效" : "Play the complete motion sequence"}</p>
         {videoError && <a href={media("vanod-motion.mp4")} target="_blank" rel="noopener noreferrer">{zh ? "在独立窗口播放" : "Open the video separately"} ↗</a>}
       </div>

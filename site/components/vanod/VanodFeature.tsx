@@ -4,9 +4,11 @@ import { useState } from "react";
 import TransitionLink from "@/components/TransitionLink";
 import { asset } from "@/lib/asset";
 import { useLanguage } from "@/lib/language";
+import VanodFilm from "./VanodFilm";
 import styles from "./feature.module.css";
 
 const views = [
+  { id: "film", file: "vanod-brand-film-v4-poster.webp", size: [1920, 1080], label: ["品牌短片", "Brand film"], caption: ["30 秒认识 Vanod 品牌 界面与 Slate", "A 30-second introduction to Vanod, its interfaces and Slate"] },
   { id: "identity", file: "hero.webp", size: [1536, 1024], label: ["视觉形象", "Identity"], caption: ["从一个 V 出发 延伸到品牌与硬件", "From a single V to a complete brand and hardware concept"] },
   { id: "website", file: "website-ui.webp", size: [1440, 900], label: ["网页设计", "Website"], caption: ["行情与交易体验的网页设计", "A web experience for markets and simulated trading"] },
   { id: "vi", file: "construction.webp", size: [1440, 900], label: ["VI 规范", "Brand guidelines"], caption: ["中英文双册 各 38 页 统一网格下的品牌与小组件设计", "Chinese and English editions, 38 pages each, uniting identity and widgets on one grid"] },
@@ -18,19 +20,19 @@ export default function VanodFeature() {
   const zh = lang === "zh", language = zh ? 0 : 1;
   const [selected, setSelected] = useState(0);
   const view = views[selected];
-  const previewFile = !zh && view.id !== "identity" ? view.file.replace(".webp", "-en.webp") : view.file;
+  const previewFile = !zh && view.id !== "identity" && view.id !== "film" ? view.file.replace(".webp", "-en.webp") : view.file;
 
   return <section id="vanod-work" className={styles.feature} aria-labelledby="vanod-feature-heading">
     <header className={styles.heading}>
       <div><span className={styles.eyebrow}>SELECTED WORK / 02</span><h2 id="vanod-feature-heading">Vanod</h2></div>
       <TransitionLink href="/vanod" className={styles.projectLink}>{zh ? "探索完整项目" : "Explore the project"} <span aria-hidden="true">↗</span></TransitionLink>
     </header>
-    <div className={styles.stage} id="vanod-preview" role="tabpanel" aria-labelledby={`vanod-view-${view.id}`}>
-      <TransitionLink href="/vanod" aria-label={zh ? "查看 Vanod 完整作品" : "View the full Vanod project"} className={styles.previewLink}>
+    <div className={styles.stage} data-film={view.id === "film"} id="vanod-preview" role="tabpanel" aria-labelledby={`vanod-view-${view.id}`}>
+      {view.id === "film" ? <VanodFilm /> : <TransitionLink href="/vanod" aria-label={zh ? "查看 Vanod 完整作品" : "View the full Vanod project"} className={styles.previewLink}>
         <img key={`${view.id}-${lang}`} src={asset(`/projects/vanod/${previewFile}`)} width={view.size[0]} height={view.size[1]} alt={view.caption[language]} loading="lazy" decoding="async" className={styles.preview} />
-        {selected === 0 && <div className={styles.brand}><img src={asset("/projects/vanod/vanod-wordmark.svg")} width={294} height={72} alt="Vanod" loading="lazy" /><span>{zh ? "品牌 网站 应用" : "Identity · Web · App"}</span></div>}
+        {view.id === "identity" && <div className={styles.brand}><img src={asset("/projects/vanod/vanod-wordmark.svg")} width={294} height={72} alt="Vanod" loading="lazy" /><span>{zh ? "品牌 网站 应用" : "Identity · Web · App"}</span></div>}
         <span className={styles.openProject} aria-hidden="true">↗</span>
-      </TransitionLink>
+      </TransitionLink>}
     </div>
     <div className={styles.bottom}>
       <div className={styles.tabs} role="tablist" aria-label={zh ? "Vanod 设计预览" : "Vanod design previews"}>

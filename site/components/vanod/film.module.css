@@ -1,0 +1,12 @@
+.player{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:9px;background:#090b10;isolation:isolate}
+.player video{display:block;width:100%;height:100%;object-fit:contain;background:#090b10}
+.play{position:absolute;inset:0;width:100%;height:100%;display:grid;place-items:center;border:0;padding:0;background:transparent;color:#fff;cursor:pointer}
+.play:focus-visible{outline:3px solid #fff;outline-offset:-7px}
+.icon{display:grid;place-items:center;width:76px;height:76px;border:1px solid #ffffff70;border-radius:50%;background:#14131b99;backdrop-filter:blur(16px);transition:transform .35s cubic-bezier(.2,.8,.2,1),background .25s}
+.icon svg{width:23px;height:23px;margin-left:4px;fill:currentColor}
+.play:hover .icon{transform:scale(1.08);background:#14131bd9}
+.label{position:absolute;left:28px;bottom:24px;display:flex;align-items:center;gap:14px;padding:8px 11px;border-radius:5px;background:#14131bdb;font:500 12px "PingFang SC",sans-serif;color:#fff}
+.label small{font-size:11px;font-variant-numeric:tabular-nums;opacity:.8}
+.error{position:absolute;bottom:0;left:0;right:0;padding:14px 20px;background:#090b10e6;color:#efedff;font-size:12px;text-align:center}.error a{text-decoration:underline}
+@media(max-width:640px){.player{border-radius:6px}.icon{width:52px;height:52px}.icon svg{width:18px;height:18px}.label{left:15px;bottom:14px;font-size:10px;gap:9px}.label small{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.icon{transition:none}.play:hover .icon{transform:none}}
