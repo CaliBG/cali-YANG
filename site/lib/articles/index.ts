@@ -8,6 +8,7 @@ import YzsWorkBody from "./content/yzs/YzsWorkBody";
 import { YZS_WORKS } from "./content/yzs/works-data";
 import TongkuangCaseStudy from "@/components/tongkuang/TongkuangCaseStudy";
 import VanodCaseStudy from "@/components/vanod/VanodCaseStudy";
+import CoffeeCaseStudy from "@/components/coffee/CoffeeCaseStudy";
 
 export interface ArticleDefinition {
   slug: string;
@@ -36,6 +37,13 @@ export const ARTICLES: ArticleDefinition[] = [...YZS_WORKS.map((work) => ({
   description: "从视觉识别到交易界面、小组件与 Slate 硬件概念的完整设计项目",
   updated: "2026-10-28",
   Body: VanodCaseStudy,
+}, {
+  slug: "unt-yzs",
+  title: "UNT × YZS — 留白发生",
+  date: "2026-10-01",
+  description: "毋名咖啡与 Yet Zero Sense 的商业联名：后期海报、完整影像、现场照片与气球滚动交互。",
+  updated: "2026-11-03",
+  Body: CoffeeCaseStudy,
 }];
 
 export function getArticle(slug: string): ArticleDefinition | undefined {
