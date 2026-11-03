@@ -1,0 +1,66 @@
+.introScroll{display:flow-root;overflow-anchor:none}
+.introPage{display:flow-root;outline:none}
+.runway,.introOverlay{display:none}
+.introScroll[data-intro-active="true"]>.introPage{position:sticky;top:0}
+.introScroll[data-intro-active="true"]>.runway{display:block;height:230svh;pointer-events:none}
+.introScroll[data-intro-active="true"]>.introOverlay{display:block}
+.introOverlay{position:sticky;top:0;width:100vw;height:100svh;margin-left:calc(50% - 50vw);margin-bottom:-100svh;z-index:70;overflow:clip;isolation:isolate;touch-action:pan-y pinch-zoom;color:#11121a;font-family:"PingFang SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.introOverlay[data-complete="true"]{visibility:hidden;pointer-events:none}
+.veil{position:absolute;inset:0;width:100%;height:100%;max-width:none;pointer-events:none}
+.introNav{position:absolute;inset:max(20px,env(safe-area-inset-top)) max(28px,env(safe-area-inset-right)) auto max(28px,env(safe-area-inset-left));display:flex;justify-content:space-between;gap:20px;font-size:12px}
+.introNav a,.introNav button{min-height:44px;display:inline-flex;align-items:center;padding:10px 0;color:inherit;background:none;border:0;font:inherit;cursor:pointer}
+.introNav :is(a,button):focus-visible{outline:2px solid #11121a;outline-offset:6px}
+.introHint{position:absolute;bottom:max(34px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:12px;color:#4f4766;opacity:var(--hint-opacity,1);pointer-events:none}
+.introHint span{display:block;font-size:20px;margin-top:14px}
+.coinSection{position:relative;overflow:hidden;isolation:isolate;background:#eeecfa;color:#171720;border-radius:8px;margin:48px 0 0}
+.coinStage{position:relative;display:grid;place-items:center;min-height:620px}
+.coinCopy{position:relative;z-index:1;width:46%;padding:20px 0;background:transparent;text-align:center}
+.coinCopy h3{margin:0;font-size:clamp(34px,4vw,58px);font-weight:600;letter-spacing:-.055em;line-height:1.23}
+.coinCopy p{margin:24px 0 28px;color:#646075;font-size:13px;line-height:1.7}
+.coinCopy a{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 24px;gap:24px;border-radius:10px;background:#191923;color:#fff;font-size:13px;transition:background .2s}
+.coinCopy a:hover{background:#393247}
+.coins{position:absolute;inset:0;pointer-events:none}
+.coin{position:absolute;left:var(--x);top:var(--y);width:var(--size);height:var(--size);max-width:none;border-radius:50%;transform:translate(-50%,-50%) rotate(var(--tilt));user-select:none;-webkit-user-drag:none}
+.coinSection[data-burst-state="ready"] .coin{opacity:0}
+.coin[data-coin="btc"]{--x:12%;--y:49%;--size:80px;--tilt:-16deg}
+.coin[data-coin="sol"]{--x:24%;--y:23%;--size:64px;--tilt:0deg;background:#101116;padding:calc(var(--size)*.23);object-fit:contain}
+.coin[data-coin="xrp"]{--x:10%;--y:18%;--size:54px;--tilt:-12deg}
+.coin[data-coin="link"]{--x:9%;--y:80%;--size:50px;--tilt:14deg}
+.coin[data-coin="ltc"]{--x:26%;--y:69%;--size:54px;--tilt:-20deg}
+.coin[data-coin="avax"]{--x:28%;--y:88%;--size:46px;--tilt:9deg}
+.coin[data-coin="eth"]{--x:84%;--y:46%;--size:78px;--tilt:13deg}
+.coin[data-coin="usdc"]{--x:91%;--y:66%;--size:60px;--tilt:-14deg}
+.coin[data-coin="doge"]{--x:76%;--y:18%;--size:60px;--tilt:-15deg}
+.coin[data-coin="usdt"]{--x:76%;--y:82%;--size:54px;--tilt:12deg}
+.coin[data-coin="ada"]{--x:89%;--y:87%;--size:50px;--tilt:-11deg}
+.coin[data-coin="uni"]{--x:91%;--y:26%;--size:52px;--tilt:17deg}
+.interactionNote{display:flex;justify-content:space-between;gap:20px;margin-top:15px;font-size:11px;line-height:1.8;color:var(--label-2)}
+.interactionNote a{white-space:nowrap;min-height:36px}
+.signature{width:min(100%,320px);color:#efedff;background:#0b0d12;border-radius:7px;padding:8px 20px 18px;margin:0 0 40px}
+.signatureStage{position:relative;isolation:isolate;overflow:hidden;aspect-ratio:32/15;width:100%;touch-action:pan-y pinch-zoom;cursor:grab;user-select:none;-webkit-user-select:none;outline-offset:3px}
+.signatureStage img,.signatureStage video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;-webkit-user-drag:none;mix-blend-mode:lighten}
+.signatureStage video{opacity:0;transition:opacity .18s ease}
+.signature:global(.motion-ready) .signatureStage video{opacity:1}
+.signature:global(.motion-ready) .signatureStage img{opacity:0}
+.signatureStage video::-webkit-media-controls{display:none!important}
+.signature:global(.motion-dragging) .signatureStage{cursor:grabbing}
+.signature:global(.motion-unavailable) .signatureStage,.signature:global(.motion-reduced) .signatureStage{cursor:default}
+.signatureCaption{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;margin-top:-6px}
+.signatureCaption button{min-height:36px;padding:5px;background:none;border:0;color:#c5bff4;font-size:11px}
+.signatureHint{font-size:10px;line-height:1.8;margin-top:5px;color:#a7a4b7}
+@media(max-width:800px){
+ .coinStage{min-height:560px}.coinCopy{width:86%;padding-block:14px}.coinCopy h3{font-size:clamp(32px,7.4vw,48px)}.coinCopy p{font-size:12px;margin:18px 0 22px}
+ .coin[data-coin="btc"]{--x:15%;--y:22%;--size:58px}.coin[data-coin="sol"]{--x:43%;--y:12%;--size:48px}.coin[data-coin="xrp"]{--x:78%;--y:11%;--size:36px}.coin[data-coin="eth"]{--x:84%;--y:23%;--size:54px}
+ .coin[data-coin="usdc"]{--x:83%;--y:78%;--size:46px}.coin[data-coin="doge"]{--x:48%;--y:88%;--size:46px}.coin[data-coin="usdt"]{--x:16%;--y:79%;--size:44px}.coin[data-coin="link"]{--x:16%;--y:10%;--size:34px}
+ .coin[data-coin="ltc"],.coin[data-coin="avax"],.coin[data-coin="ada"],.coin[data-coin="uni"]{display:none}
+}
+@media(max-width:640px){
+ .introNav{inset:15px 22px auto;font-size:11px}.introHint{font-size:11px}.introScroll[data-intro-active="true"]>.runway{height:210svh}
+ .coinSection{border-radius:5px;margin-top:30px}.interactionNote{font-size:10px;gap:15px}.signature{margin-bottom:30px}
+}
+@media(prefers-reduced-motion:reduce){
+ .introScroll[data-intro-active="true"]>.introPage{position:static}.introScroll>.introOverlay,.introScroll>.runway{display:none!important}
+ .coinSection[data-burst-state="ready"] .coin{opacity:1}.coinCopy a{transition:none}
+ .signatureStage{cursor:default}.signatureStage video{display:none}.signature:global(.motion-ready) .signatureStage img{opacity:1}
+ .signatureCaption button{display:none}
+}

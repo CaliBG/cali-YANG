@@ -35,7 +35,7 @@ export const ARTICLES: ArticleDefinition[] = [...YZS_WORKS.map((work) => ({
   title: "Vanod — 品牌与数字产品设计",
   date: "2026-10-28",
   description: "从视觉识别到交易界面、小组件与 Slate 硬件概念的完整设计项目",
-  updated: "2026-10-28",
+  updated: "2026-11-03",
   Body: VanodCaseStudy,
 }, {
   slug: "unt-yzs",

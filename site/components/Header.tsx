@@ -176,6 +176,7 @@ export default function Header() {
 
   return (
     <header
+      data-shell-header
       className={`z-50 fixed inset-0 flex flex-col justify-between font-mono-2 pointer-events-none ${ARROW_FULLSCREEN_DOM_COLOR_TRANSITION} ${
         past ? "text-white" : "text-l1"
       }`}

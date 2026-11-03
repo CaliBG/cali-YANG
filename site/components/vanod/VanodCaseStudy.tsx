@@ -7,7 +7,11 @@ import { useShellMedia } from "@/lib/shell-media";
 import { scrollToMdxAnchorTarget } from "@/components/mdx/anchors";
 import TransitionLink from "@/components/TransitionLink";
 import VanodFilm from "./VanodFilm";
+import VanodIntro from "./VanodIntro";
+import VanodCoinBurst from "./VanodCoinBurst";
+import VanodSignature from "./VanodSignature";
 import styles from "./vanod.module.css";
+import motionStyles from "./interactive.module.css";
 
 const media = (file: string) => asset(`/projects/vanod/${file}`);
 const WEBSITE = "https://calibg.github.io/vanod/";
@@ -49,11 +53,11 @@ export default function VanodCaseStudy() {
   const [videoError, setVideoError] = useState(false);
   const identity = identityPages[identityIndex];
 
-  return <div className={styles.caseStudy}>
+  return <VanodIntro><div className={styles.caseStudy}>
     <header className={styles.hero}>
       <div className={styles.heroTop}>
         <span className={styles.eyebrow}>VANOD / INDEPENDENT DESIGN & DEVELOPMENT / 2026</span>
-        <span className={styles.projectNumber}>02</span>
+        <button className={styles.introReplay} type="button" data-replay-vanod-intro>{zh ? "重看开屏" : "Replay opening"} ↻</button>
       </div>
       <h1 className={styles.wordmark}>
         <span className={styles.srOnly}>Vanod</span>
@@ -86,7 +90,7 @@ export default function VanodCaseStudy() {
     </dl>
 
     <nav className={styles.chapterNav} aria-label={zh ? "Vanod 项目章节" : "Vanod project chapters"}>
-      {[["film", zh ? "品牌短片" : "Brand film"], ["website", zh ? "官网设计" : "Website"], ["identity", zh ? "品牌系统" : "Identity"], ["interface", zh ? "UI 与小组件" : "UI & widgets"], ["motion", zh ? "标志动效" : "Motion"], ["hardware", zh ? "硬件延展" : "Hardware"]].map(([id, label]) => <a key={id} href={`#vanod-${id}`} onClick={event => {
+      {[["film", zh ? "品牌短片" : "Brand film"], ["website", zh ? "官网与交互" : "Website & interaction"], ["identity", zh ? "品牌系统" : "Identity"], ["interface", zh ? "UI 与小组件" : "UI & widgets"], ["motion", zh ? "标志动效" : "Motion"], ["hardware", zh ? "硬件延展" : "Hardware"]].map(([id, label]) => <a key={id} href={`#vanod-${id}`} onClick={event => {
         const target = document.getElementById(`vanod-${id}`);
         if (target) { event.preventDefault(); scrollToMdxAnchorTarget(target); history.replaceState(null, "", `#vanod-${id}`); }
       }}>{label}</a>)}
@@ -103,11 +107,13 @@ export default function VanodCaseStudy() {
     <section id="vanod-website" className={styles.chapter}>
       <div className={styles.chapterRow}>
         <Chapter number="01 / WEBSITE" title={zh ? "让信息有轻重" : "A clear order to the information"}>
-          {zh ? "行情需要密度，品牌需要留白。官网以深色界面承载市场信息，用清晰的层级连接行情、产品与冷钱包功能。" : "Markets need detail. A brand needs room. The website uses a dark foundation and clear hierarchy to connect market data, the product and cold-wallet features."}
+          {zh ? "行情需要密度，品牌需要留白。滚动时，字标化为一扇窗口；币种从文字中心展开，让信息随浏览自然出现。这里保留了官网的真实交互。" : "Markets need detail. A brand needs room. As you scroll, the wordmark becomes a window and coins unfold from the headline. The original website interactions are live here."}
         </Chapter>
         <a className={styles.textLink} href={WEBSITE} target="_blank" rel="noopener noreferrer">{zh ? "打开在线网页" : "Open the live website"} ↗</a>
       </div>
-      <Plate file="website-ui.webp" alt={zh ? "Vanod 官网 UI 设计规范展示" : "Vanod website UI design specimen"} caption={zh ? "官网视觉设计" : "Website design specimen"} />
+      <VanodCoinBurst />
+      <div className={motionStyles.interactionNote}><span>{zh ? "首次滑到这里 币种渐显展开 再次经过保持展开" : "Coins unfold on your first pass and stay in place when you return"}</span><a href="#vanod-signature">{zh ? "探索页脚动效" : "Try the footer interaction"} ↓</a></div>
+      <div className={styles.websitePlate}><Plate file="website-ui.webp" alt={zh ? "Vanod 官网 UI 设计规范展示" : "Vanod website UI design specimen"} caption={zh ? "官网视觉设计" : "Website design specimen"} /></div>
     </section>
 
     <section id="vanod-identity" className={styles.chapter}>
@@ -180,8 +186,8 @@ export default function VanodCaseStudy() {
       </div>
     </section>
 
-    <footer className={styles.resources}>
-      <h2>{zh ? "继续探索 Vanod" : "Explore Vanod"}</h2>
+    <footer className={styles.resources} id="vanod-signature">
+      <div className={styles.resourcesTop}><VanodSignature /><h2>{zh ? "继续探索 Vanod" : "Explore Vanod"}</h2></div>
       <div className={styles.resourceLinks}>
         <a href={WEBSITE} target="_blank" rel="noopener noreferrer"><span>{zh ? "产品官网" : "Product website"}<small>{zh ? "在线查看网页与交互" : "Explore the website and interactions"}</small></span><span aria-hidden="true">↗</span></a>
         <a href={zh ? PDF : PDF_EN} target="_blank" rel="noopener noreferrer"><span>{zh ? "品牌手册" : "Brand guidelines"}<small>{zh ? "中文版  38 页 PDF" : "English edition  38-page PDF"}</small></span><span aria-hidden="true">↗</span></a>
@@ -189,5 +195,5 @@ export default function VanodCaseStudy() {
       <p className={styles.projectNote}>{zh ? "项目持续开发中。网页与应用目前展示行情和模拟下单；UI 图版使用示例数据。Slate 硬件、包装与随身配件为概念设计样机。" : "An ongoing project. The website and app currently present market data and simulated orders; UI specimens use sample data. Slate hardware, packaging and accessories are concept mockups."}</p>
       <TransitionLink href="/" className={styles.backLink}>← {zh ? "返回作品集" : "Back to the portfolio"}</TransitionLink>
     </footer>
-  </div>;
+  </div></VanodIntro>;
 }
