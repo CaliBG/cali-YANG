@@ -1,4 +1,4 @@
-/** Authored video excerpts, driven by page position or direct manipulation.
+/** Authored motion, decoded off-DOM and drawn into a genuine RGBA canvas.
  * Only one seek is in flight; later input replaces the pending target.
  * No autoplay clock, native transport UI, scroll interception or range input. */
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
@@ -7,7 +7,11 @@ export class VanodSignatureController {
   private video: HTMLVideoElement;
   private stage: HTMLElement;
   private track: HTMLElement;
-  private poster: HTMLImageElement;
+  private canvas: HTMLCanvasElement;
+  private context: CanvasRenderingContext2D | null;
+  private scratch = document.createElement('canvas');
+  private scratchContext = this.scratch.getContext('2d', {willReadFrequently:true});
+  private paintedTime = -1;
   private replay: HTMLButtonElement;
   private hint: HTMLElement;
   private preference = matchMedia('(prefers-reduced-motion: reduce)');
@@ -29,8 +33,10 @@ export class VanodSignatureController {
   constructor(private root: HTMLElement, private container: HTMLElement, private labels: { reduced: string; error: string; retry: string; replay: string }) {
     this.stage = root.querySelector<HTMLElement>('[data-motion-stage]')!;
     this.track = root.closest<HTMLElement>('[data-signature-track]')!;
-    this.video = root.querySelector<HTMLVideoElement>('video')!;
-    this.poster = root.querySelector<HTMLImageElement>('[data-motion-poster]')!;
+    // Never attach the opaque source video to the page, even while loading.
+    this.video = document.createElement('video');
+    this.canvas = root.querySelector<HTMLCanvasElement>('[data-motion-canvas]')!;
+    this.context = this.canvas.getContext('2d', {alpha:true});
     this.replay = root.querySelector<HTMLButtonElement>('[data-motion-replay]')!;
     this.hint = root.querySelector<HTMLElement>('[data-motion-hint]')!;
     this.originalHint = this.hint.textContent || '';
@@ -63,8 +69,9 @@ export class VanodSignatureController {
   private ensureMedia() {
     if (this.loaded || this.failed || this.preference.matches || !this.pageActive || document.hidden) return;
     this.loaded = true;
+    if (!this.context || !this.scratchContext) { this.error(); return; }
     this.video.preload = 'auto';
-    this.video.src = this.video.dataset.src!;
+    this.video.src = this.root.dataset.motionSrc!;
     this.video.load();
   }
   private applyPreference = () => {
@@ -72,18 +79,49 @@ export class VanodSignatureController {
     this.root.classList.toggle('motion-reduced', reduced);
     this.replay.hidden = reduced;
     this.stage.tabIndex = reduced ? -1 : 0;
-    this.poster.src = reduced ? this.poster.dataset.rest! : this.poster.dataset.start!;
     this.hint.textContent = reduced ? this.labels.reduced : this.originalHint;
     if (reduced) {
       this.stop(); this.release(); this.replayStart = null; this.root.classList.remove('motion-ready');
-      this.video.removeAttribute('src'); this.video.load(); this.loaded = false;
+      this.video.removeAttribute('src'); this.video.load(); this.loaded = false; this.paintedTime = -1;
     } else if (this.near) { this.ensureMedia(); this.measure(); }
   };
   private ready = () => {
     if (!this.loaded || this.failed || this.preference.matches || this.video.readyState < 2) return;
+    if (!this.paintFrame()) return;
     this.root.classList.add('motion-ready');
     this.wake();
   };
+  private paintFrame() {
+    if (!this.context || !this.scratchContext) return false;
+    if (this.paintedTime === this.video.currentTime) return true;
+    const width = this.video.videoWidth, height = this.video.videoHeight;
+    if (!width || !height) return false;
+    try {
+      if (this.canvas.width !== width || this.canvas.height !== height) {
+        this.canvas.width = width; this.canvas.height = height;
+      }
+      if (this.scratch.width !== width || this.scratch.height !== height) {
+        this.scratch.width = width; this.scratch.height = height;
+      }
+      this.scratchContext.drawImage(this.video, 0, 0, width, height);
+      const frame = this.scratchContext.getImageData(0, 0, width, height);
+      const pixels = frame.data;
+      // The original monochrome clip has a dark baked-in matte. Convert it to
+      // real alpha, retaining soft edges. RGB is black; CSS inverts only the ink
+      // for dark mode. A zero alpha pixel stays transparent in either theme.
+      for (let i = 0; i < pixels.length; i += 4) {
+        const alpha = (pixels[i] + pixels[i + 1] + pixels[i + 2]) * .38 - 17.85;
+        pixels[i] = pixels[i + 1] = pixels[i + 2] = 0;
+        pixels[i + 3] = alpha;
+      }
+      this.context.putImageData(frame, 0, 0);
+      this.paintedTime = this.video.currentTime;
+      return true;
+    } catch {
+      // Keep the transparent SVG fallback if decoding or canvas access fails.
+      this.error(); return false;
+    }
+  }
   private error = () => {
     if (!this.loaded) return;
     this.failed = true; this.stop(); this.root.classList.remove('motion-ready');
@@ -160,7 +198,7 @@ export class VanodSignatureController {
   private restart = () => {
     if (this.preference.matches) return;
     if (this.failed) {
-      this.failed = false; this.loaded = false; this.root.classList.remove('motion-unavailable');
+      this.failed = false; this.loaded = false; this.paintedTime = -1; this.root.classList.remove('motion-unavailable');
       this.hint.textContent = this.originalHint; this.replay.textContent = this.labels.replay;
     }
     this.setManual(0); this.value = 0; this.replayStart = performance.now(); this.wake();
@@ -218,6 +256,8 @@ export class VanodSignatureController {
     this.root.style.removeProperty('--signature-stick-top');
     this.track.style.removeProperty('--signature-height');
     this.video.removeAttribute('src'); this.video.load();
+    this.context?.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.scratch.width = this.scratch.height = 0;
   }
 
 }

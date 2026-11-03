@@ -5,11 +5,12 @@
 }
 .caseStudy :is(a, button) { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .caseStudy :is(a, button, [tabindex]):focus-visible { outline: 2px solid var(--label-1); outline-offset: 6px; }
+.caseStudy [data-motion-stage][tabindex]:focus-visible { outline: none; }
 .caseStudy button { font: inherit; cursor: pointer; }
 .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .eyebrow { display: block; color: var(--label-2); font-size: 10px; letter-spacing: .08em; line-height: 1.7; }
 .heroTop { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
-.introReplay{color:var(--label-2);font-size:11px!important;white-space:nowrap;min-height:44px;border:0;background:none}.introReplay:hover{color:var(--label-1)}
+.introReplay{color:var(--label-2);font-size:16px!important;white-space:nowrap;min-height:44px;min-width:44px;border:0;background:none}.introReplay:hover{color:var(--label-1)}
 .websitePlate{margin-top:48px}
 .projectNumber { color: var(--label-3); font-size: 12px; font-variant-numeric: tabular-nums; }
 .wordmark { width: min(70%, 588px); margin: 50px 0 45px; }

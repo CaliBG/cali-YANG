@@ -57,7 +57,7 @@ export default function VanodCaseStudy() {
     <header className={styles.hero}>
       <div className={styles.heroTop}>
         <span className={styles.eyebrow}>VANOD / INDEPENDENT DESIGN & DEVELOPMENT / 2026</span>
-        <button className={styles.introReplay} type="button" data-replay-vanod-intro>{zh ? "重看开屏" : "Replay opening"} ↻</button>
+        <button className={styles.introReplay} type="button" data-replay-vanod-intro aria-label={zh ? "重新观看开屏动画" : "View opening animation again"}>↻</button>
       </div>
       <h1 className={styles.wordmark}>
         <span className={styles.srOnly}>Vanod</span>
