@@ -42,6 +42,12 @@ Original paths below are relative to the user's `咖啡联名` project directory
 
 - `feedback/01.webp` through `feedback/20.webp` come exclusively from the reviewed `咖啡反馈照片/已处理` directory: 19 Moments excerpts and one small coffee-photo crop, not 20 distinct customers.
 - Lossless WebP preserves every decoded pixel of the approved PNGs. Names, avatars and names within comments are already obscured in the source pixels; public files contain no original/private version or source metadata.
-- `FeedbackStack` displays complete screenshots, with reversible card navigation, horizontal swipe, a native selection menu and an expanded reader. Tall screenshots scroll naturally; the 237px photo stays at its original size.
+- `FeedbackOverview` displays all 20 complete screenshots in one board, without pagination. The six-column desktop overview uses a larger opening card and a taller card for the long screenshot. It shares the campaign's straight, four-direction masked entrance via `useMaskedEntrance`; directions repeat left, top, right and bottom across all 20 cards. Each screenshot opens in the expanded reader. Tall screenshots scroll naturally; the 237px photo stays at its original size.
 - Keyboard arrows, last-to-first wrap, Escape dismissal and trigger-focus restoration checked. Mobile 390 × 844 layout has no horizontal overflow.
 - No regenerated imagery or raster collage is used in either the overview or the feedback section.
+
+## Feedback overview verification — 2026-11-04
+
+- Production build and TypeScript checks pass. Desktop entry matrices are pure translations: rightward, downward, leftward, upward, clipped to the gray rounded board.
+- The overview renders 20 unique approved images together; its reader retains long-image scrolling, 20-to-1 keyboard navigation and Escape focus restoration.
+- Responsive layouts keep all 20 screenshots in one board: four columns on tablets and two on phones, with complete image proportions and click-to-read originals. Reduced-motion and short-screen layouts show the complete board directly.

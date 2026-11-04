@@ -7,7 +7,7 @@ import { useShellMedia } from "@/lib/shell-media";
 import { scrollToMdxAnchorTarget } from "@/components/mdx/anchors";
 import TransitionLink from "@/components/TransitionLink";
 import BalloonScene from "./BalloonScene";
-import FeedbackStack from "./FeedbackStack";
+import FeedbackOverview from "./FeedbackOverview";
 import CampaignOverview from "./CampaignOverview";
 import styles from "./coffee.module.css";
 
@@ -70,7 +70,7 @@ export default function CoffeeCaseStudy() {
       <div className={styles.photoThumbnails} role="group" aria-label={zh ? "选择现场照片" : "Choose a photograph"}>{photos.map((item,index)=><button type="button" key={item.file} onClick={()=>setPhoto(index)} aria-pressed={photo===index} aria-label={caption(item)}><img src={media(item.file)} alt="" loading="lazy" decoding="async" /></button>)}</div>
     </section>
 
-    <FeedbackStack />
+    <FeedbackOverview />
 
     <footer className={styles.ending}><p>UNT × YZS<span>Reset to blank.</span></p><div><a href="#coffee-start" onClick={event=>jump("coffee-start",event)} className={styles.textLink}>{zh ? "再让气球升起" : "Let the balloons rise again"} ↑</a><TransitionLink href="/" className={styles.textLink}>← {zh ? "返回作品集" : "Back to the portfolio"}</TransitionLink></div></footer>
     <dialog ref={dialog} className={styles.viewer} aria-label={zh ? "原图预览" : "Image preview"} onCancel={()=>setEnlarged(null)} onClick={event=>{if(event.target===event.currentTarget)setEnlarged(null);}}>{enlarged&&<div className={styles.viewerContent}><div><span>{enlarged.label}</span><button type="button" onClick={()=>setEnlarged(null)} aria-label={zh ? "关闭原图" : "Close preview"}>×</button></div><img src={media(enlarged.file)} alt={enlarged.label}/></div>}</dialog>
