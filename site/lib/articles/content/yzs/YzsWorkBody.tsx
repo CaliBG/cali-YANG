@@ -12,6 +12,7 @@ import MdxImg from "@/components/mdx/MdxImg";
 import { asset } from "@/lib/asset";
 import { useLanguage } from "@/lib/language";
 import OverviewGallery from "./OverviewGallery";
+import { GALLERY_PREVIEWS } from "./gallery-previews";
 import type { BiText, YzsWork } from "./works-data";
 
 function MetaRow({ label, value }: { label: string; value: string }) {
@@ -131,6 +132,8 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
                 <div className="w-full max-w-2xl flex justify-center">
                   <MdxImg
                     src={asset(src)}
+                    width={GALLERY_PREVIEWS[src]?.width}
+                    height={GALLERY_PREVIEWS[src]?.height}
                     alt={`${work.title} - ${idx + 1}`}
                     title={`${work.title} · ${idx + 1} / ${work.images.length}`}
                   />

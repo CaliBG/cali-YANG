@@ -1,0 +1,153 @@
+import { createHash } from "node:crypto";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { createRequire } from "node:module";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import vm from "node:vm";
+
+const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const siteRoot = path.join(repositoryRoot, "site");
+const publicRoot = path.join(siteRoot, "public");
+const outputDirectory = path.join(publicRoot, "work-detail/previews");
+const worksPath = path.join(siteRoot, "lib/articles/content/yzs/works-data.ts");
+const manifestPath = path.join(siteRoot, "lib/articles/content/yzs/gallery-previews.ts");
+const requireFromSite = createRequire(path.join(siteRoot, "package.json"));
+const sharp = requireFromSite("sharp");
+const ts = requireFromSite("typescript");
+const targetWidths = [320, 640, 960];
+const excludedSlugs = new Set(["tongkuang", "vanod", "unt-yzs"]);
+const digest = (buffer) => createHash("sha256").update(buffer).digest("hex");
+
+// Evaluate the local data module so generated arrays and future image additions
+// are included without maintaining a second list of source filenames.
+const source = await readFile(worksPath, "utf8");
+const compiled = ts.transpileModule(source, {
+  fileName: worksPath,
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+});
+const dataModule = { exports: {} };
+vm.runInNewContext(compiled.outputText, { module: dataModule, exports: dataModule.exports }, {
+  filename: worksPath,
+  timeout: 1000,
+});
+const works = dataModule.exports.YZS_WORKS.filter((work) =>
+  !excludedSlugs.has(work.slug) && work.images.length > 1
+);
+const sources = [...new Set(works.flatMap((work) => work.images))];
+if (!sources.length) throw new Error("No eligible gallery images found.");
+
+const basenames = new Map();
+for (const src of sources) {
+  if (!/^\/work-detail\/[^/]+\.(jpe?g|png)$/i.test(src)) {
+    throw new Error(`Unexpected gallery image path: ${src}`);
+  }
+  const basename = path.parse(src).name;
+  if (basenames.has(basename) && basenames.get(basename) !== src) {
+    throw new Error(`Preview basename collision: ${src} and ${basenames.get(basename)}`);
+  }
+  basenames.set(basename, src);
+}
+
+await mkdir(outputDirectory, { recursive: true });
+const results = new Map();
+let nextIndex = 0;
+
+async function generate(src) {
+  const inputPath = path.join(publicRoot, src.slice(1));
+  const input = await readFile(inputPath);
+  const metadata = await sharp(input).metadata();
+  const { width, height } = metadata.autoOrient;
+  if (!width || !height) throw new Error(`Image has no usable dimensions: ${src}`);
+  const sourceHash = digest(input);
+  const lossless = metadata.format === "png" && Math.max(width, height) <= 960;
+  const basename = path.parse(src).name;
+  // Width descriptors must be unique. Small screenshots use their native width
+  // for the upper tiers rather than generating duplicate or enlarged images.
+  const widths = [...new Set(targetWidths.map((target) => Math.min(target, width)))];
+  const variants = [];
+  for (const previewWidth of widths) {
+    const filename = `${basename}-${previewWidth}.webp`;
+    const { data, info } = await sharp(input)
+      .autoOrient()
+      .resize({ width: previewWidth, withoutEnlargement: true })
+      .webp(lossless ? { lossless: true, effort: 5 } : { quality: 82, effort: 5 })
+      .toBuffer({ resolveWithObject: true });
+    const outputMetadata = await sharp(data).metadata();
+    if (info.width !== previewWidth || info.width > width || info.height > height) {
+      throw new Error(`Unexpected preview dimensions: ${filename}`);
+    }
+    if (outputMetadata.exif || outputMetadata.icc || outputMetadata.iptc || outputMetadata.xmp || outputMetadata.orientation) {
+      throw new Error(`Preview still contains source metadata: ${filename}`);
+    }
+    await writeFile(path.join(outputDirectory, filename), data);
+    variants.push({
+      src: `/work-detail/previews/${filename}`,
+      width: info.width,
+      height: info.height,
+      bytes: data.length,
+    });
+  }
+  if (digest(await readFile(inputPath)) !== sourceHash) {
+    throw new Error(`Original image changed during generation: ${src}`);
+  }
+  results.set(src, { width, height, originalBytes: input.length, lossless, variants });
+}
+
+// Keep image processing bounded instead of decoding all originals together.
+async function worker() {
+  while (nextIndex < sources.length) {
+    const src = sources[nextIndex++];
+    await generate(src);
+  }
+}
+await Promise.all([worker(), worker()]);
+
+const manifest = Object.fromEntries(sources.map((src) => {
+  const { width, height, variants } = results.get(src);
+  return [src, {
+    width,
+    height,
+    variants: variants.map(({ src: variantSrc, width: variantWidth, height: variantHeight }) => ({
+      src: variantSrc, width: variantWidth, height: variantHeight,
+    })),
+  }];
+}));
+await writeFile(manifestPath, `// Generated by scripts/generate-gallery-previews.mjs. Do not edit by hand.
+// Regenerate with: node scripts/generate-gallery-previews.mjs
+
+export type GalleryPreview = {
+  width: number;
+  height: number;
+  variants: Array<{ src: string; width: number; height: number }>;
+};
+
+export const GALLERY_PREVIEWS: Record<string, GalleryPreview> = ${JSON.stringify(manifest, null, 2)};
+`);
+
+function summarize(imageSources) {
+  const entries = imageSources.map((src) => results.get(src));
+  const originalBytes = entries.reduce((sum, entry) => sum + entry.originalBytes, 0);
+  return {
+    images: entries.length,
+    originalBytes,
+    tiers: targetWidths.map((targetWidth) => {
+      const bytes = entries.reduce((sum, entry) => {
+        const width = Math.min(targetWidth, entry.width);
+        return sum + entry.variants.find((variant) => variant.width === width).bytes;
+      }, 0);
+      return { targetWidth, bytes, reductionPercent: Number(((1 - bytes / originalBytes) * 100).toFixed(1)) };
+    }),
+  };
+}
+
+const entries = [...results.values()];
+const merch = works.find((work) => work.slug === "yzs-merch");
+console.log(JSON.stringify({
+  works: works.map((work) => ({ slug: work.slug, images: work.images.length })),
+  total: summarize(sources),
+  merch: merch ? summarize(merch.images) : null,
+  previewFiles: entries.reduce((sum, entry) => sum + entry.variants.length, 0),
+  uniquePreviewBytes: entries.reduce((sum, entry) => sum + entry.variants.reduce((bytes, variant) => bytes + variant.bytes, 0), 0),
+  losslessSources: entries.filter((entry) => entry.lossless).length,
+  originalsUnchanged: true,
+}, null, 2));
