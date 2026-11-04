@@ -8,6 +8,7 @@ Portfolio route: `/unt-yzs/`. The homepage features the project after Tongkuang 
 - Use existing final artwork, complete films and photographs individually. Do not generate collages or recreate the imagery.
 - `BalloonScene` is a transparent image layer driven by the existing scroll container. Scrolling in reverse reverses its movement. A static toggle and reduced-motion support are included.
 - `CampaignOverview` brings three complete late-stage artworks into a single responsive board. Desktop scroll brings its four independent modules in from the left, top, right and bottom, with slightly staggered easing. The gray rounded board is a mask: all artwork outside its bounds is clipped, leaving the surrounding page and heading unobstructed. Entry distances use the board's actual layout and recalculate on resize. A static toggle, keyboard focus and reduced-motion/mobile layouts show the full overview immediately. Each original opens in a native dialog.
+- Each entrance follows a single horizontal or vertical axis: announcement rightward, poster downward, banner leftward, identity upward. The tiles and identity image remain upright throughout; easing changes speed only.
 - The latest complete film plays on request, pauses offscreen or when the document is hidden, and does not compete with the site's background audio. The earlier 720p export of the same film and its unused cover were removed from public assets.
 - Source files remain unchanged. Public WebP and H.264 copies are optimized for web delivery.
 

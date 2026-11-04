@@ -43,10 +43,10 @@ export default function CampaignOverview({ onOpen }: { onOpen: (item: { file: st
       if (measure && board && tiles.length === 4) {
         // The board is the mask: artwork starts beyond its four edges.
         const positions = [
-          [-tiles[0].offsetLeft - tiles[0].offsetWidth - 40, 24],
-          [-20, -tiles[1].offsetTop - tiles[1].offsetHeight - 40],
-          [board.clientWidth - tiles[2].offsetLeft + 40, -24],
-          [40, board.clientHeight - tiles[3].offsetTop + 40],
+          [-tiles[0].offsetLeft - tiles[0].offsetWidth - 40, 0],
+          [0, -tiles[1].offsetTop - tiles[1].offsetHeight - 40],
+          [board.clientWidth - tiles[2].offsetLeft + 40, 0],
+          [0, board.clientHeight - tiles[3].offsetTop + 40],
         ];
         tiles.forEach((tile, index) => {
           tile.style.setProperty("--x", `${positions[index][0]}px`);
@@ -58,7 +58,6 @@ export default function CampaignOverview({ onOpen }: { onOpen: (item: { file: st
       const travel = Math.max(1, root.offsetHeight - panel.offsetHeight);
       const progress = still || preference.matches || small.matches ? 1 : Math.max(0, Math.min(1, (82 - top) / travel));
       const arrival = ease(progress / .86);
-      panel.style.setProperty("--arrival", String(arrival));
       panel.style.setProperty("--spread", String(1 - arrival));
       entrances.forEach(([start, end], index) => {
         panel.style.setProperty(`--spread-${index}`, String(1 - ease((progress - start) / (end - start))));
