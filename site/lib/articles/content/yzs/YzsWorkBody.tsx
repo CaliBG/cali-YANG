@@ -11,7 +11,7 @@ import Lede from "@/components/mdx/Lede";
 import MdxImg from "@/components/mdx/MdxImg";
 import { asset } from "@/lib/asset";
 import { useLanguage } from "@/lib/language";
-import StackGallery from "./StackGallery";
+import OverviewGallery from "./OverviewGallery";
 import type { BiText, YzsWork } from "./works-data";
 
 function MetaRow({ label, value }: { label: string; value: string }) {
@@ -102,13 +102,12 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
         {pick(work.quote).replace(/ —/g, " —")}
       </blockquote>
 
-      {/* 图片展示区：顶部可互动叠放画廊（自适应画幅与完整展现） */}
+      {/* 原堆叠展示区：全部照片在同一蒙版中从四向直线移入。 */}
       {work.images.length > 1 ? (
-        <StackGallery
+        <OverviewGallery
           images={work.images.map((src) => asset(src))}
           alt={work.title}
-          aspect={work.galleryAspect}
-          maxWidth={work.galleryMaxWidth}
+          portrait={work.slug === "aily" || work.slug === "indigo-lion"}
         />
       ) : work.images.length === 1 ? (
         <MdxImg src={asset(work.images[0])} alt={work.title} />
