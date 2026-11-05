@@ -1,0 +1,33 @@
+{
+  "frames": 93,
+  "columns": 4,
+  "perSheet": 32,
+  "tiers": [
+    {
+      "width": 960,
+      "height": 450,
+      "x": 201,
+      "y": 129,
+      "w": 570,
+      "h": 195,
+      "sheets": [
+        "signature-960-00-11b454b553f2.webp",
+        "signature-960-32-4e8dff7098d3.webp",
+        "signature-960-64-58b1e2c079f3.webp"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 600,
+      "x": 268,
+      "y": 172,
+      "w": 760,
+      "h": 260,
+      "sheets": [
+        "signature-1280-00-ca656f35a3c3.webp",
+        "signature-1280-32-49c1c1ffec1e.webp",
+        "signature-1280-64-35f86d93f7fc.webp"
+      ]
+    }
+  ]
+}

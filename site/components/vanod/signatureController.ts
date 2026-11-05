@@ -1,18 +1,23 @@
-/** Authored motion, decoded off-DOM and drawn into a genuine RGBA canvas.
- * Only one seek is in flight; later input replaces the pending target.
- * No autoplay clock, native transport UI, scroll interception or range input. */
+import { asset } from "@/lib/asset";
+import frames from "./signature-frames.json";
+
+/** The film's transparent frames are prepared at build time. Direct indexing
+ * works in either direction, including jumps across distant frames. */
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
 
 export class VanodSignatureController {
-  private video: HTMLVideoElement;
+  private tier = frames.tiers[0];
+  private sheets: HTMLImageElement[] = [];
+  private loadGeneration = 0;
+  private paintedFrame = -1;
+  private stickTop = 88;
+  private travel = 1;
+  private positionDirty = true;
+  private resizeObserver: ResizeObserver;
   private stage: HTMLElement;
   private track: HTMLElement;
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D | null;
-  private scratch = document.createElement('canvas');
-  private scratchContext = this.scratch.getContext('2d', {willReadFrequently:true});
-  private paintedTime = -1;
-  private replay: HTMLButtonElement;
   private hint: HTMLElement;
   private preference = matchMedia('(prefers-reduced-motion: reduce)');
   private observer: IntersectionObserver;
@@ -26,139 +31,121 @@ export class VanodSignatureController {
   private pageActive = true;
   private manual = false;
   private manualScroll = 0;
-  private replayStart: number | null = null;
   private pointer: {id:number;x:number;y:number;progress:number;dragging:boolean} | null = null;
   private originalHint: string;
 
-  constructor(private root: HTMLElement, private container: HTMLElement, private labels: { reduced: string; error: string; retry: string; replay: string }) {
+  constructor(private root: HTMLElement, private container: HTMLElement, private labels: { reduced: string; error: string }) {
     this.stage = root.querySelector<HTMLElement>('[data-motion-stage]')!;
     this.track = root.closest<HTMLElement>('[data-signature-track]')!;
-    // Never attach the opaque source video to the page, even while loading.
-    this.video = document.createElement('video');
     this.canvas = root.querySelector<HTMLCanvasElement>('[data-motion-canvas]')!;
     this.context = this.canvas.getContext('2d', {alpha:true});
-    this.replay = root.querySelector<HTMLButtonElement>('[data-motion-replay]')!;
     this.hint = root.querySelector<HTMLElement>('[data-motion-hint]')!;
     this.originalHint = this.hint.textContent || '';
-    this.video.controls = false;
-    this.video.muted = true;
-    this.video.playsInline = true;
-    this.video.disablePictureInPicture = true;
-    this.video.addEventListener('loadedmetadata', this.wake);
-    this.video.addEventListener('loadeddata', this.ready);
-    this.video.addEventListener('seeked', this.ready);
-    this.video.addEventListener('error', this.error);
     this.stage.addEventListener('pointerdown', this.down);
     this.stage.addEventListener('pointermove', this.move, {passive:false});
     this.stage.addEventListener('pointerup', this.release);
     this.stage.addEventListener('pointercancel', this.release);
     this.stage.addEventListener('lostpointercapture', this.release);
     this.stage.addEventListener('keydown', this.key);
-    this.replay.addEventListener('click', this.restart);
     this.container.addEventListener('scroll', this.scroll, {passive:true});
-    window.addEventListener('resize', this.measure, {passive:true});
+
     document.addEventListener('visibilitychange', this.visibility);
+    window.addEventListener('online', this.resumeMedia);
     window.addEventListener('pagehide', this.pagehide);
     window.addEventListener('pageshow', this.pageshow);
     this.preference.addEventListener('change', this.applyPreference);
-    this.observer = new IntersectionObserver(this.measure, {root:this.container,rootMargin:'600px 0px',threshold:0});
-    this.observer.observe(root);
+    this.observer = new IntersectionObserver(([entry]) => {
+      this.near = entry.isIntersecting;
+      if (this.near) { this.measure(); this.resumeMedia(); }
+      else this.stop();
+    }, { root: container, rootMargin: '800px 0px' });
+    this.observer.observe(this.track);
+    this.resizeObserver = new ResizeObserver(this.measure);
+    for (const element of [this.root, this.stage, this.container, this.track]) this.resizeObserver.observe(element);
     this.applyPreference();
   }
 
   private ensureMedia() {
-    if (this.loaded || this.failed || this.preference.matches || !this.pageActive || document.hidden) return;
+    if (!this.near || this.loaded || this.failed || this.preference.matches || !this.pageActive || document.hidden) return;
     this.loaded = true;
-    if (!this.context || !this.scratchContext) { this.error(); return; }
-    this.video.preload = 'auto';
-    this.video.src = this.root.dataset.motionSrc!;
-    this.video.load();
+    if (!this.context) { this.error(); return; }
+    this.tier = this.stage.clientWidth <= 480 ? frames.tiers[0] : frames.tiers[1];
+    const generation = ++this.loadGeneration;
+    const sheets = this.tier.sheets.map(file => {
+      const image = new Image();
+      image.src = asset("/projects/vanod/interactive/" + file);
+      return image;
+    });
+    Promise.all(sheets.map(sheet => sheet.decode())).then(() => {
+      if (generation !== this.loadGeneration) return;
+      this.sheets = sheets;
+      this.canvas.width = this.tier.width;
+      this.canvas.height = this.tier.height;
+      this.wake();
+    }).catch(() => { if (generation === this.loadGeneration) this.error(); });
+  }
+  private resumeMedia = () => {
+    if (this.failed && this.context && !this.preference.matches) {
+      this.failed = false;
+      this.discardFrames();
+      this.root.classList.remove('motion-unavailable');
+      this.hint.textContent = this.originalHint;
+    }
+    this.ensureMedia();
+  };
+  private discardFrames() {
+    this.loadGeneration++;
+    this.sheets = [];
+    this.loaded = false;
+    this.paintedFrame = -1;
   }
   private applyPreference = () => {
     const reduced = this.preference.matches;
     this.root.classList.toggle('motion-reduced', reduced);
-    this.replay.hidden = reduced;
     this.stage.tabIndex = reduced ? -1 : 0;
     this.hint.textContent = reduced ? this.labels.reduced : this.originalHint;
     if (reduced) {
-      this.stop(); this.release(); this.replayStart = null; this.root.classList.remove('motion-ready');
-      this.video.removeAttribute('src'); this.video.load(); this.loaded = false; this.paintedTime = -1;
+      this.stop(); this.release(); this.root.classList.remove('motion-ready');
+      this.discardFrames();
     } else if (this.near) { this.ensureMedia(); this.measure(); }
   };
-  private ready = () => {
-    if (!this.loaded || this.failed || this.preference.matches || this.video.readyState < 2) return;
-    if (!this.paintFrame()) return;
-    this.root.classList.add('motion-ready');
-    this.wake();
-  };
   private paintFrame() {
-    if (!this.context || !this.scratchContext) return false;
-    if (this.paintedTime === this.video.currentTime) return true;
-    const width = this.video.videoWidth, height = this.video.videoHeight;
-    if (!width || !height) return false;
-    try {
-      if (this.canvas.width !== width || this.canvas.height !== height) {
-        this.canvas.width = width; this.canvas.height = height;
-      }
-      if (this.scratch.width !== width || this.scratch.height !== height) {
-        this.scratch.width = width; this.scratch.height = height;
-      }
-      this.scratchContext.drawImage(this.video, 0, 0, width, height);
-      const frame = this.scratchContext.getImageData(0, 0, width, height);
-      const pixels = frame.data;
-      // The original monochrome clip has a dark baked-in matte. Convert it to
-      // real alpha, retaining soft edges. RGB is black; CSS inverts only the ink
-      // for dark mode. A zero alpha pixel stays transparent in either theme.
-      for (let i = 0; i < pixels.length; i += 4) {
-        const alpha = (pixels[i] + pixels[i + 1] + pixels[i + 2]) * .38 - 17.85;
-        pixels[i] = pixels[i + 1] = pixels[i + 2] = 0;
-        pixels[i + 3] = alpha;
-      }
-      this.context.putImageData(frame, 0, 0);
-      this.paintedTime = this.video.currentTime;
-      return true;
-    } catch {
-      // Keep the transparent SVG fallback if decoding or canvas access fails.
-      this.error(); return false;
-    }
+    const index = Math.round(this.value * (frames.frames - 1));
+    if (!this.context || !this.sheets.length || index === this.paintedFrame) return;
+    const { x, y, w, h } = this.tier;
+    const sheet = this.sheets[Math.floor(index / frames.perSheet)];
+    const tile = index % frames.perSheet;
+    this.context.clearRect(x, y, w, h);
+    this.context.drawImage(sheet, tile % frames.columns * w, Math.floor(tile / frames.columns) * h, w, h, x, y, w, h);
+    if (this.paintedFrame === -1) this.root.classList.add('motion-ready');
+    this.paintedFrame = index;
   }
   private error = () => {
     if (!this.loaded) return;
     this.failed = true; this.stop(); this.root.classList.remove('motion-ready');
     this.root.classList.add('motion-unavailable');
     this.hint.textContent = this.labels.error;
-    this.replay.textContent = this.labels.retry;
   };
   private measure = () => {
+    if (!this.near || this.preference.matches) return;
     const bounds = this.root.getBoundingClientRect();
-    const viewportTop = this.container.getBoundingClientRect().top;
-    const rect = { top: bounds.top - viewportTop, bottom: bounds.bottom - viewportTop, height: bounds.height };
-    // Reconcile visibility on every scroll, including anchor jumps.
-    this.near = rect.bottom > -600 && rect.top < this.container.clientHeight + 600;
-    if (!this.near) { this.stop(); return; }
-    this.ensureMedia();
     const stage = this.stage.getBoundingClientRect();
-    const centreOffset = stage.top - bounds.top + stage.height / 2;
-    const stickTop = Math.max(88, this.container.clientHeight / 2 - centreOffset);
+    this.stickTop = Math.max(88, this.container.clientHeight / 2 - (stage.top - bounds.top + stage.height / 2));
+    this.root.style.setProperty('--signature-stick-top', `${this.stickTop}px`);
     this.track.style.setProperty('--signature-height', `${this.root.offsetHeight}px`);
-    this.root.style.setProperty('--signature-stick-top', `${stickTop}px`);
-    if (!this.manual) {
-      // The wordmark stays still until its centre reaches the viewport centre.
-      // The section supplies scroll travel while CSS keeps the artwork in view.
-      const trackTop = this.track.getBoundingClientRect().top - viewportTop;
-      const travel = Math.max(1, this.track.clientHeight - this.root.offsetHeight);
-      this.target = clamp((stickTop - trackTop) / travel);
-    }
+    this.travel = Math.max(1, this.track.clientHeight - this.root.offsetHeight);
+    this.positionDirty = true;
     this.wake();
   };
   private scroll = () => {
     if (!this.pointer?.dragging && this.manual && Math.abs(this.container.scrollTop - this.manualScroll) > 8) {
-      this.manual = false; this.replayStart = null;
+      this.manual = false;
     }
-    this.measure();
+    this.positionDirty = true;
+    this.wake();
   };
   private setManual(value: number) {
-    this.manual = true; this.manualScroll = this.container.scrollTop; this.target = clamp(value); this.replayStart = null;
+    this.manual = true; this.manualScroll = this.container.scrollTop; this.target = clamp(value);
     this.ensureMedia(); this.wake();
   }
   private down = (event: PointerEvent) => {
@@ -195,34 +182,23 @@ export class VanodSignatureController {
     }
     event.preventDefault(); this.setManual(next);
   };
-  private restart = () => {
-    if (this.preference.matches) return;
-    if (this.failed) {
-      this.failed = false; this.loaded = false; this.paintedTime = -1; this.root.classList.remove('motion-unavailable');
-      this.hint.textContent = this.originalHint; this.replay.textContent = this.labels.replay;
-    }
-    this.setManual(0); this.value = 0; this.replayStart = performance.now(); this.wake();
-  };
   private tick = (now: number) => {
     this.frame = 0;
     if (this.preference.matches || !this.pageActive || document.hidden || !this.near || this.failed) return;
     const dt = this.last ? Math.min(64, now - this.last) : 16.67; this.last = now;
-    if (this.replayStart !== null) {
-      const p = clamp((now - this.replayStart) / 1600);
-      this.target = p * p * (3 - 2 * p);
-      if (p === 1) this.replayStart = null;
+    if (this.positionDirty && !this.manual) {
+      const top = this.track.getBoundingClientRect().top - this.container.getBoundingClientRect().top;
+      this.target = clamp((this.stickTop - top) / this.travel);
     }
+    this.positionDirty = false;
     const delta = this.target - this.value;
-    this.value = Math.abs(delta) < .0008 ? this.target : this.value + delta * (1 - Math.exp(-dt / 65));
+    // A horizontal drag maps directly to the displayed frame. Scroll already
+    // eases in the site shell; use only a short settle for wheel/key steps.
+    const follow = 1 - Math.exp(-dt / 32);
+    this.value = this.pointer?.dragging || Math.abs(delta) < .0008 ? this.target : this.value + delta * follow;
     this.root.dataset.signatureProgress = this.value.toFixed(3);
-    const duration = this.video.duration;
-    if (this.video.readyState >= 1 && Number.isFinite(duration) && duration > 0 && !this.video.seeking) {
-      const time = this.value * Math.max(0, duration - 1/60);
-      if (Math.abs(this.video.currentTime - time) >= 1/120) {
-        try { this.video.currentTime = time; } catch { /* Metadata can be replaced during a preference change. */ }
-      }
-    }
-    if (Math.abs(this.target - this.value) > .0008 || this.replayStart !== null) this.wake();
+    this.paintFrame();
+    if (Math.abs(this.target - this.value) > .0008) this.wake();
   };
   private wake = () => {
     if (!this.frame && this.near && !this.preference.matches && !document.hidden && this.pageActive && !this.failed) {
@@ -230,34 +206,29 @@ export class VanodSignatureController {
     }
   };
   private stop() { cancelAnimationFrame(this.frame); this.frame = 0; this.last = 0; }
-  private visibility = () => { if (document.hidden) this.stop(); else this.measure(); };
+  private visibility = () => { if (document.hidden) this.stop(); else { this.ensureMedia(); this.measure(); } };
   private pagehide = () => { this.pageActive = false; this.stop(); this.release(); };
-  private pageshow = () => { this.pageActive = true; this.measure(); };
+  private pageshow = () => { this.pageActive = true; this.ensureMedia(); this.measure(); };
   destroy() {
     this.pageActive = false; this.stop(); this.release(); this.observer.disconnect();
-    this.video.removeEventListener('loadedmetadata', this.wake);
-    this.video.removeEventListener('loadeddata', this.ready);
-    this.video.removeEventListener('seeked', this.ready);
-    this.video.removeEventListener('error', this.error);
+    this.resizeObserver.disconnect();
+    this.discardFrames();
     this.stage.removeEventListener('pointerdown', this.down);
     this.stage.removeEventListener('pointermove', this.move);
     this.stage.removeEventListener('pointerup', this.release);
     this.stage.removeEventListener('pointercancel', this.release);
     this.stage.removeEventListener('lostpointercapture', this.release);
     this.stage.removeEventListener('keydown', this.key);
-    this.replay.removeEventListener('click', this.restart);
     this.container.removeEventListener('scroll', this.scroll);
-    window.removeEventListener('resize', this.measure);
     document.removeEventListener('visibilitychange', this.visibility);
+    window.removeEventListener('online', this.resumeMedia);
     window.removeEventListener('pagehide', this.pagehide);
     window.removeEventListener('pageshow', this.pageshow);
     this.preference.removeEventListener('change', this.applyPreference);
     this.root.classList.remove('motion-ready', 'motion-reduced', 'motion-unavailable');
     this.root.style.removeProperty('--signature-stick-top');
     this.track.style.removeProperty('--signature-height');
-    this.video.removeAttribute('src'); this.video.load();
     this.context?.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.scratch.width = this.scratch.height = 0;
   }
 
 }

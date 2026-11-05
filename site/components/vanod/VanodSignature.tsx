@@ -8,8 +8,6 @@ import { VanodSignatureController } from "./signatureController";
 import { V_PATH } from "./brandGeometry";
 import styles from "./interactive.module.css";
 
-const media = (name: string) => asset(`/projects/vanod/interactive/brand-lockup-${name}`);
-
 export default function VanodSignature() {
   const root = useRef<HTMLDivElement>(null);
   const container = useContainerEl();
@@ -21,13 +19,11 @@ export default function VanodSignature() {
     const motion = new VanodSignatureController(root.current, container, {
       reduced: zh ? "已跟随系统减少动态效果" : "Reduced motion enabled",
       error: zh ? "动效暂未加载 仍可继续浏览" : "Motion unavailable. You can keep exploring.",
-      retry: "↻",
-      replay: "↻",
     });
     return () => motion.destroy();
   }, [container, zh]);
 
-  return <div className={styles.signature} ref={root} data-vanod-signature data-motion-src={media("scrub.mp4")}>
+  return <div className={styles.signature} ref={root} data-vanod-signature>
     <div className={styles.signatureStage} data-motion-stage tabIndex={0} role="group" aria-label={zh ? "Vanod 交互标志 左右拖动或使用方向键" : "Interactive Vanod wordmark. Drag sideways or use arrow keys"} aria-describedby={hintId}>
       <svg data-motion-poster viewBox="0 0 1280 600" aria-hidden="true" focusable="false">
         <svg className={styles.signatureInitial} x="480" y="172" width="320" height="256" viewBox="216 264 622 496"><path d={V_PATH} fill="#000" /></svg>
@@ -35,7 +31,7 @@ export default function VanodSignature() {
       </svg>
       <canvas width={1280} height={600} data-motion-canvas aria-hidden="true" />
     </div>
-    <div className={styles.signatureCaption}><span>Your market. Your move.</span><button type="button" data-motion-replay aria-label={zh ? "重新播放字标动画" : "Play wordmark animation again"}>↻</button></div>
+    <p className={styles.signatureCaption}>Your market. Your move.</p>
     <p className={styles.signatureHint} id={hintId} data-motion-hint>{zh ? "左右拖动标志 或使用 ← → 按键" : "Drag the wordmark or use the ← → keys"}</p>
   </div>;
 }

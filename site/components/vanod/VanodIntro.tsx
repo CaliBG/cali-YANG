@@ -53,6 +53,7 @@ export default function VanodIntro({ children }: { children: ReactNode }) {
       frame = 0;
       if (preference.matches) { reveal(true); return; }
       const value = clamp((container.scrollTop - start) / Math.max(1, travel));
+      if (value === 1 && done && veilRoot.dataset.progress === "1.000") return;
       const depart = phase(value, .025, .42), expand = phase(value, .53, .98);
       const wordScale = Math.min(width * .7, 530) / 293.642;
       const left = (width - 293.642 * wordScale) / 2;
