@@ -1,5 +1,7 @@
 "use client";
 
+import { containedPreview } from "@/lib/detail-placeholder";
+
 import FilmSources from "@/components/FilmSources";
 import { responsive } from "@/lib/media";
 import { useEffect, useRef, useState } from "react";
@@ -66,7 +68,7 @@ export default function CoffeeCaseStudy() {
     <section id="coffee-photos" className={styles.chapter}>
       <header className={styles.sectionHeading}><div><span className={styles.eyebrow}>03 / IN EVERYDAY LIFE</span><h2>{zh ? "回到日常里。" : "Back in everyday life."}</h2></div><span>{zh ? "现场与返图" : "On location & shared moments"}</span></header>
       <figure className={styles.photoGallery}>
-        <button type="button" className={styles.originalPhoto} onClick={()=>setEnlarged({file:photos[photo].file,label:caption(photos[photo])})} aria-label={`${zh ? "放大查看" : "Enlarge"} ${caption(photos[photo])}`}><img {...responsive(media(photos[photo].file), "auto, (max-width: 700px) 100vw, 850px")} src={media(photos[photo].file)} alt={caption(photos[photo])} loading="lazy" decoding="async" /></button>
+        <button type="button" className={styles.originalPhoto} style={containedPreview(media(photos[photo].file))} onClick={()=>setEnlarged({file:photos[photo].file,label:caption(photos[photo])})} aria-label={`${zh ? "放大查看" : "Enlarge"} ${caption(photos[photo])}`}><img {...responsive(media(photos[photo].file), "(max-width: 700px) 100vw, 850px")} src={media(photos[photo].file)} alt={caption(photos[photo])} loading="lazy" decoding="async" /></button>
         <figcaption><span>{caption(photos[photo])}</span><div><button type="button" onClick={()=>setPhoto(value=>(value+photos.length-1)%photos.length)} aria-label={zh ? "上一张照片" : "Previous photo"}>←</button><span>{String(photo+1).padStart(2,"0")} / 05</span><button type="button" onClick={()=>setPhoto(value=>(value+1)%photos.length)} aria-label={zh ? "下一张照片" : "Next photo"}>→</button></div></figcaption>
       </figure>
       <div className={styles.photoThumbnails} role="group" aria-label={zh ? "选择现场照片" : "Choose a photograph"}>{photos.map((item,index)=><button type="button" key={item.file} onClick={()=>setPhoto(index)} aria-pressed={photo===index} aria-label={caption(item)}><img {...responsive(media(item.file), "(max-width: 640px) 22vw, 140px")} src={media(item.file)} alt="" loading="lazy" decoding="async" /></button>)}</div>
@@ -75,6 +77,6 @@ export default function CoffeeCaseStudy() {
     <FeedbackOverview />
 
     <footer className={styles.ending}><p>UNT × YZS<span>Reset to blank.</span></p><div><a href="#coffee-start" onClick={event=>jump("coffee-start",event)} className={styles.textLink}>{zh ? "再让气球升起" : "Let the balloons rise again"} ↑</a><TransitionLink href="/" className={styles.textLink}>← {zh ? "返回作品集" : "Back to the portfolio"}</TransitionLink></div></footer>
-    <dialog ref={dialog} className={styles.viewer} aria-label={zh ? "原图预览" : "Image preview"} onCancel={()=>setEnlarged(null)} onClick={event=>{if(event.target===event.currentTarget)setEnlarged(null);}}>{enlarged&&<div className={styles.viewerContent}><div><span>{enlarged.label}</span><button type="button" onClick={()=>setEnlarged(null)} aria-label={zh ? "关闭原图" : "Close preview"}>×</button></div><img src={media(enlarged.file)} alt={enlarged.label}/></div>}</dialog>
+    <dialog ref={dialog} className={styles.viewer} aria-label={zh ? "原图预览" : "Image preview"} onCancel={()=>setEnlarged(null)} onClick={event=>{if(event.target===event.currentTarget)setEnlarged(null);}}>{enlarged&&<div className={styles.viewerContent}><div><span>{enlarged.label}</span><button type="button" onClick={()=>setEnlarged(null)} aria-label={zh ? "关闭原图" : "Close preview"}>×</button></div><img style={containedPreview(media(enlarged.file))} src={media(enlarged.file)} alt={enlarged.label}/></div>}</dialog>
   </div>;
 }

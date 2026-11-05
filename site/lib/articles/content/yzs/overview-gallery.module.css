@@ -14,7 +14,7 @@
 .board[data-count="7"] .tile:first-child{grid-row:span 2}
 .board[data-count="5"]:not([data-portrait]) .tile:first-child{grid-column:span 2}
 .board[data-count="23"] .tile:last-child{grid-column:span 2}
-.imageWell{position:absolute;inset:0;display:block}
+.imageWell{background-position:center;background-size:cover;position:absolute;inset:0;display:block}
 .imageWell img{display:block;width:100%;height:100%;object-fit:cover}
 .tileCaption{position:absolute;inset:auto 0 0;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:24px 12px 10px;font-family:var(--font-mono-2),monospace;font-size:9px;line-height:1;color:#fff;background:linear-gradient(transparent,#0007);pointer-events:none}
 .tileCaption>span:last-child{font-size:13px}

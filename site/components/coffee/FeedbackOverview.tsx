@@ -1,5 +1,7 @@
 "use client";
 
+import { containedPreview } from "@/lib/detail-placeholder";
+
 import { responsive } from "@/lib/media";
 import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
@@ -58,7 +60,7 @@ export default function FeedbackOverview() {
         {feedbackItems.map((item, itemIndex) => {
           const title = zh ? item.labelZh : item.labelEn;
           return <button key={item.id} type="button" className={`${styles.tile} ${itemIndex === 0 ? styles.featured : ""} ${item.height > item.width * 1.5 ? styles.tall : ""}`} data-direction={itemIndex % 4} aria-label={zh ? `展开阅读第 ${itemIndex + 1} 张：${title}` : `Read item ${itemIndex + 1}: ${title}`} aria-haspopup="dialog" onClick={event => openReader(itemIndex, event.currentTarget)}>
-            <span className={styles.imageWell}><img {...responsive(media(item.file), "auto, (max-width: 700px) 50vw, 320px")} src={media(item.file)} alt={title} width={item.width} height={item.height} loading="lazy" decoding="async" draggable={false} /></span>
+            <span className={styles.imageWell} style={containedPreview(media(item.file))}><img {...responsive(media(item.file), "(max-width: 700px) 50vw, 320px")} src={media(item.file)} alt={title} width={item.width} height={item.height} loading="lazy" decoding="async" draggable={false} /></span>
             <span className={styles.tileCaption} aria-hidden="true"><span>{number(itemIndex + 1)}</span><span>↗</span></span>
           </button>;
         })}
@@ -71,7 +73,7 @@ export default function FeedbackOverview() {
     <dialog ref={dialog} className={styles.reader} aria-label={zh ? "联名反馈完整截图" : "Full collaboration feedback"} onKeyDown={keyboard} onClose={() => { setExpanded(false); returnFocus.current?.focus({ preventScroll: true }); }} onCancel={() => setExpanded(false)} onClick={event => { if (event.target === event.currentTarget) setExpanded(false); }}>
       <div className={styles.readerShell}>
         <div className={styles.readerHeader}><p aria-live="polite">{number(index + 1)} / {number(count)}<span>{label}</span></p><button type="button" autoFocus onClick={() => setExpanded(false)} aria-label={zh ? "关闭反馈预览" : "Close feedback preview"}>×</button></div>
-        <div className={styles.readerScroll} ref={reader} tabIndex={0} aria-label={zh ? "截图阅读区，可上下滚动" : "Screenshot reading area, scroll vertically"}><img src={media(current.file)} alt={label} width={current.width} height={current.height} decoding="async" /></div>
+        <div className={styles.readerScroll} ref={reader} tabIndex={0} aria-label={zh ? "截图阅读区，可上下滚动" : "Screenshot reading area, scroll vertically"}><img style={containedPreview(media(current.file))} src={media(current.file)} alt={label} width={current.width} height={current.height} decoding="async" /></div>
         <div className={styles.readerFooter}><button type="button" onClick={() => move(-1)}>{zh ? "← 上一张" : "← Previous"}</button><span>{zh ? "原截图 · 隐私已处理" : "Original capture · Privacy protected"}</span><button type="button" onClick={() => move(1)}>{zh ? "下一张 →" : "Next →"}</button></div>
       </div>
     </dialog>

@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { useLanguage } from "@/lib/language";
 import { scrollEnv, useContainerEl } from "@/lib/scroll-env";
+import { placeholderBackground } from "@/lib/detail-placeholder";
 import { asset, BASE_PATH } from "@/lib/asset";
 import { useMaskedEntrance } from "@/components/coffee/useMaskedEntrance";
 import { GALLERY_PREVIEWS } from "./gallery-previews";
@@ -64,7 +65,7 @@ export default function OverviewGallery({ images, alt, portrait = false }: {
         setPreviewsReady(true);
         observer.disconnect();
       }
-    }, { root: container, rootMargin: "650px 0px" });
+    }, { root: container, rootMargin: "1500px 0px" });
     observer.observe(board);
     return () => observer.disconnect();
   }, [container, boardRef, previewsReady]);
@@ -104,7 +105,7 @@ export default function OverviewGallery({ images, alt, portrait = false }: {
           return <button key={src} type="button" className={styles.tile} data-direction={index % 4}
           aria-label={zh ? `放大查看第 ${index + 1} 张照片` : `Enlarge photograph ${index + 1}`} aria-haspopup="dialog"
           onClick={event => { returnFocus.current = event.currentTarget; setSelected(index); setExpanded(true); }}>
-          <span className={styles.imageWell}>{previewsReady && <img
+          <span className={styles.imageWell} style={{ backgroundImage: placeholderBackground(src) }}>{previewsReady && <img
             src={preview ? asset(preview.variants[0].src) : src}
             srcSet={preview?.variants.map(item => `${asset(item.src)} ${item.width}w`).join(", ")}
             sizes={`${displaySizes[index] || 640}px`} width={preview?.width} height={preview?.height}
@@ -123,7 +124,7 @@ export default function OverviewGallery({ images, alt, portrait = false }: {
       onClick={event => { if (event.target === event.currentTarget) setExpanded(false); }}>
       <div className={styles.viewerShell}>
         <div className={styles.viewerHeader}><span>{alt}</span><button type="button" autoFocus aria-label={zh ? "关闭照片预览" : "Close photograph"} onClick={() => setExpanded(false)}>×</button></div>
-        <div className={styles.viewerImage}>{expanded && <img src={images[selected]} crossOrigin="anonymous" decoding="async" alt={`${alt} · ${selected + 1}`} />}</div>
+        <div className={styles.viewerImage}>{expanded && <img key={images[selected]} width={previewFor(images[selected])?.width} height={previewFor(images[selected])?.height} style={{ backgroundImage: placeholderBackground(images[selected]), backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} src={images[selected]} crossOrigin="anonymous" decoding="async" alt={`${alt} · ${selected + 1}`} />}</div>
         <div className={styles.viewerFooter}><button type="button" onClick={() => move(-1)}>{zh ? "← 上一张" : "← Previous"}</button><span aria-live="polite">{String(selected + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}</span><button type="button" onClick={() => move(1)}>{zh ? "下一张 →" : "Next →"}</button></div>
       </div>
     </dialog>

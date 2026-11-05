@@ -57,10 +57,12 @@ export default function BalloonScene({ compact = false }: { compact?: boolean })
   }, [container, still]);
 
   return <div ref={section} className={`${styles.sceneTrack} ${compact ? styles.compactTrack : ""} ${still || reduced ? styles.stillTrack : ""}`}>
-    <div ref={stage} className={styles.scene} data-coffee-scene data-progress="0" role="img" aria-label={zh ? "白色联名气球牵着咖啡，随向下滚动升起、向上滚动落下" : "White collaboration balloons carrying coffee rise as you scroll down and descend as you scroll back"}>
+    <div ref={stage} className={styles.scene} data-coffee-scene data-progress="0" role={compact ? undefined : "img"} aria-label={compact ? undefined : zh ? "白色联名气球牵着咖啡，随向下滚动升起、向上滚动落下" : "White collaboration balloons carrying coffee rise as you scroll down and descend as you scroll back"}>
       <div className={styles.physicalBalloons}>
         <img {...responsive(media("balloons-transparent.webp"), "(max-width: 700px) 65vw, 520px")} src={media("balloons-transparent.webp")} alt="" width={541} height={1059} decoding="async" loading={compact ? "lazy" : "eager"} />
       </div>
+      {compact && <a className={styles.sceneLink} href={asset("/unt-yzs/")}
+        aria-label={zh ? "进入联名咖啡项目，留白发生" : "Explore the UNT × YZS coffee collaboration"} />}
     </div>
     <div className={styles.sceneControls}>
       <span>{reduced || still ? (zh ? "静态展示" : "Still view") : (zh ? "↓ 向下滑动，气球升起  ·  ↑ 向上滑动，缓缓落下" : "↓ Scroll down to rise · ↑ Scroll back to descend")}</span>

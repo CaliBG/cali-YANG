@@ -92,7 +92,7 @@ export default function TongkuangCaseStudy(){
 
     <section className={styles.gallerySection}>
       <Chapter id="tk-gallery" number="05 / THE DETAILS" title={zh?"界面里的每一个决定。":"A closer look at the interface."}>{zh?"原始产品画面，点击放大查看。":"Original product screens. Select an image for a closer look."}</Chapter>
-      <div className={styles.gallery}>{[1,2,3,4,5].map(index=><MdxImg key={index} src={asset(`/work-detail/work09-${index}.png`)} alt={zh?`同框产品界面 ${index}`:`Tongkuang product screen ${index}`}/>)}</div>
+      <div className={styles.gallery}>{[1,2,3,4,5].map(index=><MdxImg nativePreview key={index} src={asset(`/work-detail/work09-${index}.png`)} alt={zh?`同框产品界面 ${index}`:`Tongkuang product screen ${index}`}/>)}</div>
     </section>
 
     <section className={styles.resources}>

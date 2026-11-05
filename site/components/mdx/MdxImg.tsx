@@ -1,7 +1,7 @@
 "use client";
 
 // MdxImg / ZoomableImage（docs/14-detail-pages.md §3，模块 46318）
-// - 缩略图懒加载，边框即占位底色（无骨架屏/blur）
+// - 缩略图懒加载，原始比例与微型预览
 // - 点击放大 = 共享元素 lightbox：createPortal 到 body + FLIP 变换动画
 //   （原站用 motion 的 layoutId 共享元素；此处用原生 transform FLIP 等价复现）
 // - 遮罩背景色来自图片主色（extract-color.ts），按 `${theme}:${src}` 缓存，
@@ -17,7 +17,8 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { useThemeMode } from "@/lib/theme-mode";
-import { responsive } from "@/lib/media";
+import { placeholderBackground } from "@/lib/detail-placeholder";
+import { mediaSize, responsive, textureSource } from "@/lib/media";
 import { asset, BASE_PATH } from "@/lib/asset";
 import { GALLERY_PREVIEWS } from "@/lib/articles/content/yzs/gallery-previews";
 import { scrollEnv } from "@/lib/scroll-env";
@@ -34,6 +35,7 @@ interface MdxImgProps {
   title?: string;
   width?: number;
   height?: number;
+  nativePreview?: boolean;
 }
 
 interface LightboxGeometry {
@@ -41,29 +43,53 @@ interface LightboxGeometry {
   initialTransform: string;
 }
 
-function computeGeometry(thumb: HTMLImageElement): LightboxGeometry | null {
-  const natW = thumb.naturalWidth;
-  const natH = thumb.naturalHeight;
+function computeGeometry(thumb: HTMLImageElement, width?: number, height?: number): LightboxGeometry | null {
+  const natW = width || thumb.naturalWidth;
+  const natH = height || thumb.naturalHeight;
   if (!natW || !natH) return null;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const scale = Math.min(1, (0.92 * vw) / natW, (0.92 * vh) / natH);
   const displayW = natW * scale;
-  const displayH = natH * scale;
   const rect = thumb.getBoundingClientRect();
   const dx = rect.left + rect.width / 2 - vw / 2;
   const dy = rect.top + rect.height / 2 - vh / 2;
   const s = rect.width / displayW;
-  void displayH;
   return {
     initialTransform: `translate(${dx}px, ${dy}px) scale(${s})`,
   };
 }
 
-export default function MdxImg({ src, alt = "", title, width, height }: MdxImgProps) {
+export default function MdxImg({ src, alt = "", title, width, height, nativePreview = false }: MdxImgProps) {
   const { resolvedTheme } = useThemeMode();
   const thumbRef = useRef<HTMLImageElement | null>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const localPath = BASE_PATH && src.startsWith(BASE_PATH + "/") ? src.slice(BASE_PATH.length) : src;
+  const preview = GALLERY_PREVIEWS[localPath];
+  const sizes = "(max-width: 720px) 100vw, 672px";
+  const candidates = preview?.variants.filter(v => v.width < preview.width).map(v => asset(v.src) + " " + v.width + "w");
+  const thumb = nativePreview ? {} : preview && candidates ? {sizes, srcSet:[...candidates, src + " " + preview.width + "w"].join(", ")} : responsive(src, sizes);
+
+  const dimensions = preview ?? mediaSize(src);
+  const imageWidth = width ?? dimensions?.width;
+  const imageHeight = height ?? dimensions?.height;
+  const ratio = imageWidth && imageHeight ? imageWidth / imageHeight : undefined;
+  const [loadedSrc, setLoadedSrc] = useState("");
+  const placeholder = placeholderBackground(src);
+
+  useEffect(() => {
+    const img = thumbRef.current;
+    if (!img || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        img.loading = "eager";
+        observer.disconnect();
+      }
+    }, { root: scrollEnv.getContainerEl(), rootMargin: "1400px 0px" });
+    observer.observe(img);
+    return () => observer.disconnect();
+  }, [src]);
 
   const [open, setOpen] = useState(false);
   /** entered=false → FLIP 初始位；true → 终位（触发过渡） */
@@ -87,19 +113,19 @@ export default function MdxImg({ src, alt = "", title, width, height }: MdxImgPr
   const handleOpen = useCallback(() => {
     const img = thumbRef.current;
     if (!img || !img.complete) return;
-    const geo = computeGeometry(img);
+    const geo = computeGeometry(img, imageWidth, imageHeight);
     if (!geo) return;
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     prewarm();
     setGeometry(geo);
     setEntered(false);
     setOpen(true);
-  }, [prewarm]);
+  }, [prewarm, imageWidth, imageHeight]);
 
   const handleClose = useCallback(() => {
     const img = thumbRef.current;
     if (img) {
-      const geo = computeGeometry(img);
+      const geo = computeGeometry(img, imageWidth, imageHeight);
       if (geo) setGeometry(geo);
     }
     setEntered(false);
@@ -107,7 +133,7 @@ export default function MdxImg({ src, alt = "", title, width, height }: MdxImgPr
     closeTimerRef.current = setTimeout(() => {
       setOpen(false);
     }, ZOOM_TRANSITION_MS);
-  }, []);
+  }, [imageWidth, imageHeight]);
 
   // 打开后下一帧进入终位（触发 FLIP 过渡）
   useEffect(() => {
@@ -144,12 +170,6 @@ export default function MdxImg({ src, alt = "", title, width, height }: MdxImgPr
     };
   }, []);
 
-  const localPath = BASE_PATH && src.startsWith(BASE_PATH + "/") ? src.slice(BASE_PATH.length) : src;
-  const preview = GALLERY_PREVIEWS[localPath];
-  const sizes = "auto, (max-width: 720px) 100vw, 672px";
-  const candidates = preview?.variants.filter(v => v.width < preview.width).map(v => asset(v.src) + " " + v.width + "w");
-  const thumb = preview && candidates ? {sizes, srcSet:[...candidates, src + " " + preview.width + "w"].join(", ")} : responsive(src, sizes);
-
   const overlayBg = backdrop ?? fallbackLightboxBackdrop(resolvedTheme);
 
   const overlayStyle: CSSProperties = {
@@ -162,6 +182,9 @@ export default function MdxImg({ src, alt = "", title, width, height }: MdxImgPr
     transform: entered ? "translate(0px, 0px) scale(1)" : geometry?.initialTransform,
     transition: `transform ${ZOOM_TRANSITION_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`,
     willChange: "transform",
+    aspectRatio: ratio,
+    width: ratio ? `min(${imageWidth}px, 92vw, calc(92vh * ${ratio}))` : undefined,
+    background: thumbRef.current?.currentSrc ? `center / contain no-repeat url("${thumbRef.current.currentSrc}")` : undefined,
   };
 
   return (
@@ -170,18 +193,18 @@ export default function MdxImg({ src, alt = "", title, width, height }: MdxImgPr
       <img
         {...thumb}
         ref={thumbRef}
-        src={src}
+        src={nativePreview && imageWidth ? textureSource(src, imageWidth) : src}
         alt={alt}
         title={title}
-        width={width}
-        height={height}
+        width={imageWidth}
+        height={imageHeight}
         crossOrigin="anonymous"
         loading="lazy"
         decoding="async"
         className="block w-full h-auto cursor-zoom-in select-none border border-line bg-[rgba(var(--label-d),0.05)]"
-        style={{ opacity: open ? 0 : 1 }}
+        style={{ opacity: open ? 0 : 1, aspectRatio: ratio, objectFit: "contain", backgroundImage: loadedSrc === src ? undefined : placeholder, backgroundSize: "100% 100%" }}
         onClick={handleOpen}
-        onLoad={prewarm}
+        onLoad={() => { setLoadedSrc(src); prewarm(); }}
         onMouseEnter={handleMouseEnter}
       />
       {title ? (
