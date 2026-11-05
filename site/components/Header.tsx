@@ -4,7 +4,7 @@
 // 整体 pointer-events-none，可点元素单独 pointer-events-auto；
 // arrow fullscreen 段 dampedScaleT ≥ 0.5 时整体变白（text-white + 白色虚线）。
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { asset } from "@/lib/asset";
 import AsciiScramble from "./AsciiScramble";
@@ -24,7 +24,6 @@ import { useFullscreenTransition } from "@/lib/fullscreen-transition";
 import { isPlainKeydown } from "@/lib/keys";
 import {
   scrollEnv,
-  useIsMobile,
   useNearBottom,
   useScrollEdgeShortcuts,
   useViewportSize,
@@ -122,7 +121,7 @@ export default function Header() {
   const past = useArrowFullscreenPastThreshold();
   const { menuOpen, setMenuOpen, startNavigation, readyToLoadHeavy } =
     useFullscreenTransition();
-  const isMobile = useIsMobile();
+  const menu = useRef<HTMLDetailsElement>(null);
   const nearBottom = useNearBottom(0.5);
   const [hintCount, setHintCount] = useState(0);
 
@@ -146,11 +145,20 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // 桌面宽度强制关菜单
+  const closeMenu = () => {
+    if (menu.current) menu.current.open = false;
+    setMenuOpen(false);
+  };
   useEffect(() => {
-    if (!isMobile) setMenuOpen(false);
-  }, [isMobile, setMenuOpen]);
-
+    const desktop = matchMedia("(min-width: 1024px)");
+    const sync = () => {
+      if (desktop.matches && menu.current) menu.current.open = false;
+      setMenuOpen(menu.current?.open ?? false);
+    };
+    sync();
+    desktop.addEventListener("change",sync);
+    return () => desktop.removeEventListener("change",sync);
+  }, [setMenuOpen]);
 
   // Work/Contact 锚点：首页直接滚，跨页存 sessionStorage 后走全屏过渡
   const scrollToAnchor = (anchor: string) => {
@@ -235,38 +243,17 @@ export default function Header() {
           <LangToggle dottedClass={dotted} />
         </div>
 
-        {/* 移动端汉堡 */}
-        <button
-            type="button"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            className="lg:hidden p-2 pointer-events-auto cursor-pointer"
-            onClick={() => setMenuOpen((o) => !o)}
-          >
-            <span className="block relative w-6 h-6">
-              <span
-                className={`absolute left-0 w-full h-0.5 bg-current transition-all duration-[1200ms] ease-66 ${
-                  menuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-[7px]"
-                }`}
-              />
-              <span
-                className={`absolute left-0 w-full h-0.5 bg-current transition-all duration-[1200ms] ease-66 delay-150 ${
-                  menuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-[15px]"
-                }`}
-              />
-              <span
-                className={`absolute left-0 w-full h-0.5 bg-current transition-all duration-[1200ms] ease-66 ${
-                  menuOpen ? "top-1/2 -translate-y-1/2 -rotate-45" : "top-[7px]"
-                }`}
-              />
-              <span
-                className={`absolute left-0 w-full h-0.5 bg-current transition-all duration-[1200ms] ease-66 delay-150 ${
-                  menuOpen ? "top-1/2 -translate-y-1/2 -rotate-45" : "top-[15px]"
-                }`}
-              />
-            </span>
-          </button>
       </div>
+      <details ref={menu} suppressHydrationWarning className="group lg:hidden absolute top-4 right-4 pointer-events-auto"
+        onToggle={event=>setMenuOpen(event.currentTarget.open)}>
+        <summary aria-label={menuOpen ? "Close menu" : "Open menu"} className="relative z-50 list-none p-2 cursor-pointer [&::-webkit-details-marker]:hidden">
+          <span aria-hidden="true" className="relative block w-6 h-6">
+            <span className="absolute left-0 top-[7px] w-full h-0.5 bg-current group-open:top-1/2 group-open:rotate-45"/>
+            <span className="absolute left-0 top-[15px] w-full h-0.5 bg-current group-open:top-1/2 group-open:-rotate-45"/>
+          </span>
+        </summary>
+        <MobileMenu onClose={closeMenu} onAnchor={scrollToAnchor} />
+      </details>
 
       {/* 底行（移动端隐藏时钟/坐标 HUD：无背景的固定文字会压住滚动正文） */}
       <div className="flex justify-between px-4 lg:px-14 py-4 lg:py-7 max-lg:hidden">
@@ -294,8 +281,7 @@ export default function Header() {
       {/* 导航提示面板（仅桌面） */}
       <NavHintPanel visible={hintCount > 0} />
 
-      {/* 移动端全屏菜单 */}
-      {menuOpen && <MobileMenu white={past} onAnchor={scrollToAnchor} />}
+
 
       {/* 自定义滚动条 */}
       <ScrollProgress hidden={menuOpen} />
