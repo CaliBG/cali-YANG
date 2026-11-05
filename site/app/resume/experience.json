@@ -1,0 +1,54 @@
+{
+  "headline": ["产品设计师 · 独立 iOS 开发者 · Vanod 创始人", "Product Designer, Independent iOS Developer & Founder of Vanod"],
+  "about": [
+    "我在广州美术学院学习产品设计，也是达芬奇创新实验班的成员。我为毋名咖啡与 YZS 的商业联名设计视觉和影像，独立开发并上架双摄相机同框，目前正为自己创立的 Vanod 准备种子轮融资。三个项目让我分别面对品牌合作方、真实用户和早期投资人关心的问题。",
+    "I study product design at Guangzhou Academy of Fine Arts and am a member of its Da Vinci Innovation Experimental Class. My work spans a commercial café collaboration, an independently shipped iOS camera app and Vanod, an early-stage venture I founded. Across these projects, I work from the initial brief through design, prototyping and delivery."
+  ],
+  "featured": [
+    {
+      "href": "/unt-yzs", "year": "2026", "name": ["留白发生 · 毋名咖啡 × YZS", "Reset to Blank · UNTitled Cafe × YZS"],
+      "role": ["商业品牌联名 · 品牌视觉与影像", "Commercial collaboration · Brand design & film"],
+      "image": "/projects/unt-yzs/photo-window.webp",
+      "points": [
+        ["为两个源自广美的品牌设计联名视觉。以气球和咖啡杯为识别元素，完成主海报、小程序横幅及杯套设计。", "Designed the campaign identity for two brands rooted in the academy. Carried the balloon and coffee-cup motif across the key poster, mini-program banner and cup sleeve."],
+        ["制作联名短片，以现场照片记录制作台、窗边与外带场景，并将视觉延展为包装与周边概念。", "Produced a collaboration film and documented the campaign at the café counter, by the window and on takeaway cups. Extended the identity into packaging and merchandise concepts."]
+      ]
+    },
+    {
+      "href": "/tongkuang", "year": "2026", "name": ["同框 Tongkuang", "Tongkuang"],
+      "role": ["独立产品设计与 iOS 开发", "Independent product designer & iOS developer"],
+      "image": "/projects/tongkuang/story-design.webp",
+      "points": [
+        ["针对演唱会与开箱时拍摄者难以入镜的问题，独立设计并开发 iOS 相机应用，让现场画面和拍摄者的反应同时保留。", "Designed and built an iOS camera app for concerts and unboxings so the person filming can capture the event and their own reaction together."],
+        ["使用 Swift 与 AVFoundation 实现同步双拍、录屏双拍和 Vlog 三种模式，完成真机测试并上架 App Store。上线后获得来自国内和海外用户的反馈。", "Implemented dual-camera capture, screen recording with a camera overlay, and a teleprompter-assisted vlog mode in Swift and AVFoundation. Tested on device, released on the App Store and received feedback from users in China and abroad."]
+      ]
+    },
+    {
+      "href": "/vanod", "year": "2026", "name": ["Vanod", "Vanod"],
+      "role": ["独立创始人 · 产品设计与开发", "Solo founder · Product design & development"],
+      "image": "/projects/vanod/hero.webp",
+      "points": [
+        ["独立设计品牌识别、行情界面、小组件及标志动效，并以 Slate 磁吸硬件概念探索数字资产工具的随身使用方式。", "Created the visual identity, market interface, widgets and motion system. Designed the Slate magnetic hardware concept to explore how a digital asset tool might be used on the move."],
+        ["2026 年 11 月启动种子轮融资准备，完成路演方案，梳理用户验证、软硬件研发里程碑、资金用途与岗位需求。", "Began preparing for a seed round in November 2026. Developed the pitch deck, outlining customer validation, software and hardware milestones, hiring needs and use of funds."]
+      ]
+    }
+  ],
+  "internships": [
+    {
+      "name": ["深圳市沃林数智人才服务科技有限公司", "Shenzhen Wolin Digital Talent Services Technology"],
+      "dates": ["2026.04 — 2026.08", "Apr – Aug 2026"],
+      "role": ["新媒体运营实习生", "New Media Operations Intern"],
+      "points": [
+        ["参与品牌传播的视觉内容制作，整理标志与视觉识别素材，协助制作采访影像内容。", "Supported visual content production for brand communications, organized logo and identity assets, and assisted with interview video content."]
+      ]
+    },
+    {
+      "name": ["华南筑真科技有限公司", "Huanan Zhuzhen Technology"],
+      "dates": ["2026.03 — 2026.08", "Mar – Aug 2026"],
+      "role": ["新媒体运营实习生 · 远程", "New Media Operations Intern · Remote"],
+      "points": [
+        ["参与沃林项目的媒体内容设计、广告视觉与品牌更新，将品牌素材应用到不同传播版式。", "Contributed to media content, advertising graphics and brand refresh work for the Wolin project, adapting identity assets for different communication formats."]
+      ]
+    }
+  ]
+}

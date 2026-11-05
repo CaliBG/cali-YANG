@@ -19,3 +19,7 @@
 .project a:hover{text-decoration:underline;text-underline-offset:4px}
 .section li{padding:7px 0;border-bottom:1px solid var(--line)}
 @media(max-width:700px){.page{padding:90px 16px 74px}.identity{padding:0 19px 23px}.columns{grid-template-columns:1fr;gap:0}.project{grid-template-columns:54px minmax(0,1fr);gap:13px}.project img{width:54px;height:54px}.section{padding-top:25px}.headline{font-size:15px}}
+.actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:19px;font-size:14px}.actions .contact{margin:0}
+.section .points{list-style:disc;padding-left:1.1em}
+.section .points li{padding:4px 0;border:0}
+.job{border-top:1px solid var(--line);padding:20px 0}
