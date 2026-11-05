@@ -108,7 +108,7 @@ export default function OverviewGallery({ images, alt, portrait = false }: {
             src={preview ? asset(preview.variants[0].src) : src}
             srcSet={preview?.variants.map(item => `${asset(item.src)} ${item.width}w`).join(", ")}
             sizes={`${displaySizes[index] || 640}px`} width={preview?.width} height={preview?.height}
-            alt={`${alt} · ${index + 1}`} crossOrigin="anonymous" loading="eager" decoding="async" draggable={false} />}</span>
+            alt={`${alt} · ${index + 1}`} crossOrigin="anonymous" loading="lazy" decoding="async" draggable={false} />}</span>
           <span className={styles.tileCaption} aria-hidden="true"><span>{String(index + 1).padStart(2, "0")}</span><span>↗</span></span>
         </button>;
         })}

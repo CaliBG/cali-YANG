@@ -1,5 +1,6 @@
 "use client";
 
+import { responsive } from "@/lib/media";
 import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { asset } from "@/lib/asset";
@@ -57,7 +58,7 @@ export default function FeedbackOverview() {
         {feedbackItems.map((item, itemIndex) => {
           const title = zh ? item.labelZh : item.labelEn;
           return <button key={item.id} type="button" className={`${styles.tile} ${itemIndex === 0 ? styles.featured : ""} ${item.height > item.width * 1.5 ? styles.tall : ""}`} data-direction={itemIndex % 4} aria-label={zh ? `展开阅读第 ${itemIndex + 1} 张：${title}` : `Read item ${itemIndex + 1}: ${title}`} aria-haspopup="dialog" onClick={event => openReader(itemIndex, event.currentTarget)}>
-            <span className={styles.imageWell}><img src={media(item.file)} alt={title} width={item.width} height={item.height} loading="lazy" decoding="async" draggable={false} /></span>
+            <span className={styles.imageWell}><img {...responsive(media(item.file), "auto, (max-width: 700px) 50vw, 320px")} src={media(item.file)} alt={title} width={item.width} height={item.height} loading="lazy" decoding="async" draggable={false} /></span>
             <span className={styles.tileCaption} aria-hidden="true"><span>{number(itemIndex + 1)}</span><span>↗</span></span>
           </button>;
         })}

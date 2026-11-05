@@ -1,5 +1,6 @@
 "use client";
 
+import { responsive } from "@/lib/media";
 import { useEffect, useRef, useState } from "react";
 import { asset } from "@/lib/asset";
 import { useContainerEl } from "@/lib/scroll-env";
@@ -58,7 +59,7 @@ export default function BalloonScene({ compact = false }: { compact?: boolean })
   return <div ref={section} className={`${styles.sceneTrack} ${compact ? styles.compactTrack : ""} ${still || reduced ? styles.stillTrack : ""}`}>
     <div ref={stage} className={styles.scene} data-coffee-scene data-progress="0" role="img" aria-label={zh ? "白色联名气球牵着咖啡，随向下滚动升起、向上滚动落下" : "White collaboration balloons carrying coffee rise as you scroll down and descend as you scroll back"}>
       <div className={styles.physicalBalloons}>
-        <img src={media("balloons-transparent.webp")} alt="" width={541} height={1059} decoding="async" loading={compact ? "lazy" : "eager"} />
+        <img {...responsive(media("balloons-transparent.webp"), "(max-width: 700px) 65vw, 520px")} src={media("balloons-transparent.webp")} alt="" width={541} height={1059} decoding="async" loading={compact ? "lazy" : "eager"} />
       </div>
     </div>
     <div className={styles.sceneControls}>

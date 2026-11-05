@@ -17,6 +17,9 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { useThemeMode } from "@/lib/theme-mode";
+import { responsive } from "@/lib/media";
+import { asset, BASE_PATH } from "@/lib/asset";
+import { GALLERY_PREVIEWS } from "@/lib/articles/content/yzs/gallery-previews";
 import { scrollEnv } from "@/lib/scroll-env";
 import {
   computeLightboxBackdrop,
@@ -141,6 +144,12 @@ export default function MdxImg({ src, alt = "", title, width, height }: MdxImgPr
     };
   }, []);
 
+  const localPath = BASE_PATH && src.startsWith(BASE_PATH + "/") ? src.slice(BASE_PATH.length) : src;
+  const preview = GALLERY_PREVIEWS[localPath];
+  const sizes = "auto, (max-width: 720px) 100vw, 672px";
+  const candidates = preview?.variants.filter(v => v.width < preview.width).map(v => asset(v.src) + " " + v.width + "w");
+  const thumb = preview && candidates ? {sizes, srcSet:[...candidates, src + " " + preview.width + "w"].join(", ")} : responsive(src, sizes);
+
   const overlayBg = backdrop ?? fallbackLightboxBackdrop(resolvedTheme);
 
   const overlayStyle: CSSProperties = {
@@ -159,6 +168,7 @@ export default function MdxImg({ src, alt = "", title, width, height }: MdxImgPr
     <span data-mdx-figure="true" className="my-6 block w-full">
       {/* eslint-disable-next-line @next/next/no-img-element -- 生产站即普通 img（外链域名不走 next/image） */}
       <img
+        {...thumb}
         ref={thumbRef}
         src={src}
         alt={alt}

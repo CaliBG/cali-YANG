@@ -1,5 +1,7 @@
 "use client";
 
+import FilmSources from "@/components/FilmSources";
+import { responsive } from "@/lib/media";
 import {useState} from "react";
 import {asset} from "@/lib/asset";
 import {useLanguage} from "@/lib/language";
@@ -38,8 +40,8 @@ export default function TongkuangCaseStudy(){
       </div>
       <div className={styles.heroVisual}>
         <span className={styles.heroStamp}>TWO CAMERAS.<br/>ONE MOMENT.</span>
-        <img className={styles.backPhone} src={media("record.webp")} width={640} height={1325} alt="" decoding="async"/>
-        <img className={styles.frontPhone} src={media("dual.webp")} width={640} height={1326} alt={zh?"同框前后镜头同时记录的拍摄界面":"Tongkuang recording front and back camera views together"} fetchPriority="high" decoding="async"/>
+        <img className={styles.backPhone} {...responsive(media("record.webp"), "(max-width: 700px) 170px, 230px")} src={media("record.webp")} width={640} height={1325} alt="" decoding="async"/>
+        <img className={styles.frontPhone} {...responsive(media("dual.webp"), "(max-width: 700px) 180px, 270px")} src={media("dual.webp")} width={640} height={1326} alt={zh?"同框前后镜头同时记录的拍摄界面":"Tongkuang recording front and back camera views together"} fetchPriority="high" decoding="async"/>
       </div>
     </header>
 
@@ -62,7 +64,7 @@ export default function TongkuangCaseStudy(){
           <div className={styles.modeTabs} role="tablist" aria-label={zh?"拍摄模式":"Capture modes"}>{modes.map((item,index)=><button key={item.id} type="button" role="tab" id={`tk-tab-${item.id}`} aria-selected={index===mode} aria-controls="tk-mode-panel" tabIndex={index===mode?0:-1} onClick={()=>setMode(index)} onKeyDown={event=>{let next=index;if(event.key==="ArrowDown"||event.key==="ArrowRight")next=(index+1)%3;else if(event.key==="ArrowUp"||event.key==="ArrowLeft")next=(index+2)%3;else if(event.key==="Home")next=0;else if(event.key==="End")next=2;else return;event.preventDefault();setMode(next);document.getElementById(`tk-tab-${modes[next].id}`)?.focus();}}><span>0{index+1}</span>{item.name[language]}<span aria-hidden="true">↗</span></button>)}</div>
           <div id="tk-mode-panel" role="tabpanel" aria-labelledby={`tk-tab-${selected.id}`} tabIndex={0} className={styles.modeDescription} key={mode}><h3>{selected.title[language]}</h3><p>{selected.text[language]}</p><small>{selected.detail[language]}</small></div>
         </div>
-        <div className={styles.modeImage}><span className={styles.modeWatermark}>0{mode+1}</span><img key={selected.id} src={media(selected.image)} alt={`${selected.name[language]} — ${selected.title[language]}`} width={640} height={selected.id==="screen"?1391:1326} loading="lazy" decoding="async"/></div>
+        <div className={styles.modeImage}><span className={styles.modeWatermark}>0{mode+1}</span><img key={selected.id} {...responsive(media(selected.image), "(max-width: 700px) 190px, 240px")} src={media(selected.image)} alt={`${selected.name[language]} — ${selected.title[language]}`} width={640} height={selected.id==="screen"?1391:1326} loading="lazy" decoding="async"/></div>
       </div>
     </section>
 
@@ -72,7 +74,7 @@ export default function TongkuangCaseStudy(){
 
     <section className={styles.videoSection}>
       <Chapter id="tk-film" number="03 / THE FILM" title={zh?"听我讲讲同框。":"The story behind Tongkuang."}>{zh?"完整作品视频 · 1 分 51 秒。点按播放，可全屏观看。":"The complete project film · 1 min 51 sec. Play to watch, or open fullscreen."}</Chapter>
-      <video controls playsInline preload="none" poster={media("film-poster.webp")} src={media("tongkuang-film.mp4")} onPlay={()=>setSoundEnabled(false)} onError={()=>setVideoError(true)} aria-label={zh?"同框完整作品视频":"Tongkuang complete project film"}/>
+      <video controls playsInline preload="none" poster={media("film-poster.webp")}  onPlay={()=>setSoundEnabled(false)} onError={()=>setVideoError(true)} aria-label={zh?"同框完整作品视频":"Tongkuang complete project film"}><FilmSources onFallbackError={() => setVideoError(true)} name="tongkuang-film.mp4" original={media("tongkuang-film.mp4")}/></video>
       {videoError&&<p role="status">{zh?"视频暂时无法播放。":"Video could not load. "}<a href={media("tongkuang-film.mp4")} target="_blank" rel="noopener noreferrer">{zh?"在独立窗口打开 ↗":"Open the film separately ↗"}</a></p>}
     </section>
 

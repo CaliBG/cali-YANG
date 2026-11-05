@@ -1,5 +1,7 @@
 "use client";
 
+import FilmSources from "@/components/FilmSources";
+import { responsive } from "@/lib/media";
 import { useEffect, useRef, useState } from "react";
 import { asset } from "@/lib/asset";
 import { useLanguage } from "@/lib/language";
@@ -57,17 +59,17 @@ export default function CoffeeCaseStudy() {
       <header className={styles.sectionHeading}><div><span className={styles.eyebrow}>02 / FILMS</span><h2>{zh ? "从画面，到真实的一杯。" : "From an image to a real cup."}</h2></div><span>{zh ? "完整联名影像" : "The complete film"}</span></header>
       <div className={styles.filmLayout}>
         <div className={styles.filmSummary}><span className={styles.eyebrow}>UNT × YZS / {film.duration}</span><h3>{zh ? "一杯咖啡的发生。" : "The making of a coffee."}</h3><p>{zh ? "从制作现场到联名气球，完整记录这一杯咖啡。" : "From the café counter to the collaboration balloons. The story of one cup, in full."}</p><span className={styles.eyebrow}>{zh ? "点击播放 · 可全屏观看" : "PRESS PLAY · WATCH FULLSCREEN"}</span></div>
-        <figure className={styles.filmPlayer}><video ref={video} src={media(film.file)} poster={media(film.poster)} controls playsInline preload="none" aria-label={caption(film)} onPlay={()=>setSoundEnabled(false)} onError={()=>setVideoError(true)} /><figcaption>{caption(film)}<span>{film.duration}</span></figcaption>{videoError&&<a href={media(film.file)} target="_blank" rel="noopener noreferrer">{zh?"在独立窗口播放":"Open the video separately"} ↗</a>}</figure>
+        <figure className={styles.filmPlayer}><video ref={video} poster={media(film.poster)} controls playsInline preload="none" aria-label={caption(film)} onPlay={()=>setSoundEnabled(false)} onError={()=>setVideoError(true)} ><FilmSources onFallbackError={() => setVideoError(true)} name="collaboration-film.mp4" original={media(film.file)}/></video><figcaption>{caption(film)}<span>{film.duration}</span></figcaption>{videoError&&<a href={media(film.file)} target="_blank" rel="noopener noreferrer">{zh?"在独立窗口播放":"Open the video separately"} ↗</a>}</figure>
       </div>
     </section>
 
     <section id="coffee-photos" className={styles.chapter}>
       <header className={styles.sectionHeading}><div><span className={styles.eyebrow}>03 / IN EVERYDAY LIFE</span><h2>{zh ? "回到日常里。" : "Back in everyday life."}</h2></div><span>{zh ? "现场与返图" : "On location & shared moments"}</span></header>
       <figure className={styles.photoGallery}>
-        <button type="button" className={styles.originalPhoto} onClick={()=>setEnlarged({file:photos[photo].file,label:caption(photos[photo])})} aria-label={`${zh ? "放大查看" : "Enlarge"} ${caption(photos[photo])}`}><img src={media(photos[photo].file)} alt={caption(photos[photo])} loading="lazy" decoding="async" /></button>
+        <button type="button" className={styles.originalPhoto} onClick={()=>setEnlarged({file:photos[photo].file,label:caption(photos[photo])})} aria-label={`${zh ? "放大查看" : "Enlarge"} ${caption(photos[photo])}`}><img {...responsive(media(photos[photo].file), "auto, (max-width: 700px) 100vw, 850px")} src={media(photos[photo].file)} alt={caption(photos[photo])} loading="lazy" decoding="async" /></button>
         <figcaption><span>{caption(photos[photo])}</span><div><button type="button" onClick={()=>setPhoto(value=>(value+photos.length-1)%photos.length)} aria-label={zh ? "上一张照片" : "Previous photo"}>←</button><span>{String(photo+1).padStart(2,"0")} / 05</span><button type="button" onClick={()=>setPhoto(value=>(value+1)%photos.length)} aria-label={zh ? "下一张照片" : "Next photo"}>→</button></div></figcaption>
       </figure>
-      <div className={styles.photoThumbnails} role="group" aria-label={zh ? "选择现场照片" : "Choose a photograph"}>{photos.map((item,index)=><button type="button" key={item.file} onClick={()=>setPhoto(index)} aria-pressed={photo===index} aria-label={caption(item)}><img src={media(item.file)} alt="" loading="lazy" decoding="async" /></button>)}</div>
+      <div className={styles.photoThumbnails} role="group" aria-label={zh ? "选择现场照片" : "Choose a photograph"}>{photos.map((item,index)=><button type="button" key={item.file} onClick={()=>setPhoto(index)} aria-pressed={photo===index} aria-label={caption(item)}><img {...responsive(media(item.file), "(max-width: 640px) 22vw, 140px")} src={media(item.file)} alt="" loading="lazy" decoding="async" /></button>)}</div>
     </section>
 
     <FeedbackOverview />

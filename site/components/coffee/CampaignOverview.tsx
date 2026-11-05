@@ -1,5 +1,6 @@
 "use client";
 
+import { responsive } from "@/lib/media";
 import { asset } from "@/lib/asset";
 import { useLanguage } from "@/lib/language";
 import { useMaskedEntrance } from "./useMaskedEntrance";
@@ -29,12 +30,12 @@ export default function CampaignOverview({ onOpen }: { onOpen: (item: { file: st
       }}>
         {artwork.map(item => <button key={item.file} type="button" className={`${styles.tile} ${item.className}`} onClick={() => onOpen({ file: item.file, label: zh ? item.zh : item.en })} aria-haspopup="dialog" aria-label={`${zh ? "放大查看" : "Enlarge"} ${zh ? item.zh : item.en}`}>
           <span className={styles.tileHeader}><span>{item.type}</span><span aria-hidden="true">↗</span></span>
-          <span className={styles.imageWell}><img src={asset(`/projects/unt-yzs/${item.file}`)} alt={zh ? item.zh : item.en} loading="lazy" decoding="async" /></span>
+          <span className={styles.imageWell}><img {...responsive(asset(`/projects/unt-yzs/${item.file}`), "auto, (max-width: 700px) 50vw, 450px")} src={asset(`/projects/unt-yzs/${item.file}`)} alt={zh ? item.zh : item.en} loading="lazy" decoding="async" /></span>
           <span className={styles.tileTitle}>{zh ? item.zh : item.en}</span>
         </button>)}
         <div className={`${styles.tile} ${styles.identity}`}>
           <div><span className={styles.identityBrand}>UNT × YZS</span><p>{zh ? <>留白<br />发生。</> : <>Reset<br />to blank.</>}</p><span className={styles.identityNote}>{zh ? "咖啡 · 设计 · 日常" : "Coffee · Design · Everyday life"}</span></div>
-          <img src={asset("/projects/unt-yzs/balloons-transparent.webp")} width={541} height={1059} alt={zh ? "联名气球与咖啡" : "Collaboration balloons and coffee"} loading="lazy" decoding="async" />
+          <img {...responsive(asset("/projects/unt-yzs/balloons-transparent.webp"), "auto, 35vw")} src={asset("/projects/unt-yzs/balloons-transparent.webp")} width={541} height={1059} alt={zh ? "联名气球与咖啡" : "Collaboration balloons and coffee"} loading="lazy" decoding="async" />
         </div>
       </div>
       <div className={styles.caption}>

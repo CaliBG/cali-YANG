@@ -1,5 +1,6 @@
 "use client";
 
+import { responsive } from "@/lib/media";
 import { useState, type ReactNode } from "react";
 import { asset } from "@/lib/asset";
 import { useLanguage } from "@/lib/language";
@@ -38,7 +39,7 @@ function Plate({ file, alt, caption, width = 1440, height = 900 }: { file: strin
   const localizedFile = lang === "en" && LOCALIZED_PLATES.has(file) ? file.replace(".webp", "-en.webp") : file;
   return <figure className={styles.plate}>
     <a href={media(localizedFile)} target="_blank" rel="noopener noreferrer" aria-label={alt}>
-      <img src={media(localizedFile)} width={width} height={height} alt={alt} loading="lazy" decoding="async" />
+      <img {...responsive(media(localizedFile), "auto, (max-width: 700px) 100vw, 85vw")} src={media(localizedFile)} width={width} height={height} alt={alt} loading="lazy" decoding="async" />
     </a>
     {caption && <figcaption>{caption}<span aria-hidden="true">↗</span></figcaption>}
   </figure>;
@@ -75,7 +76,7 @@ export default function VanodCaseStudy() {
         </div>
       </div>
       <figure className={styles.heroImage}>
-        <img src={media("hero.webp")} width={1536} height={1024} alt={zh ? "Vanod Slate 深石墨金属外壳与雾紫按键的硬件概念细节" : "Vanod Slate hardware concept with a graphite metal shell and lilac button"} fetchPriority="high" decoding="async" />
+        <img {...responsive(media("hero.webp"), "(max-width: 700px) 100vw, 60vw")} src={media("hero.webp")} width={1536} height={1024} alt={zh ? "Vanod Slate 深石墨金属外壳与雾紫按键的硬件概念细节" : "Vanod Slate hardware concept with a graphite metal shell and lilac button"} fetchPriority="high" decoding="async" />
         <figcaption>VANOD SLATE<span>{zh ? "硬件概念设计" : "Hardware concept"}</span></figcaption>
       </figure>
     </header>

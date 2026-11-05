@@ -1,5 +1,6 @@
 "use client";
 
+import FilmSources from "@/components/FilmSources";
 import { useEffect, useRef, useState } from "react";
 import { asset } from "@/lib/asset";
 import { useLanguage } from "@/lib/language";
@@ -36,12 +37,13 @@ export default function VanodFilm() {
 
   return <div className={styles.player}>
     <video ref={ref} controls={!enhanced || started} playsInline preload="none" width={1920} height={1080}
-      poster={file("vanod-brand-film-v4-poster.webp")} src={file("vanod-brand-film-v4.mp4")}
+      poster={file("vanod-brand-film-v4-poster.webp")}
       aria-label={zh ? "Vanod 品牌短片，30 秒，含音乐与音效" : "Vanod brand film, 30 seconds, with music and sound design"}
       onPlay={event => {
         setStarted(true); setFailed(false); setSoundEnabled(false);
         document.querySelectorAll("video").forEach(video => { if (video !== event.currentTarget) video.pause(); });
       }} onError={() => { setFailed(true); setStarted(true); }}>
+      <FilmSources onFallbackError={() => {setFailed(true); setStarted(true);}} name="vanod-brand-film-v4.mp4" original={file("vanod-brand-film-v4.mp4")}/>
       <track kind="captions" src={file("vanod-brand-film-zh.vtt")} srcLang="zh-CN" label="中文字幕" />
       <track kind="captions" src={file("vanod-brand-film-en.vtt")} srcLang="en" label="English captions" />
       <a href={file("vanod-brand-film-v4.mp4")}>{zh ? "打开品牌短片" : "Open the film"}</a>

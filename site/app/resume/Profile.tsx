@@ -1,5 +1,6 @@
 "use client";
 
+import { responsive } from "@/lib/media";
 import TransitionLink from "@/components/TransitionLink";
 import { asset } from "@/lib/asset";
 import { useLanguage } from "@/lib/language";
@@ -34,7 +35,7 @@ export default function Profile() {
         </section>
         <section className={styles.section}><h2>{zh ? "精选项目" : "Featured projects"}</h2>
           {experience.featured.map(project => <article className={styles.project} key={project.href}>
-            <img src={asset(project.image)} alt="" loading="lazy" width="90" height="90" />
+            <img {...responsive(asset(project.image), "(max-width: 700px) 54px, 80px")} src={asset(project.image)} alt="" loading="lazy" width="90" height="90" />
             <div><small>{project.year} · {project.role[i]}</small><h3><TransitionLink href={project.href}>{project.name[i]} ↗</TransitionLink></h3>
               <ul className={styles.points}>{project.points.map(point => <li key={point[1]}>{point[i]}</li>)}</ul>
             </div>

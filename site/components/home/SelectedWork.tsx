@@ -17,37 +17,11 @@ import ScrollStory from "@/components/tongkuang/ScrollStory";
 import VanodFeature from "@/components/vanod/VanodFeature";
 import CoffeeFeature from "@/components/coffee/CoffeeFeature";
 
-// 模块级 aspect-ratio 缓存（"W / H" 字符串），避免重复预载与布局闪动
-const ratioCache = new Map<string, string>();
-
-function useImageAspectRatio(src: string): string {
-  const [ratio, setRatio] = useState(() => ratioCache.get(src) ?? "1 / 1");
-
-  useEffect(() => {
-    const cached = ratioCache.get(src);
-    if (cached) {
-      setRatio(cached);
-      return;
-    }
-    let cancelled = false;
-    const img = new Image();
-    img.onload = () => {
-      if (!img.naturalWidth || !img.naturalHeight) return;
-      const value = `${img.naturalWidth} / ${img.naturalHeight}`;
-      ratioCache.set(src, value);
-      if (!cancelled) setRatio(value);
-    };
-    img.src = src;
-    return () => {
-      cancelled = true;
-    };
-  }, [src]);
-
-  return ratio;
-}
+import { mediaSize } from "@/lib/media";
 
 function WorkCard({ item }: { item: WorkItem }) {
-  const ratio = useImageAspectRatio(item.imageUrl);
+  const size = mediaSize(item.imageUrl);
+  const ratio = size ? `${size.width} / ${size.height}` : "1 / 1";
   const { lang } = useLanguage();
   // 展示名按语言切换；WebGL 图层 key 恒用英文 name 保持纹理注册稳定
   const displayName = lang === "zh" && item.nameZh ? item.nameZh : item.name;
@@ -79,6 +53,7 @@ function WorkCard({ item }: { item: WorkItem }) {
   const inner = (
     <>
       <WebGLImageSlot
+        deferUntilNear
         imageKey={item.name}
         src={item.imageUrl}
         hoverSrc={item.hoverImageUrl}

@@ -110,6 +110,8 @@ export default function DomImageLayer({
 
     return () => {
       disposed = true;
+      uniforms.map.value = null;
+      uniforms.mapHover.value = null;
       main?.dispose();
       hover?.dispose();
     };

@@ -95,6 +95,7 @@ export default function HomeScene() {
   const doneRef = useRef(false);
 
   const recompute = useCallback(() => {
+    if (doneRef.current) return;
     const keys = keysRef.current;
     const done = keys.filter((k) => readySetRef.current.has(k)).length;
     setHeavyLoadProgress(Math.round((done / Math.max(keys.length, 1)) * 100));
