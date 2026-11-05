@@ -1,0 +1,21 @@
+.page{max-width:1056px;margin:auto;padding:112px 36px 120px;color:var(--label-1)}
+.profile{border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.cover{height:clamp(125px,17vw,205px);background:#066cf4;position:relative;overflow:hidden}
+.cover img{height:100%;width:100%;object-fit:cover;object-position:50% 45%;mix-blend-mode:luminosity;opacity:.63}
+.identity{padding:0 34px 30px}
+.badge{position:relative;margin-top:-39px;margin-bottom:18px;width:84px;height:84px;border:5px solid var(--background-1);border-radius:50%;display:grid;place-items:center;background:#fff}
+.badge img{width:64%}
+.identity h1{margin:0;font-size:clamp(31px,4vw,48px);font-weight:600;line-height:1.15;letter-spacing:-.035em}
+.identity h1 span{font-size:.49em;font-weight:400;letter-spacing:0;color:var(--label-2)}
+.headline{margin:10px 0 4px;font-size:17px}
+.location,.section small{font-size:13px;color:var(--label-2)}
+.contact{display:inline-flex;align-items:center;margin-top:19px;border-radius:22px;padding:10px 19px;background:#164fb6;color:white;font-size:14px}
+.columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,28%);gap:52px}
+.section{padding-top:32px}.section h2{margin:0 0 16px;font-size:21px;font-weight:600}
+.section h3{margin:6px 0;font-size:18px;font-weight:550;line-height:1.4}
+.section p,.section li{font-size:15px;line-height:1.75}
+.project{border-top:1px solid var(--line);padding:22px 0;display:grid;grid-template-columns:80px minmax(0,1fr);gap:18px}
+.project img{width:80px;height:80px;object-fit:cover;border-radius:8px}
+.project a:hover{text-decoration:underline;text-underline-offset:4px}
+.section li{padding:7px 0;border-bottom:1px solid var(--line)}
+@media(max-width:700px){.page{padding:90px 16px 74px}.identity{padding:0 19px 23px}.columns{grid-template-columns:1fr;gap:0}.project{grid-template-columns:54px minmax(0,1fr);gap:13px}.project img{width:54px;height:54px}.section{padding-top:25px}.headline{font-size:15px}}

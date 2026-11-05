@@ -5,6 +5,7 @@
 // 项：Home（TransitionLink "/"，startDelay 300）、Work（400）、Contact（500）、
 // 语言切换（600，中/英）。
 
+import { asset } from "@/lib/asset";
 import AsciiScramble from "./AsciiScramble";
 import TransitionLink from "./TransitionLink";
 import { useFullscreenTransition } from "@/lib/fullscreen-transition";
@@ -70,6 +71,9 @@ export default function MobileMenu({
           scrambleColors={false}
         />
       </button>
+      <a href={asset("/resume/")} className={`${dotted} p-2 uppercase pointer-events-auto`} onClick={() => setMenuOpen(false)}>
+        {zh ? "简历" : "Résumé"}
+      </a>
       <button
         type="button"
         className={`${dotted} p-2 uppercase cursor-pointer pointer-events-auto`}

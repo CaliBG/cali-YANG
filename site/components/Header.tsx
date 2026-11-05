@@ -6,6 +6,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
+import { asset } from "@/lib/asset";
 import AsciiScramble from "./AsciiScramble";
 import Clock from "./Clock";
 import GridLines from "./GridLines";
@@ -226,6 +227,9 @@ export default function Header() {
               scrambleColors={false}
             />
           </button>
+          <a href={asset("/resume/")} className={`${dotted} p-2 uppercase`}>
+            {lang === "zh" ? "简历" : "Résumé"}
+          </a>
           <ThemeToggle dottedClass={dotted} {...hintHandlers} />
           <SoundToggle dottedClass={dotted} {...hintHandlers} />
           <LangToggle dottedClass={dotted} />
