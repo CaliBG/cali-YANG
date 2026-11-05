@@ -354,3 +354,19 @@ export function updateFrameState(dt: number) {
     OPAQUE_POLICIES.refractiveEffect
   );
 }
+
+
+// Keep the project imagery accessible when the optional WebGL scene cannot initialize.
+let sceneUnavailable = false;
+const sceneListeners = new Set<() => void>();
+export function setSceneUnavailable(value:boolean) {
+  sceneUnavailable = value;
+  sceneListeners.forEach(notify=>notify());
+}
+function subscribeSceneAvailability(notify:()=>void) {
+  sceneListeners.add(notify);
+  return ()=>{sceneListeners.delete(notify);};
+}
+export function useSceneUnavailable() {
+  return useSyncExternalStore(subscribeSceneAvailability,()=>sceneUnavailable,()=>false);
+}

@@ -7,7 +7,6 @@ import { PasscodeAccessProvider } from "@/lib/passcode";
 import { FullscreenTransitionProvider } from "@/lib/fullscreen-transition";
 import TransitionOrchestrator from "@/components/TransitionOrchestrator";
 import CursorOverlay from "@/components/webgl/CursorOverlay";
-import FontGate from "@/components/FontGate";
 import Header from "@/components/Header";
 import ScrollShell from "@/components/ScrollShell";
 import { asset } from "@/lib/asset";
@@ -38,6 +37,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{__html:`try{const t=localStorage.getItem("theme");const dark=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.add(dark?"dark":"light")}catch{}`}}/>
+        <style>{[
+        ["tiktok", "/fonts/TikTokSans.woff2", "100 900"],
+        ["mono", "/fonts/GeistMono[wght].woff2", "100 900"],
+        ["tronica-mono", "/fonts/DepartureMono-Regular.woff2", "400"],
+      ].map(([family,url,weight]) => `@font-face{font-family:"${family}";src:url("${asset(url)}");font-weight:${weight};font-display:swap;}`).join("\n")}</style></head>
       <body>
         <LanguageProvider>
         <ThemeModeProvider>
@@ -47,10 +53,8 @@ export default function RootLayout({
                 <FullscreenTransitionProvider>
                   <CursorOverlay />
                   <TransitionOrchestrator />
-                  <FontGate>
-                    <Header />
-                    <ScrollShell>{children}</ScrollShell>
-                  </FontGate>
+                  <Header />
+                  <ScrollShell>{children}</ScrollShell>
                 </FullscreenTransitionProvider>
               </PasscodeAccessProvider>
             </PointerProvider>

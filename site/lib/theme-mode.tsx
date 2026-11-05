@@ -4,7 +4,7 @@
 // - localStorage key "theme"，三态 light/dark/system，默认 system
 // - 解析结果挂 document.documentElement classList（先 remove 再 add）
 // - system 态监听 matchMedia("(prefers-color-scheme: dark)") change
-// - 无防闪烁内联 script，首帧靠 FontGate invisible 掩盖
+// - HTML head applies the stored theme before the first paint.
 
 import {
   createContext,
@@ -46,17 +46,10 @@ export function ThemeModeProvider({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    if (stored && (THEME_ORDER as string[]).includes(stored)) setThemeState(stored as ThemeMode);
     setMounted(true);
   }, []);
-
-  // mount 后从 localStorage 读回（只接受 light/dark/system）
-  useEffect(() => {
-    if (!mounted) return;
-    const stored = localStorage.getItem("theme");
-    if (stored && (THEME_ORDER as string[]).includes(stored)) {
-      setThemeState(stored as ThemeMode);
-    }
-  }, [mounted]);
 
   // 写回存储 + 挂类 + system 态跟随系统
   useEffect(() => {

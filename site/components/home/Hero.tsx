@@ -17,7 +17,7 @@ function HeroBrandLine() {
   const { lang } = useLanguage();
 
   return (
-    <AsciiScramble
+    <AsciiScramble readableOnEntry
       key={`brand-${lang}`}
       text={
         lang === "zh"
@@ -42,21 +42,21 @@ export default function Hero() {
     >
       <div className="flex flex-col order-2 lg:order-1 lg:grid lg:grid-cols-12 col-span-12 font-mono text-base">
         <span className="hidden lg:block lg:col-span-3 xl:col-span-2 lg:col-start-1 xl:col-start-1 p-2 font-sans font-medium text-[4svw] sm:text-2xl lg:text-3xl leading-tight">
-          <AsciiScramble
+          <AsciiScramble readableOnEntry
             key={`meta1a-${lang}`}
             text={zh ? "视觉 &" : "Visual &"}
             startDelayMs={HERO_META_DELAY}
             letterDelayMs={HERO_META_LETTER_DELAY}
           />
           <br />
-          <AsciiScramble
+          <AsciiScramble readableOnEntry
             key={`meta1b-${lang}`}
             text={zh ? "装置" : "Installation"}
             startDelayMs={HERO_META_DELAY}
             letterDelayMs={HERO_META_LETTER_DELAY}
           />
         </span>
-        <AsciiScramble
+        <AsciiScramble readableOnEntry
           key={`meta2-${lang}`}
           text={
             zh
@@ -73,17 +73,17 @@ export default function Hero() {
         className="flex flex-col self-end order-1 lg:order-2 col-span-12 px-2 font-bold text-[7.2svw] lg:text-[6svw] 2xl:text-[5svw] xl:text-[5.6svw] uppercase leading-none"
         style={{ fontVariationSettings: '"wdth" 120' }}
       >
-        <AsciiScramble
+        <AsciiScramble readableOnEntry
           key={`h1-${lang}`}
           text={zh ? "感知归零" : "Yet"}
           startDelayMs={300}
         />
-        <AsciiScramble
+        <AsciiScramble readableOnEntry
           key={`h2-${lang}`}
           text={zh ? "一切" : "Zero"}
           startDelayMs={500}
         />
-        <AsciiScramble
+        <AsciiScramble readableOnEntry
           key={`h3-${lang}`}
           text={zh ? "重新开始" : "Sense"}
           startDelayMs={700}

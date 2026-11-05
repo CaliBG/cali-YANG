@@ -12,7 +12,7 @@ export interface SceneEnv {
   isMobile: boolean;
   reducedMotion: boolean;
   /** GL uv 坐标（mutable，每帧直读，lib/pointer.tsx 提供） */
-  pointerUv: THREE.Vector2;
+  pointerUv: THREE.Vector2Like;
   pointerInsideRef: React.RefObject<boolean>;
   /** 重资源就绪上报（key ∈ c$ + DOM 图层 key） */
   onAssetReady: (key: string) => void;
@@ -57,7 +57,7 @@ export class LightRig {
 
   update(
     camera: THREE.Camera,
-    pointerUv: THREE.Vector2,
+    pointerUv: THREE.Vector2Like,
     follow: boolean,
     dt: number,
     outLight: THREE.Vector3,

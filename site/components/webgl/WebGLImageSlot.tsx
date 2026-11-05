@@ -4,8 +4,8 @@
 // 把 rect 元素 + 纹理 url 注册进 WebGL 场景 store（真实像素由 Canvas B 绘制）。
 
 import { useEffect, useRef } from "react";
-import { mediaSize, textureSource } from "@/lib/media";
-import { registerWebGLImageLayer } from "./store";
+import { mediaSize, responsive, textureSource } from "@/lib/media";
+import { registerWebGLImageLayer, useSceneUnavailable } from "./store";
 
 export interface WebGLImageSlotProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -23,8 +23,10 @@ export default function WebGLImageSlot({
   src,
   hoverSrc,
   deferUntilNear = false,
+  children,
   ...rest
 }: WebGLImageSlotProps) {
+  const unavailable = useSceneUnavailable();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -64,5 +66,8 @@ export default function WebGLImageSlot({
     };
   }, [imageKey, src, hoverSrc, deferUntilNear]);
 
-  return <div ref={ref} aria-hidden data-webgl-image={imageKey ?? src} {...rest} />;
+  return <div ref={ref} aria-hidden data-webgl-image={imageKey ?? src} {...rest}>
+    {unavailable && <img {...responsive(src,"auto, 90vw")} src={src} alt="" loading="lazy" className="w-full h-full object-contain" />}
+    {children}
+  </div>;
 }

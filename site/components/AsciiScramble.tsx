@@ -69,6 +69,7 @@ export interface AsciiScrambleProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
   text?: string;
   parts?: ScramblePart[];
+  readableOnEntry?: boolean;
   startDelayMs?: number;
   letterDelayMs?: number;
   reverse?: boolean;
@@ -112,6 +113,7 @@ function useHasEnteredViewport(
 export default function AsciiScramble({
   text,
   parts,
+  readableOnEntry = false,
   startDelayMs = 0,
   letterDelayMs = 80,
   reverse = false,
@@ -198,7 +200,7 @@ export default function AsciiScramble({
   // 未起跑：整体 opacity:0 占位（与 SSR 基准一致）
   if (t0 === null) {
     return (
-      <span ref={ref} style={{ opacity: 0, ...style }} {...rest}>
+      <span ref={ref} style={{ opacity: readableOnEntry ? 1 : 0, ...style }} {...rest}>
         {segments.map((seg, i) =>
           typeof seg === "string" ? (
             <span key={i}>{seg}</span>
@@ -224,7 +226,7 @@ export default function AsciiScramble({
     const startAt = idx * letterDelayMs;
     if (t < startAt) {
       return (
-        <span key={key} style={{ opacity: 0 }}>
+        <span key={key} style={{ opacity: readableOnEntry ? 1 : 0 }}>
           {unit.char}
         </span>
       );

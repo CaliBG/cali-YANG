@@ -11,7 +11,7 @@ import SignatureIntro from "@/components/home/SignatureIntro";
 import SelectedWork from "@/components/home/SelectedWork";
 import HyperSpace from "@/components/home/HyperSpace";
 import HomeFooter from "@/components/home/HomeFooter";
-import HomeScene from "@/components/webgl/HomeScene";
+import HomeScene from "@/components/webgl/DeferredHomeScene";
 
 export default function Home() {
   return (

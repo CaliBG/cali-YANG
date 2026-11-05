@@ -11,7 +11,7 @@ import {
   useRef,
   useSyncExternalStore,
 } from "react";
-import { Vector2 } from "three";
+import type { Vector2Like } from "three";
 
 export interface PointerSnapshot {
   x: number;
@@ -23,7 +23,7 @@ const SERVER_SNAPSHOT: PointerSnapshot = { x: 0.5, y: 0.5, inside: false };
 
 interface PointerContextValue {
   /** GL uv 坐标（mutable，供 WebGL 每帧直接读取） */
-  uv: Vector2;
+  uv: Vector2Like;
   insideRef: React.RefObject<boolean>;
   subscribe: (fn: () => void) => () => void;
   getSnapshot: () => PointerSnapshot;
@@ -33,7 +33,7 @@ interface PointerContextValue {
 const PointerContext = createContext<PointerContextValue | null>(null);
 
 export function PointerProvider({ children }: { children: React.ReactNode }) {
-  const uvRef = useRef(new Vector2(0.5, 0.5));
+  const uvRef = useRef({x:0.5, y:0.5});
   const insideRef = useRef(false);
   const snapshotRef = useRef<PointerSnapshot>(SERVER_SNAPSHOT);
   const listenersRef = useRef(new Set<() => void>());
@@ -52,7 +52,8 @@ export function PointerProvider({ children }: { children: React.ReactNode }) {
       const prev = snapshotRef.current;
       if (prev.x === x && prev.y === y && prev.inside === inside) return;
       snapshotRef.current = { x, y, inside };
-      uvRef.current.set(x, y);
+      uvRef.current.x = x;
+      uvRef.current.y = y;
       insideRef.current = inside;
       notify();
     };

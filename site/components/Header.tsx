@@ -126,7 +126,7 @@ export default function Header() {
   const nearBottom = useNearBottom(0.5);
   const [hintCount, setHintCount] = useState(0);
 
-  const homeLoadingGate = isHome && !readyToLoadHeavy;
+
   const dotted = past ? DOTTED_BORDER_BASE_WHITE : DOTTED_BORDER_BASE;
 
   // T/B 滚顶/滚底
@@ -146,13 +146,11 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // 桌面宽度强制关菜单；homeLoadingGate 时也关
+  // 桌面宽度强制关菜单
   useEffect(() => {
     if (!isMobile) setMenuOpen(false);
   }, [isMobile, setMenuOpen]);
-  useEffect(() => {
-    if (homeLoadingGate) setMenuOpen(false);
-  }, [homeLoadingGate, setMenuOpen]);
+
 
   // Work/Contact 锚点：首页直接滚，跨页存 sessionStorage 后走全屏过渡
   const scrollToAnchor = (anchor: string) => {
@@ -190,11 +188,13 @@ export default function Header() {
           style={{ fontVariationSettings: '"wght" 700, "wdth" 120' }}
         >
           <AsciiScramble
+            readableOnEntry
             text="zishuo"
             startDelayMs={300}
             scrambleColors={false}
           />
           <AsciiScramble
+            readableOnEntry
             text=".design"
             startDelayMs={300}
             scrambleColors={false}
@@ -236,8 +236,7 @@ export default function Header() {
         </div>
 
         {/* 移动端汉堡 */}
-        {!homeLoadingGate && (
-          <button
+        <button
             type="button"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
@@ -267,7 +266,6 @@ export default function Header() {
               />
             </span>
           </button>
-        )}
       </div>
 
       {/* 底行（移动端隐藏时钟/坐标 HUD：无背景的固定文字会压住滚动正文） */}
@@ -284,7 +282,7 @@ export default function Header() {
           <Clock />
         )}
         <PointerCoords dottedClass={dotted} {...hintHandlers} />
-        {!homeLoadingGate && <RotatingGlobe />}
+        {(!isHome || readyToLoadHeavy) && <RotatingGlobe />}
         {menuOpen && (
           <div className="flex items-center gap-2 pointer-events-auto lg:hidden">
             <ThemeToggle dottedClass={dotted} initialStartDelayMs={100} />
@@ -300,10 +298,10 @@ export default function Header() {
       {menuOpen && <MobileMenu white={past} onAnchor={scrollToAnchor} />}
 
       {/* 自定义滚动条 */}
-      {!homeLoadingGate && <ScrollProgress hidden={menuOpen} />}
+      <ScrollProgress hidden={menuOpen} />
 
       {/* 首页背景网格线 */}
-      {isHome && !homeLoadingGate && <GridLines />}
+      {isHome && readyToLoadHeavy && <GridLines />}
     </header>
   );
 }
