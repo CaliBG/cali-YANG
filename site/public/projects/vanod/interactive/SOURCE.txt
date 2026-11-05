@@ -2,5 +2,5 @@ Vanod interactive artwork
 Original source: https://calibg.github.io/vanod/
 Opening: original seven-vertex V and wordmark paths, implemented as a live SVG mask.
 Coin artwork: see coins/SOURCE.txt and coins/LICENSE.txt.
-Footer: original authored brand-lockup excerpt, driven by scroll and pointer position; no autoplay playback.
+Footer: approved Vanod vector paths and Brand Lockup motion study 10, driven by the position of the artwork in the viewport.
 Integrated into the Vanod portfolio case study on 2026-11-03.
