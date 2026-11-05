@@ -31,7 +31,7 @@ button.tile:hover .tileHeader>span:last-child{transform:translate(2px,-2px)}
  .stage{position:relative;top:0;padding:0;--spread:0!important}
  .heading{margin-bottom:24px}
  .board{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(290px,auto) auto auto;aspect-ratio:auto;min-height:0;max-height:none;border-radius:18px;gap:9px;padding:9px}
- .tile{border-radius:10px;padding:12px 10px;gap:12px;will-change:auto;transform:none}
+ .tile{border-radius:10px;padding:12px 10px;gap:12px;will-change:auto;transform:translateX(var(--mobile-offset,0px))}
  .announcement{grid-column:1;grid-row:1}.poster{grid-column:2;grid-row:1}
  .announcement .imageWell,.poster .imageWell{aspect-ratio:3/4}
  .banner{grid-column:1/3;grid-row:2}.banner .imageWell{aspect-ratio:3/1}

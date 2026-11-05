@@ -15,7 +15,7 @@ const number = (value: number) => String(value).padStart(2, "0");
 export default function FeedbackOverview() {
   const { lang } = useLanguage();
   const zh = lang === "zh";
-  const { sectionRef, stageRef, boardRef, still, reduced, setStill } = useMaskedEntrance();
+  const { sectionRef, stageRef, boardRef, still, reduced, setStill } = useMaskedEntrance(1023);
   const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);

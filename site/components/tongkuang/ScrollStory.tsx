@@ -27,7 +27,11 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
       const top=section.getBoundingClientRect().top-(container?.getBoundingClientRect().top??0);
       const travel=Math.max(1,section.offsetHeight-viewport);
       const value=query.matches?1:Math.max(0,Math.min(1,(96-top)/travel));
-      progress.current=value;rendererRef.current?.render(value);setPercent(Math.round(value*100));
+      if (progress.current !== value) {
+        progress.current=value;
+        rendererRef.current?.render(value);
+        setPercent(Math.round(value*100));
+      }
     };
     const request=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(update);};
     const preference=()=>{setReduced(query.matches);request();};
@@ -60,10 +64,12 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
         root.style.visibility="visible";setReady(true);
       }catch{if(!disposed){root.remove();setFailed(true);}}
     };
-    const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){void load();observer.disconnect();}},{root:container,rootMargin:"200px 0px"});
+    // Start the featured scene during initial hydration; detail scenes warm up as the reader approaches.
+    if(featured) void load();
+    const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){void load();observer.disconnect();}},{root:container,rootMargin:"1200px 0px"});
     observer.observe(stage);
     return()=>{disposed=true;observer.disconnect();sizes.disconnect();rendererRef.current=null;renderer?.destroy();root?.remove();};
-  },[container,scene,retry]);
+  },[container,scene,retry,featured]);
 
   return <section ref={sectionRef} className={`${styles.scrollStory} ${featured?styles.featured:""}`} aria-label={scene==="0"?(zh?"双摄滚动交互演示":"Dual-camera scroll experience"):(zh?"同框设计展开交互":"Tongkuang design scroll showcase")}>
     <div className={styles.stickyStory}>
@@ -73,7 +79,9 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
         {featured?<TransitionLink href="/tongkuang" className={styles.textLink}>{zh?"探索完整项目":"Explore the project"} <span aria-hidden="true">↗</span></TransitionLink>:<span className={styles.mono}>{scene==="0"?(zh?"来自第 36 页":"From slide 36"):(zh?"来自第 39–40 页":"From slides 39–40")}</span>}
       </div>
       <div ref={stageRef} className={styles.storyStage} data-progress={percent} aria-busy={!ready&&!failed}>
-        <img src={asset(`/projects/tongkuang/${scene==="0"?"story-intro":"design-expanded"}.webp`)} alt={zh?"同框：从一部相机展开为设计、开发与发布的完整过程":"Tongkuang: camera, design, development and release"} loading="lazy" decoding="async" width={1280} height={720} hidden={ready}/>
+        {scene==="2" && !reduced ? <div className={styles.scrubPreview} hidden={ready} role="img" aria-label={zh?"同框设计随滚动逐步展开":"Tongkuang design unfolding with scroll"}
+          style={{backgroundImage:`url(${asset("/projects/tongkuang/design-preview.webp")})`,
+            backgroundPosition:`${(Math.round(percent*24/100)%5)*25}% ${Math.floor(Math.round(percent*24/100)/5)*25}%`}}/> : <img src={asset(`/projects/tongkuang/${scene==="0"?"story-intro":"design-expanded"}.webp`)} alt={zh?"同框：从一部相机展开为设计、开发与发布的完整过程":"Tongkuang: camera, design, development and release"} loading="lazy" decoding="async" width={1280} height={720} hidden={ready}/>}
         {featured&&<a href={asset("/tongkuang/")} className={styles.storyLink} aria-label={zh?"查看同框完整作品":"View the full Tongkuang project"}><span>{zh?"查看完整作品":"View full project"} ↗</span></a>}
         {failed&&<button type="button" className={styles.retry} onClick={()=>setRetry(value=>value+1)}>{zh?"重新载入动画":"Reload animation"}</button>}
       </div>

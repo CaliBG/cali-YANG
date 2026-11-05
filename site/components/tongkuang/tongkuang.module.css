@@ -90,3 +90,5 @@
 .caseStudy .stickyStory{top:80px;min-height:calc(100svh - 168px);gap:16px;padding:10px 0 20px}
 .videoSection video,.deckStage{width:min(100%,calc((100svh - 200px)*16/9));margin-inline:auto}
 @media(max-width:640px){.caseStudy .stickyStory{top:72px;min-height:calc(100svh - 145px)}.deckStage:has(.presentationCover){min-height:190px}.presentationCover{padding:16px}.presentationCover h3{font-size:24px}.presentationCover .eyebrow{margin-bottom:6px}.presentationCover p{margin-top:6px}.presentationCover button{min-height:34px}}
+
+.scrubPreview{position:absolute;inset:0;background-size:500% 500%;background-repeat:no-repeat}
