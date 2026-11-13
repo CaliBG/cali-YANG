@@ -12,7 +12,11 @@ export default function MobileMenu({onClose,onAnchor}:{onClose:()=>void; onAncho
   return <nav aria-label={zh ? "主导航" : "Main navigation"}
     className="fixed inset-0 z-40 flex flex-col justify-center items-start bg-be text-l1 px-6 py-6 font-mono-2 text-[10svw]">
     <TransitionLink href="/" className={linkClass} onClick={onClose}>{zh ? "首页" : "Home"}</TransitionLink>
-    {([["#selected-work",zh?"作品":"Work"],["#contact",zh?"联系":"Contact"]] as const).map(([anchor,label])=>
+    {([
+      ["#selected-work", zh ? "作品" : "Work"],
+      ["#research", zh ? "研究与投稿" : "Research"],
+      ["#contact", zh ? "联系" : "Contact"],
+    ] as const).map(([anchor,label])=>
       <a key={anchor} href={asset("/"+anchor)} className={linkClass} onClick={event=>{
         event.preventDefault();onClose();onAnchor(anchor);
       }}>{label}</a>)}

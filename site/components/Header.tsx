@@ -160,7 +160,7 @@ export default function Header() {
     return () => desktop.removeEventListener("change",sync);
   }, [setMenuOpen]);
 
-  // Work/Contact 锚点：首页直接滚，跨页存 sessionStorage 后走全屏过渡
+  // 首页锚点：同页直接滚，跨页存 sessionStorage 后走全屏过渡
   const scrollToAnchor = (anchor: string) => {
     if (pathname === "/") {
       scrollEnv.lenisScrollTo(anchor, { lerp: 0.1 });
@@ -209,7 +209,7 @@ export default function Header() {
           />
         </TransitionLink>
 
-        {/* 桌面按钮组（5 个按钮，加宽容器并禁止换行保证同一行） */}
+        {/* 桌面导航和显示设置保持同一行 */}
         <div className="hidden lg:flex flex-nowrap justify-between items-center gap-x-3 whitespace-nowrap pointer-events-auto basis-1/2 xl:basis-2/5">
           <button
             type="button"
@@ -222,6 +222,13 @@ export default function Header() {
               startDelayMs={300}
               scrambleColors={false}
             />
+          </button>
+          <button
+            type="button"
+            className={`${dotted} p-2 uppercase cursor-pointer`}
+            onClick={() => scrollToAnchor("#research")}
+          >
+            {lang === "zh" ? "研究与投稿" : "Research"}
           </button>
           <button
             type="button"
