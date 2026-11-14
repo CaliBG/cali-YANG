@@ -16,7 +16,7 @@ export default function ResearchSubmissions() {
         <div className={styles.sectionHeading}>
           <h2 id="research-heading">{zh ? "研究与投稿" : "Research & Submissions"}</h2>
           <p className={styles.asOf}>
-            {zh ? "状态核对日期 " : "Status checked "}
+            {zh ? "记录更新日期 " : "Records updated "}
             <time dateTime={RESEARCH_STATUS_DATE}>{RESEARCH_STATUS_DATE}</time>
           </p>
         </div>

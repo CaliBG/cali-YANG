@@ -71,7 +71,7 @@ export default function ResearchArticle({ paper, content }: { paper: ResearchPap
             <div><dt>{zh ? "投稿日期" : "Submitted"}</dt><dd><time dateTime={paper.date}>{paper.date}</time></dd></div>
             <div><dt>{zh ? "当前状态" : "Status"}</dt><dd>{paper.status[lang]}</dd></div>
           </dl>
-          <p className={styles.asOf}>{zh ? "状态核对日期 " : "Status checked "}<time dateTime={RESEARCH_STATUS_DATE}>{RESEARCH_STATUS_DATE}</time></p>
+          <p className={styles.asOf}>{zh ? "记录更新日期 " : "Records updated "}<time dateTime={RESEARCH_STATUS_DATE}>{RESEARCH_STATUS_DATE}</time></p>
           <a href={paper.url} target="_blank" rel="noopener noreferrer" className={styles.textLink}>
             {zh ? "期刊官网" : "Journal website"} <span aria-hidden="true">↗</span>
           </a>

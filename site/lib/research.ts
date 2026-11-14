@@ -1,4 +1,4 @@
-export const RESEARCH_STATUS_DATE = "2026-11-13";
+export const RESEARCH_STATUS_DATE = "2026-11-14";
 
 export const researchPapers = [
   {
@@ -7,7 +7,7 @@ export const researchPapers = [
     title: "Translating situated needs into interaction constraints for dual camera recording",
     journal: "Interacting with Computers",
     date: "2026-11-10",
-    status: { en: "Awaiting admin processing", zh: "等待编辑部处理" },
+    status: { en: "Rejected 14 Nov 2026 (scope mismatch); preparing resubmission", zh: "2026-11-14 已拒稿（范围不匹配），修改转投中" },
     url: "https://academic.oup.com/iwc",
     mark: "iwc",
     description: {
