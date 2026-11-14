@@ -158,3 +158,26 @@
 .scrollingTitle:hover a, .scrollingTitle:focus-within a { animation-play-state: paused; }
 @keyframes paper-title-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .scrollingTitle a { animation: none; width: auto; } .scrollingTitle a span { white-space: normal; padding: 0; } .scrollingTitle a span[aria-hidden] { display: none; } }
+
+.readerNote { font-size: .8rem; line-height: 1.85; color: var(--label-2); margin-bottom: 2rem; max-width: 36rem; }
+.manuscriptSection { border-bottom: 1px solid var(--line); }
+.manuscriptSection summary { cursor: pointer; display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: 1.25rem 0; list-style: none; }
+.manuscriptSection summary::-webkit-details-marker { display: none; }
+.manuscriptSection summary h3 { font-size: 1.05rem; line-height: 1.5; font-weight: 500; }
+.manuscriptSection summary > span { font-size: 1.3rem; font-weight: 300; transition: transform .3s; }
+.manuscriptSection[open] summary > span { transform: rotate(45deg); }
+.manuscriptText { padding: .5rem 0 2.5rem; overflow-wrap: anywhere; }
+.manuscriptText p { margin-bottom: 1.3rem; }
+.articleBody .manuscriptText p { line-height: 1.85 !important; font-size: .95rem !important; }
+.manuscriptText h4 { font-size: 1.15rem; line-height: 1.5; font-weight: 600; margin: 2rem 0 1rem; }
+.tableScroll { overflow-x: auto; margin: 1.5rem 0; max-width: 100%; }
+.tableScroll table { min-width: 35rem; border-collapse: collapse; font-size: .76rem; line-height: 1.6; }
+.tableScroll th { font-weight: 600; text-align: left; background: var(--background-elevated); }
+.tableScroll th, .tableScroll td { padding: .8rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.manuscriptFigure { display: block; margin-block: 2rem; }
+.manuscriptFigure img { max-width: 100%; height: auto; }
+.articleBody .manuscriptText .caption { font-size: .78rem !important; color: var(--label-2); line-height: 1.6 !important; }
+
+.fullManuscript { scroll-margin-top: 7rem; }
+.manuscriptText p a { text-decoration: underline; text-underline-offset: .2em; }
+.manuscriptSection summary:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }

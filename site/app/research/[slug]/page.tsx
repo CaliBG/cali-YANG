@@ -3,6 +3,11 @@ import { notFound } from "next/navigation";
 import ResearchArticle from "@/components/research/ResearchArticle";
 import { getResearchPaper, researchPapers } from "@/lib/research";
 
+import iwc from "@/lib/research-content/iwc.json";
+import ajis from "@/lib/research-content/ajis.json";
+import ijidem from "@/lib/research-content/ijidem.json";
+const manuscripts = { iwc, ajis, ijidem };
+
 type PaperPageProps = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
@@ -24,5 +29,5 @@ export default async function PaperPage({ params }: PaperPageProps) {
   const paper = getResearchPaper((await params).slug);
   if (!paper) notFound();
 
-  return <ResearchArticle paper={paper} />;
+  return <ResearchArticle paper={paper} content={manuscripts[paper.mark]} />;
 }

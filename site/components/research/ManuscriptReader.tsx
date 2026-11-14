@@ -9,7 +9,7 @@ function LinkedText({ text }: { text: string }) {
 export default function ManuscriptReader({ content, zh }: { content: ManuscriptContent; zh: boolean }) {
   return <div className={styles.manuscript}>
     <p className={styles.readerNote}>{zh ? '以下为英文投稿稿的网页阅读版，包含正文、原始图表与参考文献。中文部分为研究导读。' : 'Web reading edition of the submitted manuscript, including text, original figures, tables and references.'}</p>
-    {content.sections.map((section, i) => <details className={styles.manuscriptSection} key={section.title} open={i === 0}>
+    {content.sections.map((section) => <details className={styles.manuscriptSection} key={section.title} open>
       <summary><h3 lang="en">{section.title}</h3><span aria-hidden="true">+</span></summary>
       <div lang="en" className={styles.manuscriptText}>
         {section.blocks.map((block,j) => {

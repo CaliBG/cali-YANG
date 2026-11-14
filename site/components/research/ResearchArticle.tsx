@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useLanguage } from "@/lib/language";
 import { RESEARCH_STATUS_DATE, type ResearchPaper } from "@/lib/research";
+import ManuscriptReader, { type ManuscriptContent } from "./ManuscriptReader";
 import JournalMark from "./JournalMark";
 import styles from "./research.module.css";
 
@@ -45,7 +46,7 @@ const evidence = {
   },
 } as const;
 
-export default function ResearchArticle({ paper }: { paper: ResearchPaper }) {
+export default function ResearchArticle({ paper, content }: { paper: ResearchPaper; content: ManuscriptContent }) {
   const { lang } = useLanguage();
   const zh = lang === "zh";
 
@@ -59,6 +60,7 @@ export default function ResearchArticle({ paper }: { paper: ResearchPaper }) {
           <p className={styles.kicker}>{paper.project[lang]}</p>
           <h1 lang="en">{paper.title}</h1>
           <p className={styles.lede}>{paper.description[lang]}</p>
+          <a href="#manuscript" className={styles.textLink}>{zh ? "阅读论文全文 ↓" : "Read full manuscript ↓"}</a>
         </div>
 
         <aside className={styles.metadata} aria-label={zh ? "投稿信息" : "Submission information"}>
@@ -102,6 +104,10 @@ export default function ResearchArticle({ paper }: { paper: ResearchPaper }) {
         <section>
           <h2>{zh ? "研究边界" : "Limitations"}</h2>
           <p>{paper.limits[lang]}</p>
+        </section>
+        <section id="manuscript" className={styles.fullManuscript}>
+          <h2>{zh ? "论文全文" : "Full manuscript"}</h2>
+          <ManuscriptReader content={content} zh={zh}/>
         </section>
       </div>
     </main>
