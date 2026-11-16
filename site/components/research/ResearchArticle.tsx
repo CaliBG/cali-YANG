@@ -68,6 +68,7 @@ export default function ResearchArticle({ paper, content }: { paper: ResearchPap
           <dl>
             <div><dt>{zh ? "期刊" : "Journal"}</dt><dd lang="en">{paper.journal}</dd></div>
             <div><dt>{zh ? "作者" : "Author"}</dt><dd>{zh ? "杨子硕" : "Zishuo Yang"}</dd></div>
+            <div><dt>{zh ? "稿号" : "Manuscript ID"}</dt><dd>{paper.manuscriptId}</dd></div>
             <div><dt>{zh ? "投稿日期" : "Submitted"}</dt><dd><time dateTime={paper.date}>{paper.date}</time></dd></div>
             <div><dt>{zh ? "当前状态" : "Status"}</dt><dd>{paper.status[lang]}</dd></div>
           </dl>
@@ -90,7 +91,7 @@ export default function ResearchArticle({ paper, content }: { paper: ResearchPap
         <section>
           <h2>{zh ? "主要发现" : "Key findings"}</h2>
           <dl className={styles.evidenceGrid}>
-            {evidence[paper.mark][lang].map(([value, label]) => (
+            {(paper.slug === "completion-feedback-safe-next-actions" ? (zh ? [["3", "构造分析案例"], ["1", "提出的歧义检验"], ["0", "真人实验"]] : [["3", "Constructed cases"], ["1", "Proposed ambiguity test"], ["0", "Human studies"]]) : evidence[paper.mark][lang]).map(([value, label]) => (
               <div key={label}>
                 <dt>{label}</dt>
                 <dd>{value}</dd>

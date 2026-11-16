@@ -1,13 +1,45 @@
-export const RESEARCH_STATUS_DATE = "2026-11-14";
+export const RESEARCH_STATUS_DATE = "2026-11-16";
 
 export const researchPapers = [
   {
+    slug: "completion-feedback-safe-next-actions",
+    manuscriptId: "IWC-26-1015",
+    project: { en: "Completion feedback", zh: "完成反馈与后续行动" },
+    title: "Completion feedback as a claim about safe next actions",
+    journal: "Interacting with Computers",
+    date: "2026-11-15",
+    status: { en: "Awaiting Admin Processing (verified 16 Nov 2026)", zh: "等待编辑部初步处理（2026-11-16 核实）" },
+    url: "https://academic.oup.com/iwc",
+    mark: "iwc",
+    description: {
+      en: "A theoretical HCI paper examining when completion feedback supports a user's next action, through constructed cases of saving, media export and uncertain uploads.",
+      zh: "以保存、媒体导出和结果不确定的上传为构造案例，分析异步界面的完成反馈何时足以支持用户执行下一步操作，提出行动相关的歧义检验。",
+    },
+    question: {
+      en: "When does a completion message provide enough evidence for a person to act next without compromising the intended outcome?",
+      zh: "一条完成提示需要提供什么证据，才能支持用户执行下一步操作并保留预期结果？",
+    },
+    method: {
+      en: "A focused discussion of HCI literature connects feedback, closure, synchronisation, recovery and task resumption. Three explicitly constructed contrasts distinguish process milestones, outcome evidence and the actions that a completion claim warrants.",
+      zh: "结合人机交互领域有关反馈、闭合、同步、恢复和任务续接的文献，区分处理里程碑、结果证据与完成声明。通过三个明确标注的构造案例，检验同一提示是否掩盖了需要不同行动的系统状态。",
+    },
+    findings: [
+      { en: "Completion is action-relative: a local save can justify closing an editor without establishing that an offline tablet has the latest version.", zh: "完成的含义取决于后续行动：本地保存可以支持关闭编辑器，却不能证明离线平板已经拥有最新版本。" },
+      { en: "When visually equivalent states require incompatible next actions, the interface must distinguish them, make the action safe across them, or communicate uncertainty.", zh: "如果界面呈现相同的状态需要采取不同的下一步行动，就应区分这些状态、调整操作以保留目标，或明确表达结果尚不确定。" },
+    ],
+    limits: {
+      en: "This is a theoretical contribution based on selected literature and constructed examples, not a user study or validated usability guideline. The journal records 15 Nov 2026 as the submission date; submission was completed on 16 Nov Beijing time.",
+      zh: "研究基于选择性文献讨论与构造案例，未开展真人实验，提出的设计建议尚待实证验证。投稿日期沿用期刊回执的 2026-11-15；北京时间完成于 11 月 16 日。",
+    },
+  },
+  {
     slug: "dual-camera-interaction-constraints",
+    manuscriptId: "IWC-26-0989",
     project: { en: "Tongkuang", zh: "同框" },
     title: "Translating situated needs into interaction constraints for dual camera recording",
     journal: "Interacting with Computers",
     date: "2026-11-10",
-    status: { en: "Rejected 14 Nov 2026 (scope mismatch); new HCI study in preparation", zh: "2026-11-14 原稿已拒稿，准备新的 HCI 研究" },
+    status: { en: "Rejected 14 Nov 2026 (scope mismatch)", zh: "2026-11-14 原稿已拒稿（范围不匹配）" },
     url: "https://academic.oup.com/iwc",
     mark: "iwc",
     description: {
@@ -39,6 +71,7 @@ export const researchPapers = [
   },
   {
     slug: "asynchronous-coding-agents",
+    manuscriptId: "6797",
     project: { en: "Valley AI", zh: "Valley AI" },
     title: "Governing Token Costs and User Control in Asynchronous Coding Agents",
     journal: "Australasian Journal of Information Systems",
@@ -75,6 +108,7 @@ export const researchPapers = [
   },
   {
     slug: "handheld-enclosure-verification",
+    manuscriptId: "IJDM-D-26-01322",
     project: { en: "Vanod Slate", zh: "Vanod Slate" },
     title: "From Fit Models to Sealing Evidence in a Thin Handheld Enclosure",
     journal: "International Journal on Interactive Design and Manufacturing",

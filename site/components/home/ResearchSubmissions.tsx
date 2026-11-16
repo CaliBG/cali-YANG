@@ -35,7 +35,8 @@ export default function ResearchSubmissions() {
                   <h3 lang="en" className={styles.scrollingTitle}><Link href={`/research/${paper.slug}/`}><span>{paper.title}</span><span aria-hidden="true">{paper.title}</span></Link></h3>
                   <p className={styles.summary}>{paper.description[lang]}</p>
                   <dl className={styles.cardMeta}>
-                    <div><dt>{zh ? "投稿日期" : "Submitted"}</dt><dd><time dateTime={paper.date}>{paper.date}</time></dd></div>
+                    <div><dt>{zh ? "稿号" : "Manuscript ID"}</dt><dd>{paper.manuscriptId}</dd></div>
+            <div><dt>{zh ? "投稿日期" : "Submitted"}</dt><dd><time dateTime={paper.date}>{paper.date}</time></dd></div>
                     <div><dt>{zh ? "当前状态" : "Status"}</dt><dd>{paper.status[lang]}</dd></div>
                   </dl>
                   <div className={styles.cardLinks}>

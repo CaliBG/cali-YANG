@@ -6,6 +6,7 @@ import { getResearchPaper, researchPapers } from "@/lib/research";
 import iwc from "@/lib/research-content/iwc.json";
 import ajis from "@/lib/research-content/ajis.json";
 import ijidem from "@/lib/research-content/ijidem.json";
+import completion from "@/lib/research-content/completion.json";
 const manuscripts = { iwc, ajis, ijidem };
 
 type PaperPageProps = { params: Promise<{ slug: string }> };
@@ -29,5 +30,5 @@ export default async function PaperPage({ params }: PaperPageProps) {
   const paper = getResearchPaper((await params).slug);
   if (!paper) notFound();
 
-  return <ResearchArticle paper={paper} content={manuscripts[paper.mark]} />;
+  return <ResearchArticle paper={paper} content={paper.slug === "completion-feedback-safe-next-actions" ? completion : manuscripts[paper.mark]} />;
 }
