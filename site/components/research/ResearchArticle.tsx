@@ -44,9 +44,13 @@ const evidence = {
       ["2", "份重新导入后有效的装配 STEP 文件"],
     ],
   },
+  jrtip: {
+    en: [["6", "Compared policies"], ["8", "Synthetic workloads"], ["40", "Seeds per workload"]],
+    zh: [["6", "种对照策略"], ["8", "类合成负载"], ["40", "个随机种子／负载"]],
+  },
 } as const;
 
-export default function ResearchArticle({ paper, content }: { paper: ResearchPaper; content: ManuscriptContent }) {
+export default function ResearchArticle({ paper, content }: { paper: ResearchPaper; content?: ManuscriptContent }) {
   const { lang } = useLanguage();
   const zh = lang === "zh";
 
@@ -60,7 +64,7 @@ export default function ResearchArticle({ paper, content }: { paper: ResearchPap
           <p className={styles.kicker}>{paper.project[lang]}</p>
           <h1 lang="en">{paper.title}</h1>
           <p className={styles.lede}>{paper.description[lang]}</p>
-          <a href="#manuscript" className={styles.textLink}>{zh ? "阅读论文全文 ↓" : "Read full manuscript ↓"}</a>
+          {content && <a href="#manuscript" className={styles.textLink}>{zh ? "阅读论文全文 ↓" : "Read full manuscript ↓"}</a>}
         </div>
 
         <aside className={styles.metadata} aria-label={zh ? "投稿信息" : "Submission information"}>
@@ -106,10 +110,10 @@ export default function ResearchArticle({ paper, content }: { paper: ResearchPap
           <h2>{zh ? "研究边界" : "Limitations"}</h2>
           <p>{paper.limits[lang]}</p>
         </section>
-        <section id="manuscript" className={styles.fullManuscript}>
+        {content && <section id="manuscript" className={styles.fullManuscript}>
           <h2>{zh ? "论文全文" : "Full manuscript"}</h2>
           <ManuscriptReader content={content} zh={zh}/>
-        </section>
+        </section>}
       </div>
     </main>
   );

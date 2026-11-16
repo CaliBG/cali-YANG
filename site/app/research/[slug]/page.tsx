@@ -7,7 +7,7 @@ import iwc from "@/lib/research-content/iwc.json";
 import ajis from "@/lib/research-content/ajis.json";
 import ijidem from "@/lib/research-content/ijidem.json";
 import completion from "@/lib/research-content/completion.json";
-const manuscripts = { iwc, ajis, ijidem };
+const manuscripts = { iwc, ajis, ijidem, jrtip: undefined };
 
 type PaperPageProps = { params: Promise<{ slug: string }> };
 

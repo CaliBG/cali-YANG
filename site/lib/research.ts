@@ -2,6 +2,43 @@ export const RESEARCH_STATUS_DATE = "2026-11-16";
 
 export const researchPapers = [
   {
+    slug: "dual-camera-sync-buffering",
+    manuscriptId: "7ab7ee6a-c2d7-46dd-ae0f-8e72724ea14b",
+    project: { en: "Dual-camera synchronization", zh: "双摄同步与缓冲调度" },
+    title: "Synchronization and buffering tradeoffs in dual camera compositing under bounded waiting",
+    journal: "Journal of Real-Time Image Processing",
+    date: "2026-11-16",
+    status: { en: "Submitted · Technical check in progress", zh: "已投稿 · 技术检查中" },
+    url: "https://link.springer.com/journal/11554",
+    mark: "jrtip",
+    description: {
+      en: "A discrete-event simulation of six dual-camera compositing policies, examining how timestamp matching and bounded waiting affect synchronization and output age.",
+      zh: "用离散事件仿真比较六种双摄合成策略，分析时间戳匹配与有限等待如何影响帧同步及输出延迟。",
+    },
+    question: {
+      en: "When does waiting for a compatible camera frame improve timely output, and when does waiting cause more primary frames to be dropped?",
+      zh: "何时等待一帧时间戳相近的副摄画面能改善输出，何时又会导致更多主摄帧被丢弃？",
+    },
+    method: {
+      en: "Six policies were compared across eight synthetic workloads with 40 independent seeds per workload. The evaluation required both a timestamp difference of at most 10 ms and a primary frame age of at most 60 ms. Historical iPhone observations describe capture continuity in a separate screen-recording workflow.",
+      zh: "在八类合成负载上比较六种策略，每类使用 40 个独立随机种子。合格输出须同时满足两路时间戳差不超过 10 毫秒、主摄帧到合成完成的时间不超过 60 毫秒。历史 iPhone 记录用于补充说明录屏流程中的采集连续性。",
+    },
+    findings: [
+      {
+        en: "Under simulated callback jitter, accepting the first compatible pair yielded 91.59% qualifying outputs, compared with 51.30% for immediate latest-frame matching.",
+        zh: "在模拟的回调抖动条件下，接受首个合格配对得到 91.59% 的合格输出，立即选取最新副摄帧的策略为 51.30%。",
+      },
+      {
+        en: "Under simulated sustained overload, the first-compatible strategy yielded 47.90% qualifying outputs, compared with 3.12% when always waiting for the full budget.",
+        zh: "在模拟的持续过载条件下，首个合格配对策略得到 47.90% 的合格输出，每次等满预算的策略为 3.12%。",
+      },
+    ],
+    limits: {
+      en: "Scheduler comparisons use synthetic traces. Historical phone records cover capture continuity and lack paired camera timestamps for measuring frame skew.",
+      zh: "调度策略比较基于仿真。历史真机记录覆盖采集连续性，缺少可用于测量两路帧时间差的配对时间戳。",
+    },
+  },
+  {
     slug: "completion-feedback-safe-next-actions",
     manuscriptId: "IWC-26-1015",
     project: { en: "Completion feedback", zh: "完成反馈与后续行动" },

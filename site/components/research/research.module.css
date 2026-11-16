@@ -71,6 +71,7 @@
 
 .cardMeta { display: grid; gap: .65rem 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: auto; padding-block: .85rem; border-top: 1px solid var(--line); }
 .cardMeta dd, .metadata dd { font-size: .88rem; line-height: 1.45; margin-top: .25rem; }
+.cardMeta dd, .metadata dd { overflow-wrap: anywhere; }
 .cardMeta time, .metadata time, .asOf time { font-variant-numeric: tabular-nums; }
 .cardLinks { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1rem; }
 
