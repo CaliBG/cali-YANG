@@ -1,6 +1,5 @@
 .wordmark {width:min(75%,470px);margin:clamp(20px,4vw,48px) 0 clamp(32px,4vw,54px)}
-.wordmark img {display:block;width:100%;height:auto;filter:brightness(0)}
-:global(.dark) .wordmark img {filter:brightness(0) invert(1)}
+.wordmark img {display:block;width:100%;height:auto;filter:brightness(0) invert(.55)}
 .section,.split {margin:clamp(56px,8vw,110px) 0;scroll-margin-top:88px}
 .split,.artGrid,.glass,.sync {display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1fr);align-items:start;gap:clamp(30px,7vw,90px)}
 .heading {max-width:730px}
