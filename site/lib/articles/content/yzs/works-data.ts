@@ -1,6 +1,8 @@
 // 站主作品详情数据（来源：caliyang.dpdns.org 内联 i18n 字典 zh/en + 详情弹窗）
 // 由 YzsWorkBody.tsx 渲染；媒体文件存于 public/work-detail/。
 
+import type { AppPresentation } from "@/components/app-showcase/AppCover";
+
 export interface BiText {
   zh: string;
   en: string;
@@ -20,6 +22,8 @@ export interface YzsWork {
   inspiration?: BiText;
   team?: BiText;
   images: string[];
+  presentation?: AppPresentation;
+  screenCaptions?: BiText[];
   /** 叠放画廊卡片宽高比(如竖屏截图 "1290 / 2796");缺省 4:5 */
   galleryAspect?: string;
   /** 叠放画廊卡片最大宽度 px;缺省 520 */
@@ -372,6 +376,12 @@ export const YZS_WORKS: YzsWork[] = [
   },
   {
     slug: "magic-note",
+    presentation: { device: "tablet", tone: "paper" },
+    screenCaptions: [
+      { zh: "用手写下一段思绪", en: "Start with a handwritten thought" },
+      { zh: "在纸页中展开对话", en: "A conversation on the page" },
+      { zh: "选择回应方式与模型", en: "Choose an engine for your notebook" },
+    ],
     title: "魔本 Magic Note — 会回应的手写日记 / Magic Note",
     date: "Feb 2026",
     description: "iPadOS 应用 / 独立设计与开发",
@@ -405,11 +415,9 @@ export const YZS_WORKS: YzsWork[] = [
     },
     team: { zh: "独立设计与独立开发 · 杨子硕 Cali-Yang", en: "Independent Design & Development · Zishuo Yang (Cali-Yang)" },
     images: [
-      `${P}/work10-1.png`,
-      `${P}/work10-2.png`,
-      `${P}/work10-3.png`,
-      `${P}/work10-4.png`,
-      `${P}/work10-5.png`,
+      "/projects/magic-note/writing.webp",
+      "/projects/magic-note/reply.webp",
+      "/projects/magic-note/settings.webp",
     ],
     demoLink: {
       href: "https://calibg.github.io/privacy/",
@@ -421,6 +429,14 @@ export const YZS_WORKS: YzsWork[] = [
   },
   {
     slug: "aily",
+    presentation: { device: "phone", tone: "indigo" },
+    screenCaptions: [
+      { zh: "随时开始对话", en: "Start a conversation" },
+      { zh: "文字与图片输入", en: "Text and image input" },
+      { zh: "管理本地模型", en: "Manage on-device models" },
+      { zh: "连接云端服务", en: "Connect a cloud provider" },
+      { zh: "切换系统端侧引擎", en: "Switch to the system on-device engine" },
+    ],
     title: "AILY — 多引擎 AI 助手 / AILY AI Assistant",
     date: "Feb 2026",
     description: "iOS 原生应用 / 独立设计与开发",
@@ -467,6 +483,40 @@ export const YZS_WORKS: YzsWork[] = [
         en: "Privacy Policy & Info",
       },
     },
+  },
+  {
+    slug: "longuse",
+    title: "久用 — 让拥有的价值随时间显现 / LongUse",
+    date: "2026",
+    description: "iOS 原生应用 / 生活工具 / 独立设计与开发",
+    presentation: { device: "phone", tone: "blue" },
+    intro: {
+      zh: [
+        "久用是一款记录物品日均成本的 iOS 应用。购买价格和购买日期是起点，使用天数让一个静态的数字变成持续变化的日均成本。已经拥有的物品、还在考虑的心愿，以及未来的成本趋势，被整理在同一个日常视角里。",
+        "设计以物品清单为入口，让价格、拥有天数与日均成本形成清晰的阅读层级。心愿预算帮助比较下一次购买，趋势曲线显示时间如何摊薄成本，陪伴里程碑则记录物品与你一起走过的日子。",
+        "使用 SwiftUI、SwiftData 与 Swift Charts 构建原生体验，通过 WidgetKit 将物品摘要与趋势带到主屏幕。记录可在本机使用，启用 iCloud 后通过用户的私人 CloudKit 数据库同步。",
+      ],
+      en: [
+        "LongUse is an iOS app for tracking the daily cost of the things you own. A purchase price and date become a cost that changes with every day of ownership. Owned items, future purchases and cost trends come together in one everyday view.",
+        "The item list gives purchase price, days owned and daily cost a clear reading order. Wishlist budgets help compare a future purchase, trend charts show costs spreading over time, and milestones mark how long an item has been part of your life.",
+        "Built with SwiftUI, SwiftData and Swift Charts, LongUse brings summaries and trends to the Home Screen through WidgetKit. Records can stay on the device or sync through the user's private CloudKit database when iCloud is enabled.",
+      ],
+    },
+    quote: {
+      zh: "让每一次拥有，\n在时间里看见价值。",
+      en: "See the value of what you own,\none day at a time.",
+    },
+    material: { zh: "SwiftUI、SwiftData、Swift Charts、WidgetKit、CloudKit", en: "SwiftUI, SwiftData, Swift Charts, WidgetKit, CloudKit" },
+    type: { zh: "iOS 物品管理 / 数据可视化与日常记录", en: "iOS item tracking / Data visualization & everyday records" },
+    inspiration: { zh: "物品的长期使用价值与日均成本", en: "Long-term ownership and cost per day" },
+    team: { zh: "独立设计与独立开发 · 杨子硕 Cali-Yang", en: "Independent Design & Development · Zishuo Yang (Cali-Yang)" },
+    images: ["/projects/longuse/purchased.webp", "/projects/longuse/wishlist.webp", "/projects/longuse/trends.webp", "/projects/longuse/item-detail.webp"],
+    screenCaptions: [
+      { zh: "已购物品与日均成本", en: "Owned items and daily costs" },
+      { zh: "心愿预算与购买计划", en: "Wishlist budgets and purchase plans" },
+      { zh: "成本趋势与预测", en: "Cost trends and forecasts" },
+      { zh: "单件物品的成本与陪伴天数", en: "An item's costs and days of ownership" },
+    ],
   },
 ];
 

@@ -5,6 +5,7 @@
 // name 为英文，nameZh 为中文（由 SelectedWork 按语言切换显示）。
 
 import { asset } from "@/lib/asset";
+import type { AppPresentation } from "@/components/app-showcase/AppCover";
 
 export interface WorkItem {
   name: string;
@@ -16,6 +17,8 @@ export interface WorkItem {
   year: string;
   type: "post" | "tools" | "event";
   codingProject?: boolean;
+  presentation?: AppPresentation;
+  screens?: string[];
   passcodeProtected?: boolean;
   gridClass: string;
 }
@@ -120,6 +123,8 @@ const WORK_ITEMS_RAW: WorkItem[] = [
   },
   {
     name: "Magic Note",
+    presentation: { device: "tablet", tone: "paper" },
+    screens: ["/projects/magic-note/writing.webp", "/projects/magic-note/reply.webp"],
     nameZh: "魔本 Magic Note — 会回应的手写日记",
     imageUrl: "/work/yzs_w10.png",
     hoverImageUrl: "/work/yzs_w10_h.png",
@@ -132,6 +137,8 @@ const WORK_ITEMS_RAW: WorkItem[] = [
   },
   {
     name: "AILY AI Assistant",
+    presentation: { device: "phone", tone: "indigo" },
+    screens: ["/work-detail/work11-1.png", "/work-detail/work11-3.png"],
     nameZh: "AILY — 多引擎 AI 助手",
     imageUrl: "/work/yzs_w11.png",
     hoverImageUrl: "/work/yzs_w11_h.png",
@@ -141,6 +148,18 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     codingProject: true,
     gridClass:
       "col-span-12 lg:col-start-7 lg:col-span-6 xl:col-start-7 xl:col-span-6",
+  },
+  {
+    name: "LongUse",
+    nameZh: "久用 — 物品日均成本记录",
+    imageUrl: "/projects/longuse/purchased.webp",
+    presentation: { device: "phone", tone: "blue" },
+    screens: ["/projects/longuse/purchased.webp", "/projects/longuse/trends.webp"],
+    href: "/longuse",
+    year: "2026",
+    type: "post",
+    codingProject: true,
+    gridClass: "col-span-12 lg:col-start-4 lg:col-span-6 xl:col-start-4 xl:col-span-6",
   },
 ];
 

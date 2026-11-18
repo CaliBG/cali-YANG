@@ -2060,5 +2060,75 @@
         "/projects/unt-yzs/feedback/20.webp"
       ]
     ]
+  },
+  "/projects/longuse/item-detail.webp": {
+    "width": 1320,
+    "height": 2868,
+    "variants": [
+      [
+        1320,
+        "/projects/longuse/item-detail.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/purchased.webp": {
+    "width": 1320,
+    "height": 2868,
+    "variants": [
+      [
+        1320,
+        "/projects/longuse/purchased.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/trends.webp": {
+    "width": 1320,
+    "height": 2868,
+    "variants": [
+      [
+        1320,
+        "/projects/longuse/trends.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/wishlist.webp": {
+    "width": 1320,
+    "height": 2868,
+    "variants": [
+      [
+        1320,
+        "/projects/longuse/wishlist.webp"
+      ]
+    ]
+  },
+  "/projects/magic-note/reply.webp": {
+    "width": 1600,
+    "height": 1199,
+    "variants": [
+      [
+        1600,
+        "/projects/magic-note/reply.webp"
+      ]
+    ]
+  },
+  "/projects/magic-note/settings.webp": {
+    "width": 1600,
+    "height": 1199,
+    "variants": [
+      [
+        1600,
+        "/projects/magic-note/settings.webp"
+      ]
+    ]
+  },
+  "/projects/magic-note/writing.webp": {
+    "width": 1600,
+    "height": 1199,
+    "variants": [
+      [
+        1600,
+        "/projects/magic-note/writing.webp"
+      ]
+    ]
   }
 }

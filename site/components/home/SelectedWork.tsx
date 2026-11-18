@@ -17,6 +17,7 @@ import ScrollStory from "@/components/tongkuang/ScrollStory";
 import VanodFeature from "@/components/vanod/VanodFeature";
 import AislandFeature from "@/components/aisland/AislandFeature";
 import CoffeeFeature from "@/components/coffee/CoffeeFeature";
+import AppCover from "@/components/app-showcase/AppCover";
 
 import { mediaSize } from "@/lib/media";
 
@@ -53,7 +54,7 @@ function WorkCard({ item }: { item: WorkItem }) {
 
   const inner = (
     <>
-      <WebGLImageSlot
+      {item.presentation && item.screens ? <AppCover presentation={item.presentation} images={item.screens} name={displayName} /> : <WebGLImageSlot
         deferUntilNear
         imageKey={item.name}
         src={item.imageUrl}
@@ -69,7 +70,7 @@ function WorkCard({ item }: { item: WorkItem }) {
             Coding Project
           </span>
         )}
-      </WebGLImageSlot>
+      </WebGLImageSlot>}
       <div className="flex justify-between items-start gap-3 min-w-0 text-xs lg:text-sm uppercase">
         <span className="flex-1 min-w-0 lg:truncate max-lg:line-clamp-2">
           {displayName}
@@ -92,7 +93,7 @@ function WorkCard({ item }: { item: WorkItem }) {
 
   return (
     <article className={`${item.gridClass} flex flex-col justify-start`}>
-      <div className={cardSizingClass}>
+      <div className={item.presentation ? "w-full max-w-[440px] mx-auto" : cardSizingClass}>
         {external ? (
           <a
             href={item.href}

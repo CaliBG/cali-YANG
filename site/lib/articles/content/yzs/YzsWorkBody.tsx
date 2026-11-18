@@ -14,6 +14,7 @@ import { useLanguage } from "@/lib/language";
 import OverviewGallery from "./OverviewGallery";
 import { GALLERY_PREVIEWS } from "./gallery-previews";
 import type { BiText, YzsWork } from "./works-data";
+import AppGallery, { AppHero } from "@/components/app-showcase/AppGallery";
 
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
@@ -77,6 +78,7 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
 
   return (
     <>
+      {work.presentation && <AppHero work={work} />}
       <Lede>
         {(zh ? work.intro.zh : work.intro.en).map((p, i) => (
           <p key={`${lang}-${i}`}>{p}</p>
@@ -109,7 +111,7 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
       </blockquote>
 
       {/* 原堆叠展示区：全部照片在同一蒙版中从四向直线移入。 */}
-      {work.images.length > 1 ? (
+      {work.presentation ? <AppGallery work={work} /> : work.images.length > 1 ? (
         <OverviewGallery
           images={work.images.map((src) => asset(src))}
           alt={work.title}
@@ -120,7 +122,7 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
       ) : null}
 
       {/* 完整照片展示区：100% 原始完整尺寸平铺，无裁切，支持点击全屏放大查看 */}
-      {work.images.length > 1 && (
+      {!work.presentation && work.images.length > 1 && (
         <section className="my-16">
           <div className="mb-8 flex items-center justify-between border-b border-line pb-3">
             <h3 className="font-mono-2 text-xs uppercase tracking-widest text-l3">
