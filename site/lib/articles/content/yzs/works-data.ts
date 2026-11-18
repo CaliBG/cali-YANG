@@ -376,7 +376,7 @@ export const YZS_WORKS: YzsWork[] = [
   },
   {
     slug: "magic-note",
-    presentation: { device: "tablet", tone: "paper" },
+    presentation: { device: "tablet", scene: "notebook" },
     screenCaptions: [
       { zh: "用手写下一段思绪", en: "Start with a handwritten thought" },
       { zh: "在纸页中展开对话", en: "A conversation on the page" },
@@ -429,7 +429,7 @@ export const YZS_WORKS: YzsWork[] = [
   },
   {
     slug: "aily",
-    presentation: { device: "phone", tone: "indigo" },
+    presentation: { device: "phone", scene: "conversation" },
     screenCaptions: [
       { zh: "随时开始对话", en: "Start a conversation" },
       { zh: "文字与图片输入", en: "Text and image input" },
@@ -489,7 +489,7 @@ export const YZS_WORKS: YzsWork[] = [
     title: "久用 — 让拥有的价值随时间显现 / LongUse",
     date: "2026",
     description: "iOS 原生应用 / 生活工具 / 独立设计与开发",
-    presentation: { device: "phone", tone: "blue" },
+    presentation: { device: "phone", scene: "ledger" },
     intro: {
       zh: [
         "久用是一款记录物品日均成本的 iOS 应用。购买价格和购买日期是起点，使用天数让一个静态的数字变成持续变化的日均成本。已经拥有的物品、还在考虑的心愿，以及未来的成本趋势，被整理在同一个日常视角里。",

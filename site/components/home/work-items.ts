@@ -18,7 +18,7 @@ export interface WorkItem {
   type: "post" | "tools" | "event";
   codingProject?: boolean;
   presentation?: AppPresentation;
-  screens?: string[];
+  coverScreen?: string;
   passcodeProtected?: boolean;
   gridClass: string;
 }
@@ -123,8 +123,8 @@ const WORK_ITEMS_RAW: WorkItem[] = [
   },
   {
     name: "Magic Note",
-    presentation: { device: "tablet", tone: "paper" },
-    screens: ["/projects/magic-note/writing.webp", "/projects/magic-note/reply.webp"],
+    presentation: { device: "tablet", scene: "notebook" },
+    coverScreen: "/projects/magic-note/writing.webp",
     nameZh: "魔本 Magic Note — 会回应的手写日记",
     imageUrl: "/work/yzs_w10.png",
     hoverImageUrl: "/work/yzs_w10_h.png",
@@ -137,8 +137,8 @@ const WORK_ITEMS_RAW: WorkItem[] = [
   },
   {
     name: "AILY AI Assistant",
-    presentation: { device: "phone", tone: "indigo" },
-    screens: ["/work-detail/work11-1.png", "/work-detail/work11-3.png"],
+    presentation: { device: "phone", scene: "conversation" },
+    coverScreen: "/work-detail/work11-1.png",
     nameZh: "AILY — 多引擎 AI 助手",
     imageUrl: "/work/yzs_w11.png",
     hoverImageUrl: "/work/yzs_w11_h.png",
@@ -153,8 +153,8 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     name: "LongUse",
     nameZh: "久用 — 物品日均成本记录",
     imageUrl: "/projects/longuse/purchased.webp",
-    presentation: { device: "phone", tone: "blue" },
-    screens: ["/projects/longuse/purchased.webp", "/projects/longuse/trends.webp"],
+    presentation: { device: "phone", scene: "ledger" },
+    coverScreen: "/projects/longuse/purchased.webp",
     href: "/longuse",
     year: "2026",
     type: "post",

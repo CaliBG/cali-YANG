@@ -25,6 +25,6 @@ export default function AppGallery({ work }: { work: YzsWork }) {
 
 export function AppHero({ work }: { work: YzsWork }) {
   return <div className={styles.hero}>
-    <AppCover presentation={work.presentation!} images={work.images} name={work.title} />
+    <AppCover presentation={work.presentation!} src={work.images[0]} name={work.title} />
   </div>;
 }

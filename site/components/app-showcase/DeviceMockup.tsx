@@ -12,11 +12,12 @@ export default function DeviceMockup({ src, alt, device = "phone", zoom = false 
   zoom?: boolean;
 }) {
   const dimensions = mediaSize(src);
-  return <div className={`${styles.device} ${styles[device]}`}>
-    <div className={styles.screen}>
-      {zoom ? <MdxImg src={asset(src)} alt={alt} nativePreview /> :
-        <img src={asset(src)} alt={alt} width={dimensions?.width ?? (device === "tablet" ? 2732 : 370)} height={dimensions?.height ?? (device === "tablet" ? 2048 : 800)} loading="lazy" decoding="async" />}
+  return <div className={styles.deviceSize}>
+    <div className={`${styles.device} ${styles[device]}`}>
+      <div className={styles.screen}>
+        {zoom ? <MdxImg src={asset(src)} alt={alt} nativePreview /> :
+          <img src={asset(src)} alt={alt} width={dimensions?.width ?? (device === "tablet" ? 2732 : 370)} height={dimensions?.height ?? (device === "tablet" ? 2048 : 800)} loading="lazy" decoding="async" />}
+      </div>
     </div>
-    <span className={styles.camera} aria-hidden="true" />
   </div>;
 }
