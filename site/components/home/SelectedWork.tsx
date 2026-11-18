@@ -15,6 +15,7 @@ import { useLanguage } from "@/lib/language";
 import { WORK_ITEMS, type WorkItem } from "./work-items";
 import ScrollStory from "@/components/tongkuang/ScrollStory";
 import VanodFeature from "@/components/vanod/VanodFeature";
+import AislandFeature from "@/components/aisland/AislandFeature";
 import CoffeeFeature from "@/components/coffee/CoffeeFeature";
 
 import { mediaSize } from "@/lib/media";
@@ -145,6 +146,7 @@ export default function SelectedWork() {
       <ScrollStory scene="2" featured />
       <VanodFeature />
       <CoffeeFeature />
+      <AislandFeature />
       <div
         ref={gridRef}
         className="grid grid-cols-12 w-full"

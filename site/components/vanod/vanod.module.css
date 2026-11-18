@@ -131,3 +131,5 @@
 
 .filmCaption{display:flex;justify-content:space-between;gap:20px;margin-top:15px;color:var(--label-2);font-size:11px;line-height:1.8}.filmCaption a{white-space:nowrap}.filmCaption a:hover{color:var(--label-1)}
 @media(max-width:640px){.filmCaption{font-size:10px;gap:12px}}
+
+.links a:first-child[target="_blank"] {background:var(--label-1);color:var(--bg,Canvas);border:0;border-radius:999px;padding:0 20px;min-height:44px;font-weight:600}

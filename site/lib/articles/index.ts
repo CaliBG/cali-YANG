@@ -8,6 +8,7 @@ import YzsWorkBody from "./content/yzs/YzsWorkBody";
 import { YZS_WORKS } from "./content/yzs/works-data";
 import TongkuangCaseStudy from "@/components/tongkuang/TongkuangCaseStudy";
 import VanodCaseStudy from "@/components/vanod/VanodCaseStudy";
+import AislandCaseStudy from "@/components/aisland/AislandCaseStudy";
 import CoffeeCaseStudy from "@/components/coffee/CoffeeCaseStudy";
 
 export interface ArticleDefinition {
@@ -44,6 +45,8 @@ export const ARTICLES: ArticleDefinition[] = [...YZS_WORKS.map((work) => ({
   description: "毋名咖啡与 Yet Zero Sense 的商业联名：后期海报、完整影像、现场照片与气球滚动交互。",
   updated: "2026-11-03",
   Body: CoffeeCaseStudy,
+}, {
+  slug:"aisland",title:"AISLAND — Agent workspace",date:"2026-11-18",updated:"2026-11-18",Body:AislandCaseStudy,
 }];
 
 export function getArticle(slug: string): ArticleDefinition | undefined {

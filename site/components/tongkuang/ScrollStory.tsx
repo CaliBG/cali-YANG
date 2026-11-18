@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import {asset} from "@/lib/asset";
 import {useLanguage} from "@/lib/language";
 import {useContainerEl} from "@/lib/scroll-env";
+import vanod from "../vanod/vanod.module.css";
 import TransitionLink from "@/components/TransitionLink";
 import styles from "./tongkuang.module.css";
 
@@ -76,7 +77,7 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
       <div className={styles.storyHeading}>
         <div><span className={styles.eyebrow}>{featured?"SELECTED WORK / 01":scene==="0"?"INTERACTIVE / 01":"INTERACTIVE / 02"}</span>
           <h2>{featured?"Tongkuang / 同框":scene==="0"?(zh?"同一刻，两个视角。":"One moment. Two perspectives."):(zh?"从一部相机，展开完整过程。":"From one camera to the full picture.")}</h2></div>
-        {featured?<TransitionLink href="/tongkuang" className={styles.textLink}>{zh?"探索完整项目":"Explore the project"} <span aria-hidden="true">↗</span></TransitionLink>:<span className={styles.mono}>{scene==="0"?(zh?"来自第 36 页":"From slide 36"):(zh?"来自第 39–40 页":"From slides 39–40")}</span>}
+        {featured?<div className={vanod.links}><a href="https://tongkuang.netlify.app/" target="_blank" rel="noopener noreferrer">{zh?"访问同框官网":"Visit Tongkuang"} ↗</a><TransitionLink href="/tongkuang" className={styles.textLink}>{zh?"探索完整项目":"Explore the project"} <span aria-hidden="true">↗</span></TransitionLink></div>:<span className={styles.mono}>{scene==="0"?(zh?"来自第 36 页":"From slide 36"):(zh?"来自第 39–40 页":"From slides 39–40")}</span>}
       </div>
       <div ref={stageRef} className={styles.storyStage} data-progress={percent} aria-busy={!ready&&!failed}>
         {scene==="2" && !reduced ? <div className={styles.scrubPreview} hidden={ready} role="img" aria-label={zh?"同框设计随滚动逐步展开":"Tongkuang design unfolding with scroll"}

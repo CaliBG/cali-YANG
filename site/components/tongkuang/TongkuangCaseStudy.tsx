@@ -12,6 +12,8 @@ import ScrollStory from "./ScrollStory";
 import styles from "./tongkuang.module.css";
 
 const media=(name:string)=>asset(`/projects/tongkuang/${name}`);
+import vanod from "../vanod/vanod.module.css";
+
 const WEBSITE="https://tongkuang.netlify.app/";
 const modes=[
   {id:"dual",name:["同步双拍","Dual camera"],title:["风景与反应，同一次快门。","The scene. Your reaction. One take."],text:["把前后两个视角放进同一次拍摄。画中画、上下分屏或左右分屏，让构图跟着故事变化。","Bring front and back perspectives into a single capture. Picture-in-picture, stacked and split layouts let the composition follow the story."],image:"dual.webp",detail:["照片 / 视频 · 需设备支持双摄","Photo / video · requires compatible dual-camera hardware"]},
@@ -36,7 +38,7 @@ export default function TongkuangCaseStudy(){
         <span className={styles.eyebrow}>TONGKUANG / PRODUCT DESIGN / 2026</span>
         <h1>{zh?<>两个视角。<br/>一个故事。</>:<>Two perspectives.<br/>One story.</>}</h1>
         <p className={styles.lede}>{zh?"同框，一款把眼前的世界与镜头后的自己同时记录下来的相机。从产品构思、原生应用，到演示与官网，我把它做成一个完整的创作工具。":"Tongkuang records the world in front of you and the person behind the camera. An independent project spanning product design, a native app, a presentation and an interactive website."}</p>
-        <div className={styles.heroLinks}><a href={WEBSITE} target="_blank" rel="noopener noreferrer">{zh?"体验产品官网":"Visit the website"} ↗</a><a href="https://apps.apple.com/app/id6791828838" target="_blank" rel="noopener noreferrer">App Store ↗</a></div>
+        <div className={vanod.links}><a href={WEBSITE} target="_blank" rel="noopener noreferrer">{zh?"体验产品官网":"Visit the website"} ↗</a><a href="https://apps.apple.com/app/id6791828838" target="_blank" rel="noopener noreferrer">App Store ↗</a></div>
       </div>
       <div className={styles.heroVisual}>
         <span className={styles.heroStamp}>TWO CAMERAS.<br/>ONE MOMENT.</span>

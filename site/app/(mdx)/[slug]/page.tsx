@@ -56,7 +56,7 @@ export default async function ArticlePage({
   if (!article) notFound();
 
   const Body = article.Body;
-  const isCaseStudy = slug === "tongkuang" || slug === "vanod" || slug === "unt-yzs";
+  const isCaseStudy = slug === "tongkuang" || slug === "vanod" || slug === "unt-yzs" || slug === "aisland";
 
   return (
     <>
