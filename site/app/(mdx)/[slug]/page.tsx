@@ -38,6 +38,10 @@ export async function generateMetadata({
       description: "Vanod 品牌与数字产品设计 — 中英文品牌手册各 38 页，统一版式网格、V 标志尺规制图、App 界面、小组件、动效与 Slate 硬件概念。杨子硕的独立设计与开发项目。",
       alternates: {canonical:"https://caliyang.dpdns.org/vanod/"},
       openGraph: {title:article.title, description:"Vanod — 38-page Chinese and English brand guidelines, interfaces, widgets and a hardware wallet concept by Zishuo Yang.", images:["https://caliyang.dpdns.org/projects/vanod/hero.webp"]},
+    } : slug === "aisland" ? {
+      description: "AISLAND 桌面灵动岛设计案例：从切换 Agent 窗口打断阅读的痛点，到会话分支、光带动效、原会话续发与跨设备同步。",
+      alternates: {canonical:"https://caliyang.dpdns.org/aisland/"},
+      openGraph: {title:article.title, description:"How AISLAND brings agent progress and follow-up tasks into the screen edge. A case study in interaction, motion and implementation.", images:["https://caliyang.dpdns.org/projects/aisland/desktop-appearance.webp"]},
     } : slug === "unt-yzs" ? {
       description: "UNT × YZS 留白发生 — 毋名咖啡与 Yet Zero Sense 的商业联名。随滚动体验气球升降，浏览后期海报、完整视频与现场照片。",
       alternates: {canonical:"https://caliyang.dpdns.org/unt-yzs/"},
