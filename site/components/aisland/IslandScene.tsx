@@ -22,13 +22,17 @@ export default function IslandScene({featured = false}: {featured?: boolean}){
       frame=0;
       if(!el)return;
       const stage=el.firstElementChild as HTMLElement;
-      const top=el.getBoundingClientRect().top-(container?.getBoundingClientRect().top??0);
+      const bounds=el.getBoundingClientRect();
+      const top=bounds.top-(container?.getBoundingClientRect().top??0);
       const viewport = container?.clientHeight ?? window.innerHeight;
-      // Leave the full laptop in view before following the notch.
-      const enter = viewport * .80;
-      const centre = Math.max(64, (viewport - stage.clientHeight) / 2);
-      const p = reduce.matches ? 1 : (enter - top) / Math.max(1, enter - centre);
       const width=stage.clientWidth,height=stage.clientHeight;
+      // Drive both scenes by the trailing edge: first show the entire frame,
+      // then leave a short stretch of scroll with the laptop at its original size.
+      const fullyVisibleTop = viewport - bounds.height;
+      const rest = Math.min(64, viewport * .075);
+      const start = Math.min(fullyVisibleTop - rest, viewport * .75);
+      const travel = Math.max(110, (start - 64) * .86);
+      const p = reduce.matches ? 1 : (start - top) / travel;
       const base=Math.min(width*.96,height*1.48);
       const zoom=Math.min(width*.86/(base*.72*448/1512),height*.78/(base*.72*423/1512));
       el.style.setProperty("--zoom",String(1+(zoom-1)*smooth(p/.82)));

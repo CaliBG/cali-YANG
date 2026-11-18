@@ -1,4 +1,6 @@
 .sceneFrame{--zoom:1;--open:0}
+/* Leave the whole 16:9 frame visible even on short landscape screens. */
+@media(max-height:540px){.sceneFrame[data-film=true]{max-width:calc((100svh - 120px) * 16 / 9)}}
 .previewStage{position:absolute;inset:0;overflow:hidden;border-radius:inherit;background:radial-gradient(ellipse at 50% 75%,#30353e,#101115 73%);container-type:size}
 @media(min-width:761px) and (min-height:541px){.sceneFrame.detailFrame{width:min(100%,1188px,calc((100svh - 240px)*1.728))}}
 .mac{position:relative;width:min(96cqw,148cqh);aspect-ratio:830/503;margin:0 auto;top:9%;transform:scale(var(--zoom));transform-origin:50% 2%}
