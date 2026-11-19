@@ -470,11 +470,11 @@ export const YZS_WORKS: YzsWork[] = [
     },
     team: { zh: "独立设计与独立开发 · 杨子硕 Cali-Yang", en: "Independent Design & Development · Zishuo Yang (Cali-Yang)" },
     images: [
-      "/projects/aily/mockups/screen-1.webp",
-      "/projects/aily/mockups/screen-2.webp",
-      "/projects/aily/mockups/screen-3.webp",
-      "/projects/aily/mockups/screen-4.webp",
-      "/projects/aily/mockups/screen-5.webp",
+      "/projects/aily/front/screen-1.webp",
+      "/projects/aily/front/screen-2.webp",
+      "/projects/aily/front/screen-3.webp",
+      "/projects/aily/front/screen-4.webp",
+      "/projects/aily/front/screen-5.webp",
     ],
     demoLink: {
       href: "https://calibg.github.io/privacy/",
@@ -510,7 +510,7 @@ export const YZS_WORKS: YzsWork[] = [
     type: { zh: "iOS 物品管理 / 数据可视化与日常记录", en: "iOS item tracking / Data visualization & everyday records" },
     inspiration: { zh: "物品的长期使用价值与日均成本", en: "Long-term ownership and cost per day" },
     team: { zh: "独立设计与独立开发 · 杨子硕 Cali-Yang", en: "Independent Design & Development · Zishuo Yang (Cali-Yang)" },
-    images: ["/projects/longuse/mockups/purchased.webp", "/projects/longuse/mockups/wishlist.webp", "/projects/longuse/mockups/trends.webp", "/projects/longuse/mockups/item-detail.webp"],
+    images: ["/projects/longuse/front/purchased.webp", "/projects/longuse/front/wishlist.webp", "/projects/longuse/front/trends.webp", "/projects/longuse/front/item-detail.webp"],
     screenCaptions: [
       { zh: "已购物品与日均成本", en: "Owned items and daily costs" },
       { zh: "心愿预算与购买计划", en: "Wishlist budgets and purchase plans" },

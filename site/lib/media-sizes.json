@@ -2230,5 +2230,95 @@
         "/projects/longuse/mockups/wishlist.webp"
       ]
     ]
+  },
+  "/projects/aily/front/screen-1.webp": {
+    "width": 900,
+    "height": 1865,
+    "variants": [
+      [
+        900,
+        "/projects/aily/front/screen-1.webp"
+      ]
+    ]
+  },
+  "/projects/aily/front/screen-2.webp": {
+    "width": 900,
+    "height": 1865,
+    "variants": [
+      [
+        900,
+        "/projects/aily/front/screen-2.webp"
+      ]
+    ]
+  },
+  "/projects/aily/front/screen-3.webp": {
+    "width": 900,
+    "height": 1865,
+    "variants": [
+      [
+        900,
+        "/projects/aily/front/screen-3.webp"
+      ]
+    ]
+  },
+  "/projects/aily/front/screen-4.webp": {
+    "width": 900,
+    "height": 1865,
+    "variants": [
+      [
+        900,
+        "/projects/aily/front/screen-4.webp"
+      ]
+    ]
+  },
+  "/projects/aily/front/screen-5.webp": {
+    "width": 900,
+    "height": 1865,
+    "variants": [
+      [
+        900,
+        "/projects/aily/front/screen-5.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/front/item-detail.webp": {
+    "width": 900,
+    "height": 1865,
+    "variants": [
+      [
+        900,
+        "/projects/longuse/front/item-detail.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/front/purchased.webp": {
+    "width": 900,
+    "height": 1865,
+    "variants": [
+      [
+        900,
+        "/projects/longuse/front/purchased.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/front/trends.webp": {
+    "width": 900,
+    "height": 1865,
+    "variants": [
+      [
+        900,
+        "/projects/longuse/front/trends.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/front/wishlist.webp": {
+    "width": 900,
+    "height": 1865,
+    "variants": [
+      [
+        900,
+        "/projects/longuse/front/wishlist.webp"
+      ]
+    ]
   }
 }
