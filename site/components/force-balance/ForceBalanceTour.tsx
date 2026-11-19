@@ -30,7 +30,7 @@ export default function ForceBalanceTour() {
   const copy = stops[current][lang];
 
   useEffect(() => {
-    const query = matchMedia("(prefers-reduced-motion: reduce), (max-height: 500px)");
+    const query = matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setDiscrete(query.matches);
     update();
     query.addEventListener("change", update);
@@ -115,18 +115,28 @@ export default function ForceBalanceTour() {
     aria-label={zh ? "力量与平衡 · 三维导览" : "Force & Balance sculpture tour"}>
     <div ref={stage} className={styles.stage}>
       <div className={styles.image}>
-        <img src={asset(folder + "/view-" + current + ".webp")} alt={copy[1]} width={1050} height={700} />
+        <div className={styles.stillFrame} hidden={ready && !still}>
+          <img src={asset(folder + "/black-view-" + current + ".webp")} alt={copy[1]} width={1050} height={700} />
+          <div className={styles.pin} data-side="right" hidden={current === 0} aria-hidden="true"
+            style={{ left: stillPins[current][0] + "%", top: stillPins[current][1] + "%" }}><span>{copy[1]}</span></div>
+        </div>
         <canvas ref={canvas} className={styles.canvas} data-visible={ready && !still} aria-hidden="true" />
         <div ref={pin} className={styles.pin} data-side="right"
-          style={!ready || still ? { left: stillPins[current][0] + "%", top: stillPins[current][1] + "%" } : { left: "var(--tour-pin-x)", top: "var(--tour-pin-y)" }}
-          hidden={current === 0} aria-hidden="true"><span>{copy[1]}</span></div>
+          style={{ left: "var(--tour-pin-x)", top: "var(--tour-pin-y)" }}
+          hidden={!ready || still || current === 0} aria-hidden="true"><span>{copy[1]}</span></div>
       </div>
-      <nav className={styles.nav} aria-label={zh ? "选择观察位置" : "Choose a viewpoint"}>
-        {stops.map((s, i) => <button key={s.key} type="button" aria-pressed={current === i} onClick={() => select(i)}>{s[lang][0]}</button>)}
-      </nav>
-      <div className={styles.notes}>
-        <div className={styles.caption}>{copy[2]}</div>
-        <small>{still ? (zh ? "点选视角" : "Choose a view") : (zh ? "滚动穿行 · 点选视角" : "Scroll to explore · Select a view")}</small>
+      <h1 className={styles.title} data-closeup={current > 0}>
+        <span>43+1</span>
+        <span>{zh ? "力量与平衡" : "Force & Balance"}</span>
+      </h1>
+      <div className={styles.overlay}>
+        <div className={styles.notes}>
+          <div className={styles.caption}>{copy[2]}</div>
+          <small>{still ? (zh ? "点选视角" : "Choose a view") : (zh ? "滚动穿行 · 点选视角" : "Scroll to explore · Select a view")}</small>
+        </div>
+        <nav className={styles.nav} aria-label={zh ? "选择观察位置" : "Choose a viewpoint"}>
+          {stops.map((s, i) => <button key={s.key} type="button" aria-pressed={current === i} onClick={() => select(i)}>{s[lang][0]}</button>)}
+        </nav>
       </div>
     </div>
   </section>;

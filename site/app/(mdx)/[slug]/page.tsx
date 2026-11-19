@@ -5,6 +5,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import MdxTableOfContents from "@/components/mdx/MdxTableOfContents";
+import tourStyles from "@/components/force-balance/tour.module.css";
 import ForceBalanceTour from "@/components/force-balance/ForceBalanceTour";
 import ArticleFooter from "@/components/mdx/ArticleFooter";
 import { ARTICLES, getArticle } from "@/lib/articles";
@@ -61,6 +62,21 @@ export default async function ArticlePage({
   if (!article) notFound();
 
   const Body = article.Body;
+  if (slug === "force-balance") {
+    return <article data-mdx-article="true" className={tourStyles.page}>
+      <ForceBalanceTour />
+      <div className={ARTICLE_SHELL_CLASS}>
+        <div className={`${ARTICLE_PROSE_CLASS} ${tourStyles.story}`}>
+          <div className={tourStyles.metadata}>
+            <time>{article.date}</time>
+            <span>{article.description}</span>
+          </div>
+          <Body />
+          <ArticleFooter updated={article.updated} />
+        </div>
+      </div>
+    </article>;
+  }
   const isCaseStudy = slug === "tongkuang" || slug === "vanod" || slug === "unt-yzs" || slug === "aisland";
 
   return (
@@ -75,7 +91,6 @@ export default async function ArticlePage({
             >
               {article.title}
             </h1>
-            {slug === "force-balance" && <ForceBalanceTour />}
             <p className={ARTICLE_DATE_CLASS}>{article.date}</p>
             <div className="mt-2 border-line border-b"></div>
             {article.description ? (

@@ -21,7 +21,7 @@ export async function mountTour(canvas: HTMLCanvasElement, url: string, signal: 
   if (signal.aborted) { releaseModel(sculpture); throw new DOMException("Aborted", "AbortError"); }
 
   let renderer: THREE.WebGLRenderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false }); }
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
   catch (error) { releaseModel(sculpture); throw error; }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -29,8 +29,7 @@ export async function mountTour(canvas: HTMLCanvasElement, url: string, signal: 
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x343836);
-  scene.fog = new THREE.FogExp2(0x343836, .115);
+  renderer.setClearColor(0x000000, 0);
   const pmrem = new THREE.PMREMGenerator(renderer);
   const room = new RoomEnvironment();
   const environment = pmrem.fromScene(room, .04);
@@ -38,13 +37,6 @@ export async function mountTour(canvas: HTMLCanvasElement, url: string, signal: 
   pmrem.dispose();
   scene.environment = environment.texture;
   scene.environmentIntensity = .57;
-  const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(80, 80),
-    new THREE.MeshStandardMaterial({ color: 0x55584e, roughness: .94 })
-  );
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -.072;
-  ground.receiveShadow = true;
   const keyLight = new THREE.DirectionalLight(0xfff3df, 1.85);
   keyLight.position.set(-2, 4, 3);
   keyLight.castShadow = true;
@@ -56,7 +48,7 @@ export async function mountTour(canvas: HTMLCanvasElement, url: string, signal: 
   sculpture.traverse(node => {
     if (node instanceof THREE.Mesh) node.castShadow = node.receiveShadow = true;
   });
-  scene.add(sculpture, ground, keyLight, new THREE.HemisphereLight(0xfff9e9, 0x615849, .36));
+  scene.add(sculpture, keyLight, new THREE.HemisphereLight(0xfff9e9, 0x615849, .36));
   renderer.shadowMap.autoUpdate = false;
   renderer.shadowMap.needsUpdate = true;
 
@@ -77,6 +69,9 @@ export async function mountTour(canvas: HTMLCanvasElement, url: string, signal: 
         height = Math.max(1, canvas.clientHeight);
         renderer.setSize(width, height, false);
         camera.aspect = width / height;
+        // On tall displays, preserve enough horizontal field of view for the whole base.
+        camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(20)) *
+          Math.max(1, 1.15 / camera.aspect)));
         camera.updateProjectionMatrix();
       }
       eye.getPoint(progress, camera.position);
@@ -94,8 +89,6 @@ export async function mountTour(canvas: HTMLCanvasElement, url: string, signal: 
     },
     dispose() {
       releaseModel(sculpture);
-      ground.geometry.dispose();
-      ground.material.dispose();
       keyLight.shadow.dispose();
       environment.dispose();
       renderer.dispose();
