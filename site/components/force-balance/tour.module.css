@@ -33,17 +33,21 @@
 }
 .title, .overlay { position: absolute; z-index: 2; left: var(--gutter); right: var(--gutter); }
 .title {
+  --open-size: clamp(100px, 11.8vw, 215px);
+  --detail-size: clamp(72px, 7.3vw, 140px);
   top: max(100px, 12dvh); display: grid; justify-items: start; row-gap: clamp(10px, 1.3dvh, 16px);
   width: fit-content; margin: 0; font-weight: 540; line-height: 1; text-shadow: 0 1px 15px #000b;
   pointer-events: none;
 }
 .title span:first-child {
-  font-family: var(--font-sans); font-size: clamp(100px, 11.8vw, 215px); font-weight: 900;
+  font-family: var(--font-sans); font-weight: 900;
+  font-size: calc(var(--open-size) + (var(--detail-size) - var(--open-size)) * var(--title-shrink, 0));
+  transition: font-size 210ms ease-out;
   font-variation-settings: "wght" 900, "wdth" 106; line-height: .86; letter-spacing: -.075em;
   margin-left: -.045em;
 }
 .title span + span { font-size: clamp(18px, 1.65vw, 30px); font-weight: 600; letter-spacing: -.015em; line-height: 1.2; }
-.title[data-closeup="true"] span:first-child { font-size: clamp(72px, 7.3vw, 140px); }
+.title[data-still-closeup="true"] { --title-shrink: 1; }
 .overlay {
   bottom: max(78px, 9dvh); display: flex; align-items: flex-end;
   justify-content: space-between; gap: clamp(18px, 5vw, 72px); pointer-events: none;
@@ -67,9 +71,11 @@
 .track[data-still="true"] { height: auto; }
 .track[data-still="true"] .stage { position: relative; }
 @media (max-width: 800px) {
-  .title { top: max(82px, 10dvh); row-gap: 9px; }
-  .title span:first-child { font-size: clamp(86px, 25vw, 138px); }
-  .title[data-closeup="true"] span:first-child { font-size: clamp(58px, 17vw, 94px); }
+  .title {
+    --open-size: clamp(86px, 25vw, 138px);
+    --detail-size: clamp(58px, 17vw, 94px);
+    top: max(82px, 10dvh); row-gap: 9px;
+  }
   .overlay { flex-direction: column; align-items: stretch; bottom: max(48px, calc(env(safe-area-inset-bottom) + 32px)); gap: 10px; }
   .nav { justify-content: space-between; gap: 3px; }
   .nav button { flex: 1; padding-inline: 2px; }
@@ -77,13 +83,14 @@
 }
 @media (max-height: 500px) and (min-aspect-ratio: 1/1) {
   .title { top: 62px; row-gap: 5px; }
-  .title span:first-child, .title[data-closeup="true"] span:first-child { font-size: clamp(50px, 13dvh, 68px); }
+  .title span:first-child { font-size: clamp(50px, 13dvh, 68px); }
   .title span + span { font-size: 15px; }
   .overlay { bottom: 26px; flex-direction: row; align-items: end; }
   .caption { font-size: 13px; }
   .notes small { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .title span:first-child { transition: none; }
   .track { height: auto; }
   .stage { position: relative; }
 }

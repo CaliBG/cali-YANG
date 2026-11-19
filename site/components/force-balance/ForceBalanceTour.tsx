@@ -20,6 +20,7 @@ export default function ForceBalanceTour() {
   const container = useContainerEl();
   const track = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const title = useRef<HTMLHeadingElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const pin = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
@@ -40,6 +41,7 @@ export default function ForceBalanceTour() {
   useEffect(() => {
     const section = track.current, panel = stage.current, screen = canvas.current, marker = pin.current;
     if (!section || !panel || !screen || !marker || still) return;
+    const heading = title.current;
     const target = container ?? window;
     const abort = new AbortController();
     let viewer: TourRenderer | undefined;
@@ -52,7 +54,11 @@ export default function ForceBalanceTour() {
       const inset = parseFloat(getComputedStyle(panel).top) || 0;
       const distance = Math.max(1, section.offsetHeight - panel.offsetHeight);
       const p = Math.max(0, Math.min(1, (inset - top) / distance));
-      setCurrent(stopAt(p * lastKey));
+      const key = p * lastKey;
+      // Finish the title move as the camera reaches the first nail-head close-up.
+      const t = Math.min(1, key / stops[1].key);
+      heading?.style.setProperty("--title-shrink", String(t * t * (3 - 2 * t)));
+      setCurrent(stopAt(key));
       if (!viewer) return;
       const { x, y, visible } = viewer.draw(p);
       marker.style.setProperty("--tour-pin-x", x + "%");
@@ -95,6 +101,7 @@ export default function ForceBalanceTour() {
       screen.removeEventListener("webglcontextlost", lost);
       viewer?.dispose(); setReady(false);
       marker.style.removeProperty("visibility");
+      heading?.style.removeProperty("--title-shrink");
     };
   }, [container, still]);
 
@@ -125,7 +132,7 @@ export default function ForceBalanceTour() {
           style={{ left: "var(--tour-pin-x)", top: "var(--tour-pin-y)" }}
           hidden={!ready || still || current === 0} aria-hidden="true"><span>{copy[1]}</span></div>
       </div>
-      <h1 className={styles.title} data-closeup={current > 0}>
+      <h1 ref={title} className={styles.title} data-still-closeup={still && current > 0}>
         <span>43+1</span>
         <span>{zh ? "力量与平衡" : "Force & Balance"}</span>
       </h1>
