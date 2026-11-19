@@ -2130,5 +2130,105 @@
         "/projects/magic-note/writing.webp"
       ]
     ]
+  },
+  "/projects/longuse/dual-iphone-air.webp": {
+    "width": 1600,
+    "height": 1200,
+    "variants": [
+      [
+        1600,
+        "/projects/longuse/dual-iphone-air.webp"
+      ]
+    ]
+  },
+  "/projects/aily/mockups/screen-1.webp": {
+    "width": 820,
+    "height": 1680,
+    "variants": [
+      [
+        820,
+        "/projects/aily/mockups/screen-1.webp"
+      ]
+    ]
+  },
+  "/projects/aily/mockups/screen-2.webp": {
+    "width": 820,
+    "height": 1680,
+    "variants": [
+      [
+        820,
+        "/projects/aily/mockups/screen-2.webp"
+      ]
+    ]
+  },
+  "/projects/aily/mockups/screen-3.webp": {
+    "width": 820,
+    "height": 1680,
+    "variants": [
+      [
+        820,
+        "/projects/aily/mockups/screen-3.webp"
+      ]
+    ]
+  },
+  "/projects/aily/mockups/screen-4.webp": {
+    "width": 820,
+    "height": 1680,
+    "variants": [
+      [
+        820,
+        "/projects/aily/mockups/screen-4.webp"
+      ]
+    ]
+  },
+  "/projects/aily/mockups/screen-5.webp": {
+    "width": 820,
+    "height": 1680,
+    "variants": [
+      [
+        820,
+        "/projects/aily/mockups/screen-5.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/mockups/item-detail.webp": {
+    "width": 820,
+    "height": 1524,
+    "variants": [
+      [
+        820,
+        "/projects/longuse/mockups/item-detail.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/mockups/purchased.webp": {
+    "width": 820,
+    "height": 1524,
+    "variants": [
+      [
+        820,
+        "/projects/longuse/mockups/purchased.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/mockups/trends.webp": {
+    "width": 820,
+    "height": 1524,
+    "variants": [
+      [
+        820,
+        "/projects/longuse/mockups/trends.webp"
+      ]
+    ]
+  },
+  "/projects/longuse/mockups/wishlist.webp": {
+    "width": 820,
+    "height": 1524,
+    "variants": [
+      [
+        820,
+        "/projects/longuse/mockups/wishlist.webp"
+      ]
+    ]
   }
 }

@@ -138,7 +138,7 @@ const WORK_ITEMS_RAW: WorkItem[] = [
   {
     name: "AILY AI Assistant",
     presentation: { device: "phone", scene: "conversation" },
-    coverScreen: "/work-detail/work11-1.png",
+    coverScreen: "/projects/aily/mockups/screen-1.webp",
     nameZh: "AILY — 多引擎 AI 助手",
     imageUrl: "/work/yzs_w11.png",
     hoverImageUrl: "/work/yzs_w11_h.png",
@@ -152,9 +152,8 @@ const WORK_ITEMS_RAW: WorkItem[] = [
   {
     name: "LongUse",
     nameZh: "久用 — 物品日均成本记录",
-    imageUrl: "/projects/longuse/purchased.webp",
+    imageUrl: "/projects/longuse/dual-iphone-air.webp",
     presentation: { device: "phone", scene: "ledger" },
-    coverScreen: "/projects/longuse/purchased.webp",
     href: "/longuse",
     year: "2026",
     type: "post",

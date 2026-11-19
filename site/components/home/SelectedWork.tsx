@@ -54,7 +54,14 @@ function WorkCard({ item }: { item: WorkItem }) {
 
   const inner = (
     <>
-      {item.presentation && item.coverScreen ? <AppCover presentation={item.presentation} src={item.coverScreen} name={displayName} /> : <WebGLImageSlot
+      {item.presentation ? (
+        item.coverScreen
+          ? <AppCover presentation={item.presentation} src={item.coverScreen} name={displayName} />
+          : <div data-app-cover={item.presentation.scene}>
+              <img className="block h-auto w-full rounded-[3px]" src={item.imageUrl}
+                width={size?.width} height={size?.height} alt={displayName} loading="lazy" decoding="async" />
+            </div>
+      ) : <WebGLImageSlot
         deferUntilNear
         imageKey={item.name}
         src={item.imageUrl}
