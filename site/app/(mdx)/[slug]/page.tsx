@@ -5,6 +5,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import MdxTableOfContents from "@/components/mdx/MdxTableOfContents";
+import ForceBalanceTour from "@/components/force-balance/ForceBalanceTour";
 import ArticleFooter from "@/components/mdx/ArticleFooter";
 import { ARTICLES, getArticle } from "@/lib/articles";
 import {
@@ -74,6 +75,7 @@ export default async function ArticlePage({
             >
               {article.title}
             </h1>
+            {slug === "force-balance" && <ForceBalanceTour />}
             <p className={ARTICLE_DATE_CLASS}>{article.date}</p>
             <div className="mt-2 border-line border-b"></div>
             {article.description ? (
