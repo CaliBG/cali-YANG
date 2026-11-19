@@ -17,6 +17,7 @@ import ScrollStory from "@/components/tongkuang/ScrollStory";
 import VanodFeature from "@/components/vanod/VanodFeature";
 import AislandFeature from "@/components/aisland/AislandFeature";
 import CoffeeFeature from "@/components/coffee/CoffeeFeature";
+import ForceBalanceScroll from "@/components/force-balance/ForceBalanceScroll";
 import AppCover from "@/components/app-showcase/AppCover";
 
 import { mediaSize } from "@/lib/media";
@@ -52,9 +53,10 @@ function WorkCard({ item }: { item: WorkItem }) {
     return "w-full max-w-[270px] sm:max-w-[290px] lg:max-w-[310px] mx-auto";
   }, [numRatio]);
 
+  const forceBalance = item.href === "/force-balance";
   const inner = (
     <>
-      {item.presentation ? (
+      {forceBalance ? <ForceBalanceScroll alt={displayName} /> : item.presentation ? (
         item.coverScreen
           ? <AppCover presentation={item.presentation} src={item.coverScreen} name={displayName} />
           : <div data-app-cover={item.presentation.scene}>
@@ -100,7 +102,7 @@ function WorkCard({ item }: { item: WorkItem }) {
 
   return (
     <article className={`${item.gridClass} flex flex-col justify-start`}>
-      <div className={item.presentation ? "w-full max-w-[440px] mx-auto" : cardSizingClass}>
+      <div className={item.presentation || forceBalance ? "w-full max-w-[440px] mx-auto" : cardSizingClass}>
         {external ? (
           <a
             href={item.href}
