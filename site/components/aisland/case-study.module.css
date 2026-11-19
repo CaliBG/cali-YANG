@@ -33,3 +33,8 @@
   .artGrid {margin:20px 0}
   .markStudy {padding:30px 17%}
 }
+
+.film { margin: clamp(1.8rem, 5vw, 4rem) 0; }
+.film video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #08090b; border-radius: 8px; }
+.film figcaption { display: flex; justify-content: space-between; align-items: baseline; padding-top: .65rem; font-size: .875rem; }
+.film figcaption span { font-variant-numeric: tabular-nums; opacity: .68; }

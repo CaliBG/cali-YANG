@@ -9,6 +9,7 @@ const copy = {
   zh: {
     headline: "看一眼任务，接着读下去。",
     introduction: "AISLAND 是一个停在屏幕顶部的 Agent 工作台。在原来的窗口里，你就能知道哪个会话需要回应，也能给支持续发的会话安排下一步。",
+    film: "产品短片",
     visit: "访问 AISLAND 官网",
     facts: [["年份", "2026"], ["设计范围", "产品 · 交互 · 视觉 · 开发"], ["桌面", "macOS · Windows"], ["移动端", "iOS · Android"]],
     pain: "用户痛点",
@@ -50,6 +51,7 @@ const copy = {
   en: {
     headline: "Check the task. Keep your place.",
     introduction: "AISLAND is an agent workspace at the top of the screen. From the window you’re already using, see which conversation needs a reply and send a follow-up to a supported agent.",
+    film: "Product film",
     visit: "Visit the AISLAND website",
     facts: [["Year", "2026"], ["Scope", "Product · Interaction · Visual design · Development"], ["Desktop", "macOS · Windows"], ["Mobile", "iOS · Android"]],
     pain: "The problem",
@@ -107,6 +109,14 @@ export default function AislandCaseStudy() {
       </div>
     </header>
     <dl className={c.facts}>{text.facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
+    <figure className={s.film}>
+      <video controls playsInline preload="none" poster={media("aisland-poster.jpg")} width={1600} height={900} aria-label={text.film}>
+        <source src={media("aisland-v9.mp4")} type="video/mp4"/>
+        <track kind="captions" srcLang="en" label="English" src={media("aisland-en.vtt")}/>
+        <a href={media("aisland-v9.mp4")}>{text.film}</a>
+      </video>
+      <figcaption>{text.film}<span>0:54</span></figcaption>
+    </figure>
     <nav className={c.chapterNav} aria-label={text.headline}>{chapters.map(([id, label]) => <a key={id} href={"#"+id}>{label}</a>)}</nav>
 
     <section className={s.split} id="problem">
