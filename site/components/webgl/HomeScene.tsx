@@ -6,13 +6,14 @@
 
 import {
   Suspense,
+  type RefObject,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
 import { useThemeMode } from "@/lib/theme-mode";
 import { useFullscreenTransition } from "@/lib/fullscreen-transition";
@@ -29,6 +30,7 @@ import {
   type SceneEnv,
 } from "./scene-env";
 import {
+  frameState,
   getWebGLSectionEl,
   updateFrameState,
   useWebGLImageLayers,
@@ -53,7 +55,58 @@ export {
 } from "./store";
 
 // 首屏加载进度只等待 banner 模型，页脚模型按滚动位置独立加载。
-const HEAVY_MODEL_KEYS = ["hello", "h_star"] as const;
+type BannerDraws = { hello: number; cursor: number };
+
+function HeroHandoff({ draws, ready, entryFinished, onStart }: {
+  draws: RefObject<BannerDraws>;
+  entryFinished: RefObject<boolean>;
+  ready: boolean;
+  onStart: () => void;
+}) {
+  const canvas = useThree((state) => state.gl.domElement);
+  const liveBanner = useRef<HTMLElement | null>(null);
+  const started = useRef(false);
+  const measuredEntry = useRef(false);
+  useEffect(() => {
+    function restorePoster() {
+      liveBanner.current?.removeAttribute("data-hero-live");
+      liveBanner.current = null;
+    }
+    canvas.addEventListener("webglcontextlost", restorePoster);
+    return () => {
+      canvas.removeEventListener("webglcontextlost", restorePoster);
+      restorePoster();
+    };
+  }, [canvas]);
+
+  // PostFX presents the composited frame at priority 998. Both glass meshes
+  // must have participated in this same frame before the poster can fade.
+  useFrame(({ gl }) => {
+    if (liveBanner.current && entryFinished.current && !measuredEntry.current &&
+        frameState.sections.get("banner")?.inView && !gl.getContext().isContextLost()) {
+      performance.mark("portfolio:hero-entry-complete");
+      measuredEntry.current = true;
+    }
+    if (!ready || liveBanner.current) return;
+    const inView = frameState.sections.get("banner")?.inView;
+    const bothDrawn = draws.current.hello === frameState.frameCount &&
+      draws.current.cursor === frameState.frameCount;
+    if (!started.current && (bothDrawn || inView === false)) {
+      started.current = true;
+      onStart();
+    }
+    if (!bothDrawn || gl.getContext().isContextLost()) return;
+    const banner = getWebGLSectionEl("banner");
+    if (!banner?.isConnected) return;
+    liveBanner.current = banner;
+    banner.setAttribute("data-hero-live", "");
+    performance.mark("portfolio:hero-animation-ready");
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      performance.mark("portfolio:hero-poster-dismissed");
+    }
+  }, 999);
+  return null;
+}
 
 /** cH 等价物：useFrame(-1000) 每帧重置 section 布局缓存 / 更新滚动遮挡进度 sI */
 function FrameEnv() {
@@ -130,7 +183,7 @@ function FooterModelGate() {
 
 export default function HomeScene() {
   const { resolvedTheme } = useThemeMode();
-  const { setReadyToLoadHeavy, setHeavyLoadProgress, readyToLoadHeavy } =
+  const { setReadyToLoadHeavy, setHeavyLoadProgress } =
     useFullscreenTransition();
   const pointer = usePointerContext();
   const isMobile = useIsMobile();
@@ -140,35 +193,28 @@ export default function HomeScene() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // §2.10 加载进度上报：2 个首屏模型 key + 每个 DOM 图层纹理
-  const readySetRef = useRef(new Set<string>());
-  const keysRef = useRef<string[]>([...HEAVY_MODEL_KEYS]);
-  keysRef.current = [...HEAVY_MODEL_KEYS, ...layers.map((l) => l.key)];
-  const doneRef = useRef(false);
-
-  const recompute = useCallback(() => {
-    if (doneRef.current) return;
-    const keys = keysRef.current;
-    const done = keys.filter((k) => readySetRef.current.has(k)).length;
-    setHeavyLoadProgress(Math.round((done / Math.max(keys.length, 1)) * 100));
-    if (done >= keys.length && !doneRef.current) {
-      doneRef.current = true;
+  // Other sections load their own images without holding the entry camera.
+  const models = useRef(new Set<string>());
+  const draws = useRef<BannerDraws>({ hello: -1, cursor: -1 });
+  const [bannerReady, setBannerReady] = useState(false);
+  const [cameraStarted, setCameraStarted] = useState(false);
+  const startCamera = useCallback(() => setCameraStarted(true), []);
+  const entryFinished = useRef(false);
+  const finishCamera = useCallback(() => { entryFinished.current = true; }, []);
+  const onAssetReady = useCallback((key: string) => {
+    if ((key !== "hello" && key !== "h_star") || models.current.has(key)) return;
+    models.current.add(key);
+    setHeavyLoadProgress(models.current.size * 50);
+    if (models.current.size === 2) {
+      setBannerReady(true);
       setReadyToLoadHeavy(true);
     }
   }, [setHeavyLoadProgress, setReadyToLoadHeavy]);
 
-  const onAssetReady = useCallback(
-    (key: string) => {
-      readySetRef.current.add(key);
-      recompute();
-    },
-    [recompute]
-  );
-
-  // 图层注册变化时重算总量
-  useEffect(() => {
-    recompute();
-  }, [layers, recompute]);
+  useEffect(() => () => {
+    setReadyToLoadHeavy(false);
+    setHeavyLoadProgress(0);
+  }, [setReadyToLoadHeavy, setHeavyLoadProgress]);
 
   const env = useMemo<SceneEnv>(
     () => ({
@@ -178,7 +224,7 @@ export default function HomeScene() {
       pointerUv: pointer.uv,
       pointerInsideRef: pointer.insideRef,
       onAssetReady,
-      ready: readyToLoadHeavy,
+      ready: cameraStarted,
     }),
     [
       resolvedTheme,
@@ -187,7 +233,7 @@ export default function HomeScene() {
       pointer.uv,
       pointer.insideRef,
       onAssetReady,
-      readyToLoadHeavy,
+      cameraStarted,
     ]
   );
 
@@ -199,7 +245,7 @@ export default function HomeScene() {
             <FrameEnv />
             <PerspectiveCamera makeDefault position={[0, 0, 22]} />
             <OverlayDots />
-            <CameraRig />
+            <CameraRig onEntryEnd={finishCamera} />
             <GlassProvider>
               <Suspense fallback={null}>
                 <GlassModel
@@ -212,6 +258,7 @@ export default function HomeScene() {
                   scale={isMobile ? 19 : 22}
                   sectionName="banner"
                   onReady={() => onAssetReady("hello")}
+                  onPoseDraw={() => { draws.current.hello = frameState.frameCount; }}
                   tintEnabled
                 />
                 <GlassModel
@@ -230,6 +277,7 @@ export default function HomeScene() {
                   tintEnabled
                   tingColor={["#009dff", "#009dff", "#64c3ff", "#64c3ff"]}
                   onReady={() => onAssetReady("h_star")}
+                  onPoseDraw={() => { draws.current.cursor = frameState.frameCount; }}
                 />
               </Suspense>
               <GradientBackground />
@@ -240,6 +288,7 @@ export default function HomeScene() {
               ))}
               <HyperSpaceGate />
               <PostFX />
+              <HeroHandoff draws={draws} ready={bannerReady} entryFinished={entryFinished} onStart={startCamera} />
             </GlassProvider>
           </SceneEnvContext.Provider>
         </Canvas>

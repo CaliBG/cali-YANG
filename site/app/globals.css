@@ -50,6 +50,17 @@
     }
   }
 
+  /* Keep the dark system poster and the SSR text readable without scripts. */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light):not(.dark) {
+      color-scheme: dark;
+      --label: 255, 255, 255;
+      --label-d: 230, 232, 232;
+      --background-deep: 15, 17, 17;
+      --background-elevated: #191b1b;
+    }
+  }
+
   .dark {
     color-scheme: dark;
     --label: 255, 255, 255;

@@ -17,6 +17,7 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
   const sectionRef=useRef<HTMLElement>(null),stageRef=useRef<HTMLDivElement>(null);
   const rendererRef=useRef<Renderer|null>(null),progress=useRef(0);
   const [percent,setPercent]=useState(0),[ready,setReady]=useState(false);
+  const [posterRequested,setPosterRequested]=useState(false);
   const [failed,setFailed]=useState(false),[retry,setRetry]=useState(0),[reduced,setReduced]=useState(false);
 
   useEffect(()=>{
@@ -54,6 +55,7 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
     const sizes=new ResizeObserver(resize);sizes.observe(stage);
     const load=async()=>{
       if(disposed||loading)return;loading=true;
+      if(featured)setPosterRequested(true);
       root=document.createElement("div");root.className="tk-story-canvas";root.style.visibility="hidden";
       stage.append(root);resize();
       try{
@@ -81,8 +83,10 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
       </div>}
       <div ref={stageRef} className={styles.storyStage} data-progress={percent} aria-busy={!ready&&!failed}>
         {scene==="2" && !reduced ? <div className={styles.scrubPreview} hidden={ready} role="img" aria-label={zh?"同框设计随滚动逐步展开":"Tongkuang design unfolding with scroll"}
-          style={{backgroundImage:`url(${asset("/projects/tongkuang/design-preview.webp")})`,
-            backgroundPosition:`${(Math.round(percent*24/100)%5)*25}% ${Math.floor(Math.round(percent*24/100)/5)*25}%`}}/> : <img src={asset(`/projects/tongkuang/${scene==="0"?"story-intro":"design-expanded"}.webp`)} alt={zh?"同框：从一部相机展开为设计、开发与发布的完整过程":"Tongkuang: camera, design, development and release"} loading="lazy" decoding="async" width={1280} height={720} hidden={ready}/>}
+          style={{backgroundImage:!featured||posterRequested?`url(${asset("/projects/tongkuang/design-preview.webp")})`:undefined,
+            backgroundPosition:`${(Math.round(percent*24/100)%5)*25}% ${Math.floor(Math.round(percent*24/100)/5)*25}%`}}>
+          {featured&&<noscript><div className={styles.scrubPreview} style={{backgroundImage:`url(${asset("/projects/tongkuang/design-preview.webp")})`,backgroundPosition:"0% 0%"}}/></noscript>}
+        </div> : <img src={asset(`/projects/tongkuang/${scene==="0"?"story-intro":"design-expanded"}.webp`)} alt={zh?"同框：从一部相机展开为设计、开发与发布的完整过程":"Tongkuang: camera, design, development and release"} loading="lazy" decoding="async" width={1280} height={720} hidden={ready}/>}
         {featured && <PreviewLinks href="/tongkuang" name={zh ? "同框" : "Tongkuang"} website="https://tongkuang.netlify.app/" />}
         {failed&&<button type="button" className={styles.retry} onClick={()=>setRetry(value=>value+1)}>{zh?"重新载入动画":"Reload animation"}</button>}
       </div>

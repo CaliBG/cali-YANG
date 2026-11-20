@@ -1,3 +1,40 @@
+.banner {
+  position: relative;
+  isolation: isolate;
+}
+
+.poster {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  --light: var(--desktop-light);
+  --dark: var(--desktop-dark);
+  background: var(--light) center / cover no-repeat;
+}
+
+@media (width < 1024px) {
+  .poster {
+    --light: var(--mobile-light);
+    --dark: var(--mobile-dark);
+  }
+}
+
+:global(html.dark) .poster { background-image: var(--dark); }
+
+@media (prefers-color-scheme: dark) {
+  :global(html:not(.light)) .poster { background-image: var(--dark); }
+}
+
+.banner[data-hero-live] .poster {
+  opacity: 0;
+  transition: opacity 160ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner[data-hero-live] .poster { transition: none; }
+}
+
 @media (max-width: 700px), (pointer: coarse) and (max-width: 960px) and (max-height: 540px) {
   .title { margin-block-start: clamp(12px, 4svh, 36px); }
 }

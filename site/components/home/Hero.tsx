@@ -5,13 +5,38 @@
 // 3D 元素（hello.gltf / cursor.glb / 贴纸粒子 / 指针失真）画在 -z-1 背景 Canvas，
 // 本区块把容器注册为 WebGL section "banner"（components/webgl/store）。
 
+import type { CSSProperties } from "react";
+import { asset } from "@/lib/asset";
 import { useWebGLSectionRef } from "@/components/webgl/store";
 import styles from "./hero.module.css";
+import preview from "./hero-preview.module.css";
 import AsciiScramble from "@/components/AsciiScramble";
 import { useLanguage } from "@/lib/language";
 
 const HERO_META_DELAY = 300;
 const HERO_META_LETTER_DELAY = 10;
+
+const posterDirectory = asset("/model/hero-poster/");
+const posterStyle = {
+  "--desktop-light": `url("${posterDirectory}desktop-light.webp")`,
+  "--desktop-dark": `url("${posterDirectory}desktop-dark.webp")`,
+  "--mobile-light": `url("${posterDirectory}mobile-light.webp")`,
+  "--mobile-dark": `url("${posterDirectory}mobile-dark.webp")`,
+} as CSSProperties;
+
+// Match the CSS and the theme already applied by the head script. Start this
+// request during HTML parsing, including when hydration is waiting for scripts.
+const preloadPoster = `{
+  const theme = document.documentElement.classList;
+  const dark = theme.contains("dark") || (!theme.contains("light") && matchMedia("(prefers-color-scheme: dark)").matches);
+  const size = matchMedia("(width < 1024px)").matches ? "mobile" : "desktop";
+  const link = document.createElement("link");
+  link.rel = "preload";
+  link.as = "image";
+  link.fetchPriority = "high";
+  link.href = ${JSON.stringify(posterDirectory)} + size + "-" + (dark ? "dark" : "light") + ".webp";
+  document.head.appendChild(link);
+}`;
 
 // 自介（文案取自站主作品集 about_p2，中英双语）
 function HeroBrandLine() {
@@ -39,8 +64,21 @@ export default function Hero() {
   return (
     <div
       ref={bannerRef}
-      className="grid grid-cols-12 grid-rows-[auto_1fr] px-4 lg:px-14 py-18 lg:py-24 w-full h-dvh lg:h-screen"
+      className={`${styles.banner} grid grid-cols-12 grid-rows-[auto_1fr] px-4 lg:px-14 py-18 lg:py-24 w-full h-dvh lg:h-screen`}
     >
+      <script dangerouslySetInnerHTML={{ __html: preloadPoster }} />
+      <div aria-hidden="true" {...{ elementtiming: "hero-preview" }} className={`${styles.poster} ${preview.frame}`} />
+      <div
+        aria-hidden="true"
+        {...{ elementtiming: "hero-poster" }}
+        className={styles.poster}
+        style={posterStyle}
+        onTransitionEnd={(event) => {
+          if (event.propertyName === "opacity" && event.currentTarget.parentElement?.hasAttribute("data-hero-live")) {
+            performance.mark("portfolio:hero-poster-dismissed");
+          }
+        }}
+      />
       <div className="flex flex-col order-2 lg:order-1 lg:grid lg:grid-cols-12 col-span-12 font-mono text-base">
         <span className="hidden lg:block lg:col-span-3 xl:col-span-2 lg:col-start-1 xl:col-start-1 p-2 font-sans font-medium text-[4svw] sm:text-2xl lg:text-3xl leading-tight">
           <AsciiScramble readableOnEntry

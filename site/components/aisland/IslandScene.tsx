@@ -46,7 +46,8 @@ export default function IslandScene({featured = false}: {featured?: boolean}){
     return()=>{cancelAnimationFrame(frame);observer.disconnect();target.removeEventListener("scroll",update);window.removeEventListener("resize",update);reduce.removeEventListener("change",update);};
   },[container]);
   return <div className={[feature.stage,styles.sceneFrame,featured ? "" : styles.detailFrame].join(" ")} data-film="true" ref={ref}><div className={styles.previewStage} role="img" aria-label={lang==="zh"?"镜头推近 MacBook 顶部，灵动岛展开，蓝色光带流过进行中的任务。":"The camera moves toward the MacBook notch. The island opens and a blue pulse travels along the active task."}>
-    <div className={styles.mac}><div className={styles.screen} style={{backgroundImage:`url("${media("macbook-pro-desktop.jpg")}")`}}>
+    <div className={styles.mac}><div className={styles.screen}>
+      <img className={styles.desktop} src={media("macbook-pro-desktop.jpg")} alt="" loading="lazy" decoding="async" fetchPriority="low" width={3024} height={1964}/>
       <img className={styles.window} src={media("sessions-1120.png")} alt="" loading="lazy"/>
       <div className={styles.island}><div className={styles.mask}><img src={media("island-live.png")} alt="" loading="lazy"/>
         <svg viewBox="0 0 1000 148" preserveAspectRatio="none" className={styles.flow}><defs><clipPath id={id+"clip"}><path d="M0 44.8C110 44.8 140.4 0 260 0H838Q850 0 850 6V82Q850 88 838 88H260C140.4 88 110 80.9 0 80.9Z"/></clipPath><linearGradient id={id+"light"}><stop stopColor="#75b3ff" stopOpacity="0"/><stop offset=".5" stopColor="#a1caff" stopOpacity=".58"/><stop offset="1" stopColor="#75b3ff" stopOpacity="0"/></linearGradient></defs><g clipPath={`url(#${id}clip)`}><rect x="-650" width="650" height="148" fill={`url(#${id}light)`}/></g></svg>

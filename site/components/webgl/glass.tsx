@@ -190,6 +190,7 @@ export interface GlassModelProps {
   /** 原站拼写（[lightA, lightB, darkA, darkB]，覆盖 leva 主题 tint 色） */
   tingColor?: [string, string, string, string];
   onReady?: () => void;
+  onPoseDraw?: () => void;
 }
 
 const DEG2RAD = Math.PI / 180;
@@ -208,6 +209,7 @@ export function GlassModel({
   sectionName = "footer",
   tingColor,
   onReady,
+  onPoseDraw,
 }: GlassModelProps) {
   const env = useSceneEnv();
   const glass = useGlassContext();
@@ -357,6 +359,7 @@ export function GlassModel({
   }, [glass.glassLayer]);
 
   const lightRig = useMemo(() => new LightRig(), []);
+  const poseSettled = useRef(false);
   const readyFramesRef = useRef(0);
   const readyFiredRef = useRef(false);
   const onReadyRef = useRef(onReady);
@@ -424,6 +427,7 @@ export function GlassModel({
       const entry = Math.min(1, Math.max(0, raw));
       const afterT = Math.min(1, Math.max(0, raw - 1));
       const axes = ["x", "y", "z"] as const;
+      poseSettled.current = true;
       for (let i = 0; i < 3; i++) {
         const mid = THREE.MathUtils.lerp(beforeRotation[i], rotation[i], entry);
         const target = THREE.MathUtils.lerp(mid, after[i], afterT) * DEG2RAD;
@@ -433,6 +437,9 @@ export function GlassModel({
           6,
           dt
         );
+        if (Math.abs(spin.rotation[axes[i]] - target) > 2 * DEG2RAD) {
+          poseSettled.current = false;
+        }
       }
     }
 
@@ -481,7 +488,7 @@ export function GlassModel({
       <group rotation={tiltRad}>
         <group ref={spinRef} rotation={beforeRad}>
           <group rotation={tiltRadInv}>
-            <mesh ref={meshRef} geometry={geometry} scale={[scale, scale, scale]}>
+            <mesh ref={meshRef} geometry={geometry} scale={[scale, scale, scale]} {...(onPoseDraw && { onAfterRender: () => { if (poseSettled.current) onPoseDraw(); } })}>
               <primitive object={glassMaterial} attach="material" />
             </mesh>
           </group>
@@ -491,5 +498,9 @@ export function GlassModel({
   );
 }
 
-useGLTF.preload(asset(getHeroModelPath()), DRACO_DECODER_PATH);
-useGLTF.preload(asset("/model/cursor.glb"), DRACO_DECODER_PATH);
+// The scene shell is prerendered for Next's native chunk preload hints.
+// Model fetching/decoding belongs to the browser, never the static export.
+if (typeof window !== "undefined") {
+  useGLTF.preload(asset(getHeroModelPath()), DRACO_DECODER_PATH);
+  useGLTF.preload(asset("/model/cursor.glb"), DRACO_DECODER_PATH);
+}

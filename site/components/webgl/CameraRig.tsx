@@ -22,13 +22,14 @@ const PARALLAX = {
   leaveParallaxLag: 0.05,
 };
 
-export default function CameraRig() {
+export default function CameraRig({ onEntryEnd }: { onEntryEnd: () => void }) {
   const { camera } = useThree();
   const env = useSceneEnv();
 
   const offset = useMemo(() => new THREE.Vector2(0, 0), []);
   const lookTarget = useMemo(() => new THREE.Vector3(), []);
   const entryStartRef = useRef<number | null>(null);
+  const reportedEntry = useRef(false);
 
   useFrame((state, dt) => {
     const cam = camera as THREE.PerspectiveCamera;
@@ -58,6 +59,10 @@ export default function CameraRig() {
         1
       );
       z = THREE.MathUtils.lerp(baseZ + 8, baseZ, customCubic(t));
+      if (t === 1 && !reportedEntry.current) {
+        reportedEntry.current = true;
+        onEntryEnd();
+      }
     }
 
     // 鼠标视差（仅桌面端）

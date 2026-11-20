@@ -78,9 +78,10 @@ export default function GradientBackground() {
   const state = useMemo(() => {
     const blueNoise = makeBlueNoiseTexture();
 
-    const bgColor = new THREE.Color(THEME_COLORS.light.bg);
-    const vignetteColor = new THREE.Color(THEME_COLORS.light.vignette);
-    const outputColor = new THREE.Color(THEME_COLORS.light.output);
+    const initial = THEME_COLORS[envRef.current.theme];
+    const bgColor = new THREE.Color(initial.bg);
+    const vignetteColor = new THREE.Color(initial.vignette);
+    const outputColor = new THREE.Color(initial.output);
 
     const smoothedPos = new THREE.Vector2().copy(STATIC_CENTER);
     const mousePos = new THREE.Vector2(0.5, 0.5);
@@ -198,9 +199,9 @@ export default function GradientBackground() {
       read: null as THREE.WebGLRenderTarget | null,
       write: null as THREE.WebGLRenderTarget | null,
       targets: {
-        bg: new THREE.Color(THEME_COLORS.light.bg),
-        vignette: new THREE.Color(THEME_COLORS.light.vignette),
-        output: new THREE.Color(THEME_COLORS.light.output),
+        bg: bgColor.clone(),
+        vignette: vignetteColor.clone(),
+        output: outputColor.clone(),
       },
     };
   }, []);
