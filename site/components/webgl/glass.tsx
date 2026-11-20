@@ -4,6 +4,7 @@
 // leva 面板值全部写死为默认值（不装 leva）。
 
 import {
+  use,
   createContext,
   useContext,
   useEffect,
@@ -24,8 +25,8 @@ import {
   type OpaquePolicy,
   type WebGLSectionName,
 } from "./store";
-import { asset } from "@/lib/asset";
-import { getHeroModelPath } from "@/lib/hero-model";
+import { heroModelSource } from "@/lib/hero-delivery";
+import { CURSOR_MODEL_PATH, getHeroModelPath } from "@/lib/hero-model";
 
 export const DRACO_DECODER_PATH =
   "https://www.gstatic.com/draco/versioned/decoders/1.5.5/";
@@ -213,12 +214,8 @@ export function GlassModel({
 }: GlassModelProps) {
   const env = useSceneEnv();
   const glass = useGlassContext();
-  // model 传入可能是相对（"model/x.gltf"）或绝对（"/model/x.gltf"），
-  // 统一归一化为 /model/... 后再加 basePath 前缀，且与 useGLTF.preload 的 key 一致。
-  const gltf = useGLTF(
-    asset(model.startsWith("/") ? model : `/${model}`),
-    DRACO_DECODER_PATH
-  );
+  const source = heroModelSource(model.startsWith("/") ? model : `/${model}`);
+  const gltf = useGLTF(typeof source === "string" ? source : use(source), DRACO_DECODER_PATH);
 
   const after = afterRotation ?? rotation;
 
@@ -501,6 +498,9 @@ export function GlassModel({
 // The scene shell is prerendered for Next's native chunk preload hints.
 // Model fetching/decoding belongs to the browser, never the static export.
 if (typeof window !== "undefined") {
-  useGLTF.preload(asset(getHeroModelPath()), DRACO_DECODER_PATH);
-  useGLTF.preload(asset("/model/cursor.glb"), DRACO_DECODER_PATH);
+  for (const path of [getHeroModelPath(), CURSOR_MODEL_PATH]) {
+    const source = heroModelSource(path);
+    if (typeof source === "string") useGLTF.preload(source, DRACO_DECODER_PATH);
+    else void source.then((url) => useGLTF.preload(url, DRACO_DECODER_PATH));
+  }
 }

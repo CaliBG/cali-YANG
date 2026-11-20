@@ -5,7 +5,8 @@
 // 3D 元素（hello.gltf / cursor.glb / 贴纸粒子 / 指针失真）画在 -z-1 背景 Canvas，
 // 本区块把容器注册为 WebGL section "banner"（components/webgl/store）。
 
-import type { CSSProperties } from "react";
+import { type CSSProperties, useLayoutEffect } from "react";
+import { ensureHeroDelivery, heroDeliveryScript } from "@/lib/hero-delivery";
 import { asset } from "@/lib/asset";
 import { useWebGLSectionRef } from "@/components/webgl/store";
 import styles from "./hero.module.css";
@@ -18,25 +19,11 @@ const HERO_META_LETTER_DELAY = 10;
 
 const posterDirectory = asset("/model/hero-poster/");
 const posterStyle = {
-  "--desktop-light": `url("${posterDirectory}desktop-light.webp")`,
-  "--desktop-dark": `url("${posterDirectory}desktop-dark.webp")`,
-  "--mobile-light": `url("${posterDirectory}mobile-light.webp")`,
-  "--mobile-dark": `url("${posterDirectory}mobile-dark.webp")`,
+  "--desktop-light": `var(--hero-desktop-light, url("${posterDirectory}desktop-light.webp"))`,
+  "--desktop-dark": `var(--hero-desktop-dark, url("${posterDirectory}desktop-dark.webp"))`,
+  "--mobile-light": `var(--hero-mobile-light, url("${posterDirectory}mobile-light.webp"))`,
+  "--mobile-dark": `var(--hero-mobile-dark, url("${posterDirectory}mobile-dark.webp"))`,
 } as CSSProperties;
-
-// Match the CSS and the theme already applied by the head script. Start this
-// request during HTML parsing, including when hydration is waiting for scripts.
-const preloadPoster = `{
-  const theme = document.documentElement.classList;
-  const dark = theme.contains("dark") || (!theme.contains("light") && matchMedia("(prefers-color-scheme: dark)").matches);
-  const size = matchMedia("(width < 1024px)").matches ? "mobile" : "desktop";
-  const link = document.createElement("link");
-  link.rel = "preload";
-  link.as = "image";
-  link.fetchPriority = "high";
-  link.href = ${JSON.stringify(posterDirectory)} + size + "-" + (dark ? "dark" : "light") + ".webp";
-  document.head.appendChild(link);
-}`;
 
 // 自介（文案取自站主作品集 about_p2，中英双语）
 function HeroBrandLine() {
@@ -59,6 +46,7 @@ function HeroBrandLine() {
 
 export default function Hero() {
   const bannerRef = useWebGLSectionRef("banner");
+  useLayoutEffect(() => { ensureHeroDelivery().selectPoster(); }, []);
   const { lang } = useLanguage();
   const zh = lang === "zh";
   return (
@@ -66,7 +54,7 @@ export default function Hero() {
       ref={bannerRef}
       className={`${styles.banner} grid grid-cols-12 grid-rows-[auto_1fr] px-4 lg:px-14 py-18 lg:py-24 w-full h-dvh lg:h-screen`}
     >
-      <script dangerouslySetInnerHTML={{ __html: preloadPoster }} />
+      <script dangerouslySetInnerHTML={{ __html: heroDeliveryScript }} />
       <div aria-hidden="true" {...{ elementtiming: "hero-preview" }} className={`${styles.poster} ${preview.frame}`} />
       <div
         aria-hidden="true"

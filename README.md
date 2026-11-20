@@ -27,6 +27,8 @@ npm run build
 
 Next.js 配置 `output: "export"`，静态网站输出到 `site/out/`。主站和备用站均在域名根目录运行，发布时 `NEXT_PUBLIC_BASE_PATH` 为空。
 
+正式发布时，`caliyang.cn` 提供 HTML 和样式。发布脚本将 `NEXT_PUBLIC_PORTFOLIO_ASSET_ORIGIN` 设为本次提交专用的 Cloudflare Pages 地址。浏览器从该地址预载脚本、首屏模型和高清首帧，镜像请求失败或等待过久时自动尝试主站同一文件。脚本在执行前校验文件摘要。本地直接运行 `npm run build` 则默认从本站加载全部资源。
+
 ## 一次发布，同步源码和两个站点
 
 确认修改并提交到本地 `main` 后，执行：
@@ -39,8 +41,8 @@ npm run deploy
 
 1. 检查 `main`、干净工作区、Cloudflare 登录与目标项目、Netlify 备用站访问权限。
 2. 构建一次，生成含完整源码提交号的 `release.json`，复制成独立发布目录，检查 Cloudflare 的文件数量和大小限制。
-3. 推送本次源码到 GitHub `main`，将相同构建同步到 `gh-pages`。
-4. 先发布 Cloudflare Pages，再把同一个发布目录上传 Netlify。
+3. 推送源码至 GitHub `main`，将构建上传到本次提交专用的 Cloudflare Pages 资源地址。核对版本后，再发布同一份构建到 `gh-pages`。
+4. 更新 Cloudflare Pages 生产镜像和旧域名入口，再把同一个发布目录上传 Netlify。
 5. 读取原域名、Cloudflare `pages.dev` 发布地址和 Netlify 备用地址的 `release.json`，核对三个地址的 `sourceCommit` 与本次提交完全一致，并再次检查 GitHub 远端版本。
 
 脚本不会自动提交修改；任一步失败都会返回错误，不会报告全部同步成功。若发布中断，请排除原因后重新执行。发布期间不要修改源码或切换分支。

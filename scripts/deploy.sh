@@ -36,6 +36,8 @@ trap 'echo "❌ ${DEPLOY_STAGE}失败，尚未完成全部同步；请检查错�
 [[ -z "$(git status --porcelain)" ]] || fail "工作区存在未提交修改，请先检查并提交源码后再发布；脚本不会自动提交源码。"
 [[ "$CLOUDFLARE_ACCOUNT_ID" == "$EXPECTED_CLOUDFLARE_ACCOUNT" ]] || fail "CLOUDFLARE_ACCOUNT_ID 与作品集账户不一致，已停止发布。"
 SOURCE_SHA="$(git rev-parse HEAD)"
+ASSET_BRANCH="assets-${SOURCE_SHA:0:12}"
+ASSET_ORIGIN="https://${ASSET_BRANCH}.${CLOUDFLARE_PROJECT}.pages.dev"
 WORK_DIR="$(mktemp -d /tmp/cali-portfolio-deploy-XXXXXX)"
 DEPLOY_DIR="$WORK_DIR/export"
 
@@ -80,7 +82,7 @@ check_source
 
 DEPLOY_STAGE="构建作品集"
 echo "📦 正在构建源码 $SOURCE_SHA 的静态全量导出..."
-NEXT_PUBLIC_BASE_PATH="" npm --prefix site run build
+NEXT_PUBLIC_BASE_PATH="" NEXT_PUBLIC_PORTFOLIO_ASSET_ORIGIN="$ASSET_ORIGIN" npm --prefix site run build
 check_source
 touch site/out/.nojekyll
 [[ "$(cat site/out/CNAME)" == "caliyang.cn" ]] || fail "构建中的 CNAME 必须与 GitHub Pages 作品集域名一致。"
@@ -132,6 +134,18 @@ echo "🔄 检查并同步 GitHub 源码..."
 git fetch origin refs/heads/main:refs/remotes/origin/main refs/heads/gh-pages:refs/remotes/origin/gh-pages
 git merge-base --is-ancestor origin/main "$SOURCE_SHA" || fail "远端 main 有本地尚未包含的提交，请先同步并解决差异后再发布。"
 git push origin "$SOURCE_SHA:refs/heads/main"
+check_source
+
+# Keep the content-addressed scripts reachable for already-open tabs, including
+# during a release. The custom domain changes only after this copy is live.
+DEPLOY_STAGE="发布并核对本版本的静态资源镜像"
+wrangler pages deploy "$DEPLOY_DIR" \
+  --project-name "$CLOUDFLARE_PROJECT" \
+  --branch "$ASSET_BRANCH" \
+  --commit-hash "$SOURCE_SHA" \
+  --commit-message "Portfolio assets $SOURCE_SHA" \
+  --commit-dirty=false
+node scripts/verify-release.mjs "$SOURCE_SHA" "$ASSET_ORIGIN"
 check_source
 
 DEPLOY_STAGE="发布 GitHub Pages 构建副本"

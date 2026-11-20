@@ -12,6 +12,12 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const nextConfig: NextConfig = {
   output: "export",
   basePath,
+  webpack(config, { isServer }) {
+    // Preserve route and dynamic boundaries while avoiding extra shared
+    // requests on a cold connection. Webpack chunk IDs work on either origin.
+    if (!isServer) config.optimization.splitChunks = false;
+    return config;
+  },
   trailingSlash: true,
   images: { unoptimized: true },
 };

@@ -11,9 +11,18 @@ import { useSceneEnv } from "./scene-env";
 import { frameState, type WebGLSectionName } from "./store";
 import { asset } from "@/lib/asset";
 
-const STICKER_URLS = Array.from({ length: 12 }, (_, i) =>
-  asset(`/sticker_img/s_${String(i + 1).padStart(2, "0")}.png`)
-);
+// The twelve original slots alternate two byte-identical sets of PNGs.
+const STICKER_SLOTS = 12;
+const STICKER_VARIANTS = 2;
+
+function readSticker(slot: number): Promise<HTMLImageElement | null> {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => resolve(null);
+    image.src = asset(`/sticker_img/s_${String(slot + 1).padStart(2, "0")}.png`);
+  });
+}
 
 // s5：粒子参数
 const P = {
@@ -141,24 +150,22 @@ export default function StickerParticles({
 
   const [atlas, setAtlas] = useState<AtlasData | null>(null);
 
-  // 12 张 PNG 预加载 → 图集
+  // Keep the original atlas layout. A failed request can use the next
+  // identical file of that variant without delaying the healthy path.
   useEffect(() => {
     let cancelled = false;
-    Promise.all(
-      STICKER_URLS.map(
-        (url) =>
-          new Promise<HTMLImageElement | null>((resolve) => {
-            const img = new Image();
-            img.onload = () => resolve(img);
-            img.onerror = () => resolve(null);
-            img.src = url;
-          })
-      )
-    ).then((imgs) => {
+    async function loadVariant(variant: number) {
+      for (let slot = variant; slot < STICKER_SLOTS && !cancelled; slot += STICKER_VARIANTS) {
+        const image = await readSticker(slot);
+        if (image) return image;
+      }
+      return null;
+    }
+    Promise.all([loadVariant(0), loadVariant(1)]).then((variants) => {
       if (cancelled) return;
-      const ok = imgs.filter((i): i is HTMLImageElement => !!i);
-      if (ok.length === 0) return;
-      setAtlas(buildAtlas(ok));
+      const slots = Array.from({ length: STICKER_SLOTS }, (_, i) => variants[i % STICKER_VARIANTS]);
+      const images = slots.filter((image): image is HTMLImageElement => image !== null);
+      if (images.length) setAtlas(buildAtlas(images));
     });
     return () => {
       cancelled = true;
@@ -187,7 +194,7 @@ export default function StickerParticles({
     const continuous: Particle[] = [];
     for (let i = 0; i < P.particleCount; i++) {
       const p = {} as Particle;
-      spawnContinuous(p, i % 12, true);
+      spawnContinuous(p, i % STICKER_SLOTS, true);
       p.emitAt = 0;
       continuous.push(p);
     }
@@ -244,7 +251,7 @@ export default function StickerParticles({
         p.windAmp = 0.3 + r() * P.windStrength;
         p.windPhase = r() * Math.PI * 2;
         p.fallRand = 0.6 + 0.8 * r();
-        p.texIndex = i % 12;
+        p.texIndex = i % STICKER_SLOTS;
         p.delay = i * (0.04 + Math.random() * 0.04);
         p.oneShot = true;
         p.scale = P.clickScale;
