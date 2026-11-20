@@ -114,10 +114,8 @@ export default function SelectedWork() {
         {aily && <WorkCard item={aily} />}
         <CoffeeFeature />
       </div>
-      <div className={styles.digitalPair}>
-        <ScrollStory scene="2" featured />
-        <AislandFeature />
-      </div>
+      <ScrollStory scene="2" featured />
+      <AislandFeature />
       <div className={styles.collection}>
         {remaining.map(item => <WorkCard key={item.href} item={item} />)}
       </div>

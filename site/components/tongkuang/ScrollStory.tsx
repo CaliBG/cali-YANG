@@ -26,8 +26,8 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
     const update=()=>{
       const viewport=container?.clientHeight??innerHeight;
       const top=section.getBoundingClientRect().top-(container?.getBoundingClientRect().top??0);
-      const travel=featured ? viewport + section.offsetHeight : Math.max(1,section.offsetHeight-viewport);
-      const value=query.matches?1:Math.max(0,Math.min(1,((featured ? viewport : 96)-top)/travel));
+      const travel=Math.max(1,section.offsetHeight-viewport);
+      const value=query.matches?1:Math.max(0,Math.min(1,(96-top)/travel));
       if (progress.current !== value) {
         progress.current=value;
         rendererRef.current?.render(value);
@@ -44,7 +44,7 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
     query.addEventListener("change",preference);
     const sizes=new ResizeObserver(request);sizes.observe(section);
     return()=>{cancelAnimationFrame(frame);sizes.disconnect();target.removeEventListener("scroll",request);window.removeEventListener("resize",request);window.visualViewport?.removeEventListener("resize",request);query.removeEventListener("change",preference);};
-  },[container,featured]);
+  },[container]);
 
   useEffect(()=>{
     const stage=stageRef.current;if(!stage)return;

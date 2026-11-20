@@ -6,7 +6,7 @@
   gap: clamp(40px, 4.5vw, 72px);
 }
 
-.opening, .coffeePair, .digitalPair, .collection {
+.opening, .coffeePair, .collection {
   display: grid;
   align-items: center;
   gap: clamp(20px, 2.6vw, 42px);
@@ -14,7 +14,6 @@
 
 .opening { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
 .coffeePair { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); }
-.digitalPair { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
 .collection { grid-template-columns: minmax(0, 2.6fr) minmax(0, 2.4fr) minmax(0, 3.6fr) minmax(0, 3.4fr); }
 .card { min-width: 0; }
 .coffeePair > .card { align-self: start; margin-top: clamp(62px, 8vw, 125px); }
@@ -26,7 +25,7 @@
 }
 
 @media (max-width: 700px) {
-  .opening, .coffeePair, .digitalPair { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .opening, .coffeePair { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .opening > .card { width: 72%; justify-self: end; }
   .coffeePair > .card { width: 77%; margin-top: 0; }
   .collection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; }

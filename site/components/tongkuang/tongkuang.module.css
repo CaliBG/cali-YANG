@@ -94,9 +94,3 @@
 .scrubPreview{position:absolute;inset:0;background-size:500% 500%;background-repeat:no-repeat}
 
 @media(prefers-reduced-motion:reduce){.gallerySlot>[data-mdx-figure]{transform:none!important;will-change:auto!important}}
-
-.scrollStory.featured { height: auto; }
-.featured .stickyStory { position: relative; top: auto; min-height: 0; padding: 0; gap: 14px; }
-.featured .storyStage { width: 100%; margin: 0; }
-.featured .storyHeading { align-items: center; flex-flow: row wrap; gap: 8px 16px; }
-.featured .storyHeading > div { margin-top: 0; }
