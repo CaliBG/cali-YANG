@@ -25,7 +25,9 @@ function location() {
     browser=await puppeteer.launch({executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',headless:true,protocolTimeout:325000,args:['--no-proxy-server',...(softwareWebGL?['--enable-unsafe-swiftshader','--use-angle=swiftshader']:[]),'--disable-background-timer-throttling','--disable-backgrounding-occluded-windows','--disable-renderer-backgrounding']});
     result.browser=await browser.version();
     const page=await browser.newPage(); await page.setViewport(viewport);
-    const pageErrors=[],failedRequests=[];page.on('requestfailed',r=>{failedRequests.push({path:new URL(r.url()).pathname,error:r.failure()?.errorText});});page.on('pageerror',e=>pageErrors.push(String(e).slice(0,160)));
+    const researchImages=[];
+    page.on('request',r=>{if(r.resourceType()==='image'&&r.url().includes('/research/'))researchImages.push(new URL(r.url()).pathname);});
+    const pageErrors=[],failedRequests=[];page.on('requestfailed',r=>{failedRequests.push({path:new URL(r.url()).pathname,type:r.resourceType(),navigation:r.isNavigationRequest(),error:r.failure()?.errorText});});page.on('pageerror',e=>pageErrors.push(String(e).slice(0,160)));
     await page.evaluateOnNewDocument(()=>{
       performance.setResourceTimingBufferSize(1500);window.qaSceneTrace={elements:[],lcp:null,legacyReady:null};
       try{new PerformanceObserver(l=>{for(const e of l.getEntries())window.qaSceneTrace.elements.push({id:e.identifier,name:e.name,t:e.startTime,url:e.url?.startsWith('data:')?'inline':e.url?.split('/').pop()});}).observe({type:'element',buffered:true});}catch{}
@@ -51,7 +53,7 @@ function location() {
       const posters=Array.from(document.querySelectorAll('[elementtiming]'),i=>({id:i.getAttribute('elementtiming'),image:(i.currentSrc||getComputedStyle(i).backgroundImage).replace(/data:[^)]*/, 'inline'),opacity:getComputedStyle(i).opacity,width:i.getBoundingClientRect().width}));
       const nav=performance.getEntriesByType('navigation')[0];return {graphics,posters,visibility:document.visibilityState,ttfb:Math.round(nav.responseStart),fcp:Math.round(performance.getEntriesByName('first-contentful-paint')[0]?.startTime||0),...window.qaSceneTrace,marks,resources,slowest:performance.getEntriesByType('resource').filter(e=>e.duration>150).sort((a,b)=>b.responseEnd-a.responseEnd).slice(0,12).map(e=>({path:new URL(e.name).pathname,end:Math.round(e.responseEnd),bytes:e.encodedBodySize})),canvasCount:document.querySelectorAll('canvas').length,jsHeapBytes:performance.memory?.usedJSHeapSize};
     });
-    Object.assign(result,metrics,{pageErrors,failedRequests,waitMs:Date.now()-start});
+    Object.assign(result,metrics,{pageErrors,failedRequests,researchImages,waitMs:Date.now()-start});
     result.sceneMs=config.baseline?Math.round(result.legacyReady||0):Object.fromEntries(result.marks)['portfolio:hero-animation-ready'];
     result.entryCompleteMs=Object.fromEntries(result.marks)['portfolio:hero-entry-complete'];
     if(!result.sceneMs||(!config.baseline&&!result.entryCompleteMs)||result.timerError)throw Error('No measured scene-ready signal');
