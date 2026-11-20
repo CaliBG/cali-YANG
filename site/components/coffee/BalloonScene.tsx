@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { asset } from "@/lib/asset";
 import { useContainerEl } from "@/lib/scroll-env";
 import { useLanguage } from "@/lib/language";
+import PreviewLinks from "@/components/home/PreviewLinks";
 import styles from "./coffee.module.css";
 
 const media = (file: string) => asset(`/projects/unt-yzs/${file}`);
@@ -62,8 +63,7 @@ export default function BalloonScene({ compact = false }: { compact?: boolean })
       <div className={styles.physicalBalloons}>
         <img {...responsive(media("balloons-transparent.webp"), "(max-width: 700px) 65vw, 520px")} src={media("balloons-transparent.webp")} alt="" width={541} height={1059} decoding="async" loading={compact ? "lazy" : "eager"} />
       </div>
-      {compact && <a className={styles.sceneLink} href={asset("/unt-yzs/")}
-        aria-label={zh ? "进入联名咖啡项目，留白发生" : "Explore the UNT × YZS coffee collaboration"} />}
+      {compact && <PreviewLinks href="/unt-yzs" name={zh ? "留白发生" : "Reset to blank"} />}
     </div>
     <div className={styles.sceneControls}>
       <span>{reduced || still ? (zh ? "静态展示" : "Still view") : (zh ? "↓ 向下滑动，气球升起  ·  ↑ 向上滑动，缓缓落下" : "↓ Scroll down to rise · ↑ Scroll back to descend")}</span>

@@ -4,8 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import {asset} from "@/lib/asset";
 import {useLanguage} from "@/lib/language";
 import {useContainerEl} from "@/lib/scroll-env";
-import vanod from "../vanod/vanod.module.css";
-import TransitionLink from "@/components/TransitionLink";
+import PreviewLinks from "@/components/home/PreviewLinks";
 import styles from "./tongkuang.module.css";
 
 type Renderer = {render:(progress:number)=>void; destroy:()=>void};
@@ -75,13 +74,13 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
       <div className={styles.storyHeading}>
         <div>{!featured && <span className={styles.eyebrow}>{scene==="0"?"INTERACTIVE / 01":"INTERACTIVE / 02"}</span>}
           <h2>{featured?"Tongkuang / 同框":scene==="0"?(zh?"同一刻，两个视角。":"One moment. Two perspectives."):(zh?"从一部相机，展开完整过程。":"From one camera to the full picture.")}</h2></div>
-        {featured?<div className={vanod.links}><a href="https://tongkuang.netlify.app/" target="_blank" rel="noopener noreferrer">{zh?"访问同框官网":"Visit Tongkuang"} ↗</a><TransitionLink href="/tongkuang" className={styles.textLink}>{zh?"探索完整项目":"Explore the project"} <span aria-hidden="true">↗</span></TransitionLink></div>:<span className={styles.mono}>{scene==="0"?(zh?"来自第 36 页":"From slide 36"):(zh?"来自第 39–40 页":"From slides 39–40")}</span>}
+        {!featured && <span className={styles.mono}>{scene==="0"?(zh?"来自第 36 页":"From slide 36"):(zh?"来自第 39–40 页":"From slides 39–40")}</span>}
       </div>
       <div ref={stageRef} className={styles.storyStage} data-progress={percent} aria-busy={!ready&&!failed}>
         {scene==="2" && !reduced ? <div className={styles.scrubPreview} hidden={ready} role="img" aria-label={zh?"同框设计随滚动逐步展开":"Tongkuang design unfolding with scroll"}
           style={{backgroundImage:`url(${asset("/projects/tongkuang/design-preview.webp")})`,
             backgroundPosition:`${(Math.round(percent*24/100)%5)*25}% ${Math.floor(Math.round(percent*24/100)/5)*25}%`}}/> : <img src={asset(`/projects/tongkuang/${scene==="0"?"story-intro":"design-expanded"}.webp`)} alt={zh?"同框：从一部相机展开为设计、开发与发布的完整过程":"Tongkuang: camera, design, development and release"} loading="lazy" decoding="async" width={1280} height={720} hidden={ready}/>}
-        {featured&&<a href={asset("/tongkuang/")} className={styles.storyLink} aria-label={zh?"查看同框完整作品":"View the full Tongkuang project"}><span>{zh?"查看完整作品":"View full project"} ↗</span></a>}
+        {featured && <PreviewLinks href="/tongkuang" name={zh ? "同框" : "Tongkuang"} website="https://tongkuang.netlify.app/" />}
         {failed&&<button type="button" className={styles.retry} onClick={()=>setRetry(value=>value+1)}>{zh?"重新载入动画":"Reload animation"}</button>}
       </div>
       <div className={styles.storyCaption}>

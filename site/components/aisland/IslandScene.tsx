@@ -3,6 +3,7 @@ import {useEffect,useRef,useId} from "react";
 import {asset} from "@/lib/asset";
 import {useContainerEl} from "@/lib/scroll-env";
 import {useLanguage} from "@/lib/language";
+import PreviewLinks from "@/components/home/PreviewLinks";
 import styles from "./island.module.css";
 import feature from "../vanod/feature.module.css";
 
@@ -51,5 +52,7 @@ export default function IslandScene({featured = false}: {featured?: boolean}){
         <svg viewBox="0 0 1000 148" preserveAspectRatio="none" className={styles.flow}><defs><clipPath id={id+"clip"}><path d="M0 44.8C110 44.8 140.4 0 260 0H838Q850 0 850 6V82Q850 88 838 88H260C140.4 88 110 80.9 0 80.9Z"/></clipPath><linearGradient id={id+"light"}><stop stopColor="#75b3ff" stopOpacity="0"/><stop offset=".5" stopColor="#a1caff" stopOpacity=".58"/><stop offset="1" stopColor="#75b3ff" stopOpacity="0"/></linearGradient></defs><g clipPath={`url(#${id}clip)`}><rect x="-650" width="650" height="148" fill={`url(#${id}light)`}/></g></svg>
       </div><img className={styles.compact} src={media("island-collapsed.png")} alt="" loading="lazy"/></div>
     </div><img className={styles.frame} src={media("macbook-pro-space-gray.png")} alt="" loading="lazy"/></div>
-  </div></div>;
+  </div>
+    {featured && <PreviewLinks href="/aisland" name="AISLAND" website={website} />}
+  </div>;
 }

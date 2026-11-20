@@ -2,7 +2,7 @@
 
 import { responsive } from "@/lib/media";
 import { useState } from "react";
-import TransitionLink from "@/components/TransitionLink";
+import PreviewLinks from "@/components/home/PreviewLinks";
 import { asset } from "@/lib/asset";
 import { useLanguage } from "@/lib/language";
 import VanodHomeMotion from "./VanodHomeMotion";
@@ -26,14 +26,13 @@ export default function VanodFeature() {
   return <section id="vanod-work" className={styles.feature} aria-labelledby="vanod-feature-heading">
     <header className={styles.heading}>
       <div><h2 id="vanod-feature-heading">Vanod</h2></div>
-      <TransitionLink href="/vanod" className={styles.projectLink}>{zh ? "探索完整项目" : "Explore the project"} <span aria-hidden="true">↗</span></TransitionLink>
     </header>
     <div className={styles.stage} data-film={view.id === "film"} id="vanod-preview" role="tabpanel" aria-labelledby={`vanod-view-${view.id}`}>
-      {view.id === "film" ? <VanodHomeMotion /> : <TransitionLink href="/vanod" aria-label={zh ? "查看 Vanod 完整作品" : "View the full Vanod project"} className={styles.previewLink}>
+      {view.id === "film" ? <VanodHomeMotion /> : <>
         <img key={`${view.id}-${lang}`} {...responsive(asset(`/projects/vanod/${previewFile}`), "auto, (max-width: 700px) 100vw, 65vw")} src={asset(`/projects/vanod/${previewFile}`)} width={view.size[0]} height={view.size[1]} alt={view.caption[language]} loading="lazy" decoding="async" className={styles.preview} />
         {view.id === "identity" && <div className={styles.brand}><img src={asset("/projects/vanod/vanod-wordmark.svg")} width={294} height={72} alt="Vanod" loading="lazy" /><span>{zh ? "品牌 网站 应用" : "Identity · Web · App"}</span></div>}
-        <span className={styles.openProject} aria-hidden="true">↗</span>
-      </TransitionLink>}
+      </>}
+      <PreviewLinks href="/vanod" name="Vanod" website="https://calibg.github.io/vanod/" />
     </div>
     <div className={styles.bottom}>
       <div className={styles.tabs} role="tablist" aria-label={zh ? "Vanod 设计预览" : "Vanod design previews"}>

@@ -71,10 +71,7 @@
 @media(prefers-reduced-motion:reduce){.scrollStory{height:auto}.stickyStory{position:relative;top:0}.modeDescription,.modeImage img{animation:none}.caseStudy *{scroll-behavior:auto!important;transition:none!important}}
 
 /* The homepage artwork is a native link; vertical touch scrolling stays available. */
-.storyStage .storyLink{position:absolute;inset:0;z-index:1;display:block;touch-action:pan-y;color:#fff;text-decoration:none}
-.storyLink>span{position:absolute;right:18px;bottom:18px;padding:10px 16px;border-radius:4px;background:#171919e8;font-size:12px;opacity:0;transform:translateY(5px);transition:opacity .2s,transform .2s}
-.storyLink:hover>span,.storyLink:focus-visible>span{opacity:1;transform:translateY(0)}
-.storyStage .storyLink:focus-visible{outline:3px solid #155fd6;outline-offset:-5px;border-radius:inherit}
+
 .presentationCover{height:100%;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(22px,6vw,80px);background:var(--background-elevated)}
 .presentationCover .eyebrow{margin-bottom:clamp(10px,2vw,24px)}
 .presentationCover h3{font-size:clamp(27px,5vw,70px);line-height:1.03;letter-spacing:-.05em;font-weight:500;margin:0}
@@ -83,8 +80,7 @@
 .presentationCover button:hover{opacity:.65}
 .presentationHint{color:var(--label-2);font-size:11px;line-height:1.7}
 .deckControls .closePresentation{padding-inline:14px;font-size:11px}
-@media(max-width:640px){.presentationCover{padding:20px}.presentationCover .eyebrow{font-size:9px;margin-bottom:8px}.presentationCover h3{font-size:27px}.presentationCover p{margin-top:8px}.presentationCover button{margin-top:4px;min-height:38px}.presentationHint{flex-basis:100%}.storyLink>span{right:10px;bottom:10px;padding:8px 12px;font-size:11px}}
-@media(prefers-reduced-motion:reduce){.storyLink>span{transition:none;transform:none}}
+@media(max-width:640px){.presentationCover{padding:20px}.presentationCover .eyebrow{font-size:9px;margin-bottom:8px}.presentationCover h3{font-size:27px}.presentationCover p{margin-top:8px}.presentationCover button{margin-top:4px;min-height:38px}.presentationHint{flex-basis:100%}}
 
 /* Keep case-study controls above the site's fixed footer. */
 .caseStudy .stickyStory{top:80px;min-height:calc(100svh - 168px);gap:16px;padding:10px 0 20px}
