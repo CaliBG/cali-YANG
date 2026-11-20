@@ -57,59 +57,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     gridClass: "col-span-12 lg:col-start-1 lg:col-span-6 xl:col-span-5",
   },
   {
-    name: "Pain",
-    nameZh: "痛",
-    imageUrl: "/work/yzs_w03.jpg",
-    hoverImageUrl: "/work/yzs_w03_h.jpg",
-    href: "/pain",
-    year: "2025",
-    type: "post",
-    gridClass:
-      "col-span-12 lg:col-span-6 xl:col-span-5 lg:col-start-7 xl:col-start-7",
-  },
-  {
-    name: "Deep Sea Breathing",
-    nameZh: "深海呼吸",
-    imageUrl: "/work/yzs_w04.jpg",
-    hoverImageUrl: "/work/yzs_w04_h.jpg",
-    href: "/deep-sea-breathing",
-    year: "2025",
-    type: "post",
-    gridClass:
-      "col-span-6 lg:col-start-5 lg:col-span-4 xl:col-start-6 xl:col-span-3",
-  },
-  {
-    name: "Imprint — Flowing Traces",
-    nameZh: "拓印-流动的痕",
-    imageUrl: "/work/yzs_w05.jpg", // 无 hover 图（源站仅一张）
-    href: "/imprint-flowing-traces",
-    year: "2025",
-    type: "post",
-    gridClass:
-      "col-span-6 lg:col-start-9 lg:col-span-4 xl:col-start-10 xl:col-span-3",
-  },
-  {
-    name: "Quiet Index",
-    nameZh: "安静指数",
-    imageUrl: "/work/yzs_w07.jpg", // 视频作品，缩略图为抽帧；无 hover 图
-    href: "/quiet-index",
-    year: "2025",
-    type: "post",
-    gridClass:
-      "col-span-12 lg:col-start-1 lg:col-span-4 xl:col-start-1 xl:col-span-3",
-  },
-  {
-    name: "Indigo Lion, Guardian of Place",
-    nameZh: "靛狮·域守",
-    imageUrl: "/work/yzs_w08.jpg",
-    hoverImageUrl: "/work/yzs_w08_h.jpg",
-    href: "/indigo-lion",
-    year: "2025",
-    type: "post",
-    gridClass:
-      "col-span-12 lg:col-start-5 lg:col-span-4 xl:col-start-5 xl:col-span-4",
-  },
-  {
     name: "Tongkuang Dual Camera",
     nameZh: "同框 — 前后双摄相机",
     imageUrl: "/work/yzs_w09.png",

@@ -34,11 +34,7 @@ function VideoFigure({
 }) {
   // 元数据加载后记录真实宽高比：竖屏限高居中，且用 aspect-ratio 同步收紧
   // 宽度（避免 object-fit 产生上下 letterbox 灰边）。
-  const dimensions: Record<string, [number, number]> = {
-    "work07.mp4": [540,1050], "work07-demo.mp4": [1080,1468], "work08-demo.mp4": [1280,752],
-  };
-  const known = dimensions[src.split("/").pop() ?? ""];
-  const [ratio, setRatio] = useState<{ w: number; h: number } | null>(known ? {w:known[0],h:known[1]} : null);
+  const [ratio, setRatio] = useState<{ w: number; h: number } | null>(null);
   const portrait = ratio ? ratio.h > ratio.w : false;
 
   return (
@@ -48,7 +44,6 @@ function VideoFigure({
         controls
         playsInline
         preload="none"
-        poster={known ? src.replace(/\.mp4$/, "-poster.webp") : undefined}
         onLoadedMetadata={(e) =>
           setRatio({
             w: e.currentTarget.videoWidth,
@@ -115,7 +110,7 @@ export default function YzsWorkBody({ work }: { work: YzsWork }) {
         <OverviewGallery
           images={work.images.map((src) => asset(src))}
           alt={work.title}
-          portrait={work.slug === "aily" || work.slug === "indigo-lion"}
+          portrait={work.slug === "aily"}
         />
       ) : work.images.length === 1 ? (
         <MdxImg src={asset(work.images[0])} alt={work.title} />

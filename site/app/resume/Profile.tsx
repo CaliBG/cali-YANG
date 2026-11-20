@@ -55,10 +55,6 @@ export default function Profile() {
           <p>{zh ? "达芬奇创新实验班成员" : "Member, Da Vinci Innovation Experimental Class"}</p>
         </section>
         <section className={styles.section}><h2>{zh ? "专业技能" : "Skills"}</h2><ul>{skills.map(skill => <li key={skill}>{skill}</li>)}</ul></section>
-        <section className={styles.section}><h2>{zh ? "团队实践" : "Team project"}</h2>
-          <h3><TransitionLink href="/deep-sea-breathing">{zh ? "深海呼吸" : "Deep Sea Breathing"} ↗</TransitionLink></h3>
-          <p>{zh ? "2025 · 与团队探索仿生呼吸鳃与感官脊柱的可穿戴结构。" : "2025 · Collaborated on a wearable concept using gill-like structures and light to express the body's response to its environment."}</p>
-        </section>
       </aside>
     </div>
   </main>;
