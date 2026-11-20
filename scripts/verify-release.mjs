@@ -8,8 +8,10 @@ if (!/^[a-f0-9]{40}$/.test(sourceCommit ?? '') || origins.length === 0) {
 async function verifyRelease(origin) {
   const url = new URL('/release.json', origin);
   if (!['https:', 'http:'].includes(url.protocol)) throw new Error(`不支持的网站地址：${origin}`);
+  // gh-pages pushes trigger a separate Pages build before the CDN can serve it.
+  const attempts = url.hostname === 'caliyang.cn' ? 30 : 6;
   let lastError;
-  for (let attempt = 1; attempt <= 6; attempt++) {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
     url.searchParams.set('source', sourceCommit);
     url.searchParams.set('check', `${Date.now()}-${attempt}`);
     try {
@@ -37,7 +39,7 @@ async function verifyRelease(origin) {
       return;
     } catch (error) {
       lastError = error;
-      if (attempt < 6) await new Promise(resolve => setTimeout(resolve, 5000));
+      if (attempt < attempts) await new Promise(resolve => setTimeout(resolve, 5000));
     }
   }
   throw new Error(`${new URL(origin).origin} 未通过线上版本核验：${lastError.message}`);

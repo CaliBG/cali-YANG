@@ -7,7 +7,7 @@ export default function JournalMark({ paper }: { paper: ResearchPaper }) {
     <div className={styles.journalMark} data-journal={paper.mark}>
       {/* The journal name is also available as visible text beside the mark. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={asset(`/research/${paper.mark}-transparent.webp`)} alt="" decoding="async" />
+      <img src={asset(`/research/${paper.mark}-transparent.webp`)} alt="" loading="lazy" decoding="async" />
     </div>
   );
 }
