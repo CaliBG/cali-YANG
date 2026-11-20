@@ -15,8 +15,6 @@ export interface WorkItem {
   hoverImageUrl?: string;
   href: string;
   year: string;
-  type: "post" | "tools" | "event";
-  codingProject?: boolean;
   presentation?: AppPresentation;
   coverScreen?: string;
   passcodeProtected?: boolean;
@@ -30,7 +28,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     hoverImageUrl: "/work/yzs_w06_h.jpg",
     href: "/yzs-merch",
     year: "2026",
-    type: "post",
   },
   {
     name: "43+1 — Force & Balance",
@@ -39,7 +36,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     hoverImageUrl: "/work/yzs_w01_h.jpg",
     href: "/force-balance",
     year: "2025",
-    type: "post",
   },
   {
     name: "Memory of the Flesh",
@@ -48,7 +44,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     hoverImageUrl: "/work/yzs_w02_h.jpg",
     href: "/memory-of-the-flesh",
     year: "2025",
-    type: "post",
   },
   {
     name: "Tongkuang Dual Camera",
@@ -57,42 +52,34 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     hoverImageUrl: "/work/yzs_w09_h.png",
     href: "/tongkuang",
     year: "2026",
-    type: "post",
-    codingProject: true,
   },
   {
     name: "Magic Note",
     presentation: { device: "tablet", scene: "notebook" },
     coverScreen: "/projects/magic-note/writing.webp",
-    nameZh: "魔本 Magic Note — 会回应的手写日记",
+    nameZh: "魔本 Magic Note",
     imageUrl: "/work/yzs_w10.png",
     hoverImageUrl: "/work/yzs_w10_h.png",
     href: "/magic-note",
     year: "2026",
-    type: "post",
-    codingProject: true,
   },
   {
-    name: "AILY AI Assistant",
+    name: "AILY",
     presentation: { device: "phone", scene: "conversation" },
     coverScreen: "/projects/aily/mockups/screen-1.webp",
-    nameZh: "AILY — 多引擎 AI 助手",
+    nameZh: "AILY",
     imageUrl: "/work/yzs_w11.png",
     hoverImageUrl: "/work/yzs_w11_h.png",
     href: "/aily",
     year: "2026",
-    type: "post",
-    codingProject: true,
   },
   {
     name: "LongUse",
-    nameZh: "久用 — 物品日均成本记录",
+    nameZh: "久用",
     imageUrl: "/projects/longuse/dual-iphone-air.webp",
     presentation: { device: "phone", scene: "ledger" },
     href: "/longuse",
     year: "2026",
-    type: "post",
-    codingProject: true,
   },
 ];
 

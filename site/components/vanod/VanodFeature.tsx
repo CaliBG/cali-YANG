@@ -1,52 +1,16 @@
 "use client";
 
-import { responsive } from "@/lib/media";
-import { useState } from "react";
 import PreviewLinks from "@/components/home/PreviewLinks";
-import { asset } from "@/lib/asset";
-import { useLanguage } from "@/lib/language";
+import WorkCaption from "@/components/home/WorkCaption";
 import VanodHomeMotion from "./VanodHomeMotion";
 import styles from "./feature.module.css";
 
-const views = [
-  { id: "film", file: "vanod-brand-film-v4-poster.webp", size: [1920, 1080], label: ["品牌交互", "Brand interaction"], caption: ["随滚动展开 Vanod 与加密资产", "Scroll to unfold Vanod and crypto"] },
-  { id: "identity", file: "hero.webp", size: [1536, 1024], label: ["视觉形象", "Identity"], caption: ["从一个 V 出发 延伸到品牌与硬件", "From a single V to a complete brand and hardware concept"] },
-  { id: "website", file: "website-ui.webp", size: [1440, 900], label: ["网页设计", "Website"], caption: ["行情与交易体验的网页设计", "A web experience for markets and simulated trading"] },
-  { id: "vi", file: "construction.webp", size: [1440, 900], label: ["VI 规范", "Brand guidelines"], caption: ["中英文双册 各 38 页 统一网格下的品牌与小组件设计", "Chinese and English editions, 38 pages each, uniting identity and widgets on one grid"] },
-  { id: "ui", file: "app-ui.webp", size: [1440, 900], label: ["UI 设计", "App interface"], caption: ["连接行情 资产与硬件钱包的移动界面", "A mobile interface connecting markets, assets and a hardware wallet"] },
-];
-
 export default function VanodFeature() {
-  const { lang } = useLanguage();
-  const zh = lang === "zh", language = zh ? 0 : 1;
-  const [selected, setSelected] = useState(0);
-  const view = views[selected];
-  const previewFile = !zh && view.id !== "identity" && view.id !== "film" ? view.file.replace(".webp", "-en.webp") : view.file;
-
-  return <section id="vanod-work" className={styles.feature} aria-labelledby="vanod-feature-heading">
-    <header className={styles.heading}>
-      <div><h2 id="vanod-feature-heading">Vanod</h2></div>
-    </header>
-    <div className={styles.stage} data-film={view.id === "film"} id="vanod-preview" role="tabpanel" aria-labelledby={`vanod-view-${view.id}`}>
-      {view.id === "film" ? <VanodHomeMotion /> : <>
-        <img key={`${view.id}-${lang}`} {...responsive(asset(`/projects/vanod/${previewFile}`), "auto, (max-width: 700px) 100vw, 65vw")} src={asset(`/projects/vanod/${previewFile}`)} width={view.size[0]} height={view.size[1]} alt={view.caption[language]} loading="lazy" decoding="async" className={styles.preview} />
-        {view.id === "identity" && <div className={styles.brand}><img src={asset("/projects/vanod/vanod-wordmark.svg")} width={294} height={72} alt="Vanod" loading="lazy" /><span>{zh ? "品牌 网站 应用" : "Identity · Web · App"}</span></div>}
-      </>}
+  return <section id="vanod-work" className={styles.feature} aria-label="Vanod">
+    <div id="vanod-preview" className={styles.stage} data-film="true">
+      <VanodHomeMotion />
       <PreviewLinks href="/vanod" name="Vanod" website="https://calibg.github.io/vanod/" />
     </div>
-    <div className={styles.bottom}>
-      <div className={styles.tabs} role="tablist" aria-label={zh ? "Vanod 设计预览" : "Vanod design previews"}>
-        {views.map((item, index) => <button key={item.id} type="button" role="tab" id={`vanod-view-${item.id}`} aria-controls="vanod-preview" aria-selected={selected === index} tabIndex={selected === index ? 0 : -1} onClick={() => setSelected(index)} onKeyDown={event => {
-          let next = index;
-          if (event.key === "ArrowRight") next = (index + 1) % views.length;
-          else if (event.key === "ArrowLeft") next = (index + views.length - 1) % views.length;
-          else if (event.key === "Home") next = 0;
-          else if (event.key === "End") next = views.length - 1;
-          else return;
-          event.preventDefault(); setSelected(next); document.getElementById(`vanod-view-${views[next].id}`)?.focus();
-        }}>{item.label[language]}</button>)}
-      </div>
-      <span className={styles.meta}>2026 <span aria-hidden="true">/</span> {zh ? "独立设计与开发" : "Independent design & development"}</span>
-    </div>
+    <WorkCaption name="Vanod" year="2026" />
   </section>;
 }

@@ -12,6 +12,7 @@ import CoffeeFeature from "@/components/coffee/CoffeeFeature";
 import ForceBalanceScroll from "@/components/force-balance/ForceBalanceScroll";
 import AppCover from "@/components/app-showcase/AppCover";
 
+import WorkCaption from "@/components/home/WorkCaption";
 import styles from "./selected-work.module.css";
 import { mediaSize } from "@/lib/media";
 
@@ -42,33 +43,8 @@ function WorkCard({ item }: { item: WorkItem }) {
         hoverSrc={item.hoverImageUrl}
         className="relative w-full pointer-events-none select-none"
         style={{ aspectRatio: ratio }}
-      >
-        {item.codingProject && (
-          <span
-            className="top-0 right-0 z-10 absolute bg-selection px-1 font-mono-2 text-black text-xs uppercase pointer-events-none select-none"
-            aria-hidden="true"
-          >
-            Coding Project
-          </span>
-        )}
-      </WebGLImageSlot>}
-      <div className="flex justify-between items-start gap-3 min-w-0 text-xs lg:text-sm uppercase">
-        <span className="flex-1 min-w-0 lg:truncate max-lg:line-clamp-2">
-          {displayName}
-        </span>
-        <div className="flex items-center gap-2 sm:gap-3 font-mono-2 tabular-nums whitespace-nowrap shrink-0">
-          <span>{item.year}</span>
-          {item.type !== "post" && (
-            <span
-              className="hidden lg:inline-flex items-center gap-1"
-              aria-hidden="true"
-            >
-              <span>{item.type}</span>
-              <span>↗</span>
-            </span>
-          )}
-        </div>
-      </div>
+      />}
+      <WorkCaption name={displayName} year={item.year} />
     </>
   );
 
@@ -79,7 +55,7 @@ function WorkCard({ item }: { item: WorkItem }) {
           href={item.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="group block space-y-3"
+          className="group block"
           aria-label={ariaLabel}
         >
           {inner}
@@ -87,7 +63,7 @@ function WorkCard({ item }: { item: WorkItem }) {
       ) : (
         <TransitionLink
           href={item.href}
-          className="group block space-y-3"
+          className="group block"
           aria-label={ariaLabel}
         >
           {inner}

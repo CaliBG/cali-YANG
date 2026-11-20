@@ -90,3 +90,9 @@
 .scrubPreview{position:absolute;inset:0;background-size:500% 500%;background-repeat:no-repeat}
 
 @media(prefers-reduced-motion:reduce){.gallerySlot>[data-mdx-figure]{transform:none!important;will-change:auto!important}}
+
+.featured .stickyStory { width: min(100%, calc((100svh - 240px) * 16 / 9)); margin-inline: auto; gap: 0; }
+.featured .storyStage { width: 100%; margin: 0; }
+@media (max-height: 540px) and (orientation: landscape) {
+  .featured .stickyStory { width: min(100%, calc((100svh - 150px) * 16 / 9)); }
+}

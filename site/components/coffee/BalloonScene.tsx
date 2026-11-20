@@ -65,9 +65,9 @@ export default function BalloonScene({ compact = false }: { compact?: boolean })
       </div>
       {compact && <PreviewLinks href="/unt-yzs" name={zh ? "留白发生" : "Reset to blank"} />}
     </div>
-    <div className={styles.sceneControls}>
+    {!compact && <div className={styles.sceneControls}>
       <span>{reduced || still ? (zh ? "静态展示" : "Still view") : (zh ? "↓ 向下滑动，气球升起  ·  ↑ 向上滑动，缓缓落下" : "↓ Scroll down to rise · ↑ Scroll back to descend")}</span>
       {!reduced && <button type="button" aria-pressed={still} onClick={() => setStill(value => !value)}>{still ? (zh ? "开启动效" : "Enable motion") : (zh ? "静态观看" : "View still")}</button>}
-    </div>
+    </div>}
   </div>;
 }

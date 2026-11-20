@@ -48,6 +48,5 @@ export default function VanodHomeMotion(){
   return <div className={s.scene} ref={root} aria-label={lang==="zh"?"Vanod 字标与币种随滚动展开":"Vanod and crypto symbols unfold as you scroll"}>
     <div className={s.tokens} aria-hidden="true">{coins.map((coin,i)=><img key={coin} data-token src={asset(`/projects/vanod/interactive/coins/${coin}.svg`)} alt="" width={88} height={88} draggable={false} style={{width: `clamp(${24*coinSizes[i]}px, ${5.6*coinSizes[i]}vw, ${66*coinSizes[i]}px)`,left:`${50+targets[i][0]}%`,top:`${50+targets[i][1]}%`}} />)}</div>
     <svg className={s.word} viewBox="0 0 1280 600" fill="currentColor" fillRule="evenodd" role="img" aria-label="Vanod"><path data-mark d={V_PATH} transform={markPose(1)}/><g transform={wordTransform}>{WORD_LETTERS.map((d,i)=><path data-letter key={i} d={d}/>)}</g></svg>
-    <p className={s.caption}>See the market. Make your move.</p>
   </div>;
 }

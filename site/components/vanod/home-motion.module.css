@@ -3,5 +3,4 @@
 .tokens img{position:absolute;width:clamp(26px,6.8vw,80px);height:auto;aspect-ratio:1;transform:translate(-50%,-50%);will-change:transform,opacity}
 .scene[data-progress] .tokens img{left:50%!important;top:50%!important}
 .word{position:absolute;width:88%;height:auto;left:6%;top:50%;transform:translateY(-50%);z-index:1;overflow:visible}
-.caption{position:absolute;top:66%;left:15%;right:15%;text-align:center;font-size:clamp(10px,1.5vw,19px);letter-spacing:-.02em;color:#656074;z-index:2;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.tokens img{will-change:auto}}

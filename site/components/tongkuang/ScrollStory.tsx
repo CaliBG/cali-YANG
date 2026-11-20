@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import {asset} from "@/lib/asset";
 import {useLanguage} from "@/lib/language";
 import {useContainerEl} from "@/lib/scroll-env";
+import WorkCaption from "@/components/home/WorkCaption";
 import PreviewLinks from "@/components/home/PreviewLinks";
 import styles from "./tongkuang.module.css";
 
@@ -71,11 +72,11 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
 
   return <section ref={sectionRef} className={`${styles.scrollStory} ${featured?styles.featured:""}`} aria-label={scene==="0"?(zh?"双摄滚动交互演示":"Dual-camera scroll experience"):(zh?"同框设计展开交互":"Tongkuang design scroll showcase")}>
     <div className={styles.stickyStory}>
-      <div className={styles.storyHeading}>
-        <div>{!featured && <span className={styles.eyebrow}>{scene==="0"?"INTERACTIVE / 01":"INTERACTIVE / 02"}</span>}
-          <h2>{featured?"Tongkuang / 同框":scene==="0"?(zh?"同一刻，两个视角。":"One moment. Two perspectives."):(zh?"从一部相机，展开完整过程。":"From one camera to the full picture.")}</h2></div>
-        {!featured && <span className={styles.mono}>{scene==="0"?(zh?"来自第 36 页":"From slide 36"):(zh?"来自第 39–40 页":"From slides 39–40")}</span>}
-      </div>
+      {!featured && <div className={styles.storyHeading}>
+        <div><span className={styles.eyebrow}>{scene==="0"?"INTERACTIVE / 01":"INTERACTIVE / 02"}</span>
+          <h2>{scene==="0"?(zh?"同一刻，两个视角。":"One moment. Two perspectives."):(zh?"从一部相机，展开完整过程。":"From one camera to the full picture.")}</h2></div>
+        <span className={styles.mono}>{scene==="0"?(zh?"来自第 36 页":"From slide 36"):(zh?"来自第 39–40 页":"From slides 39–40")}</span>
+      </div>}
       <div ref={stageRef} className={styles.storyStage} data-progress={percent} aria-busy={!ready&&!failed}>
         {scene==="2" && !reduced ? <div className={styles.scrubPreview} hidden={ready} role="img" aria-label={zh?"同框设计随滚动逐步展开":"Tongkuang design unfolding with scroll"}
           style={{backgroundImage:`url(${asset("/projects/tongkuang/design-preview.webp")})`,
@@ -83,11 +84,11 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
         {featured && <PreviewLinks href="/tongkuang" name={zh ? "同框" : "Tongkuang"} website="https://tongkuang.netlify.app/" />}
         {failed&&<button type="button" className={styles.retry} onClick={()=>setRetry(value=>value+1)}>{zh?"重新载入动画":"Reload animation"}</button>}
       </div>
-      <div className={styles.storyCaption}>
+      {featured ? <WorkCaption name={zh ? "同框" : "Tongkuang"} year="2026" /> : <div className={styles.storyCaption}>
         <span>{reduced?(zh?"静态展示 · 已减少动态效果":"Still view · reduced motion"):(zh?"↓ 向下展开 · ↑ 向上收拢":"↓ Scroll to unfold · ↑ Scroll back to rewind")}</span>
         <span className={styles.progressTrack} aria-hidden="true"><i style={{transform:`scaleX(${percent/100})`}}/></span>
         <span className={styles.mono}>{percent.toString().padStart(2,"0")}%</span>
-      </div>
+      </div>}
     </div>
   </section>;
 }
