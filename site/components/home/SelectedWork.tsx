@@ -102,10 +102,12 @@ export default function SelectedWork() {
   const visible = WORK_ITEMS.filter(item => !item.passcodeProtected || lookup(item.href));
   const force = visible.find(item => item.href === "/force-balance");
   const aily = visible.find(item => item.href === "/aily");
-  const remaining = visible.filter(item => item !== force && item !== aily && item.href !== "/tongkuang");
+  const longuse = visible.find(item => item.href === "/longuse");
+  const remaining = visible.filter(item => item !== force && item !== aily && item !== longuse && item.href !== "/tongkuang");
 
   return (
     <section id="selected-work" className={styles.gallery}>
+      <ScrollStory scene="2" featured />
       <div className={styles.opening}>
         <VanodFeature />
         {force && <WorkCard item={force} />}
@@ -114,10 +116,12 @@ export default function SelectedWork() {
         {aily && <WorkCard item={aily} />}
         <CoffeeFeature />
       </div>
-      <ScrollStory scene="2" featured />
-      <AislandFeature />
       <div className={styles.collection}>
         {remaining.map(item => <WorkCard key={item.href} item={item} />)}
+      </div>
+      <div className={styles.appPair}>
+        <AislandFeature />
+        {longuse && <WorkCard item={longuse} />}
       </div>
     </section>
   );

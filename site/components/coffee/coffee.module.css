@@ -85,7 +85,7 @@
   border-radius: 8px;
   isolation: isolate;
 }
-.cafePhoto { position: absolute; inset: 0 auto 0 0; width: 49%; height: 100%; object-fit: cover; object-position: center 64%; }
+.campaignPoster { position: absolute; inset: 0 auto 0 0; width: 49%; height: 100%; object-fit: contain; background: #efefef; }
 .compactTrack .physicalBalloons { left: 49%; width: 51%; }
 .compactTrack .sceneControls { position: static; }
 .feature .featureHeading { flex-wrap: wrap; gap: 6px 16px; margin-bottom: 14px; }

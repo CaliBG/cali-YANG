@@ -58,7 +58,7 @@ export default function BalloonScene({ compact = false }: { compact?: boolean })
 
   return <div ref={section} className={`${styles.sceneTrack} ${compact ? styles.compactTrack : ""} ${still || reduced ? styles.stillTrack : ""}`}>
     <div ref={stage} className={styles.scene} data-coffee-scene data-progress="0" role={compact ? undefined : "img"} aria-label={compact ? undefined : zh ? "白色联名气球牵着咖啡，随向下滚动升起、向上滚动落下" : "White collaboration balloons carrying coffee rise as you scroll down and descend as you scroll back"}>
-      {compact && <img className={styles.cafePhoto} {...responsive(media("photo-cafe.webp"), "(max-width: 700px) 48vw, 34vw")} src={media("photo-cafe.webp")} alt={zh ? "咖啡吧台上的联名饮品" : "The collaboration coffee at the café counter"} loading="lazy" decoding="async" />}
+      {compact && <img className={styles.campaignPoster} {...responsive(media("sold-out.webp"), "(max-width: 700px) 48vw, 34vw")} src={media("sold-out.webp")} alt={zh ? "留白发生联名咖啡海报，店长回复「卖完啦，在等补货」" : "Reset to blank coffee poster with a sold-out message from the café"} loading="lazy" decoding="async" />}
       <div className={styles.physicalBalloons}>
         <img {...responsive(media("balloons-transparent.webp"), "(max-width: 700px) 65vw, 520px")} src={media("balloons-transparent.webp")} alt="" width={541} height={1059} decoding="async" loading={compact ? "lazy" : "eager"} />
       </div>
