@@ -6,7 +6,7 @@ const commit='a16244ab2ccfa7d6c609acd7adecc6346a2ddf4d';
 const dir=process.env.ORIGINAL_RESULT_DIR;
 const label=process.argv[3];
 const isPrimary=label==='main';
-const targets={main:'https://caliyang.cn',fixed:'https://4fa711d1.caliyang-portfolio.pages.dev',candidate:'https://4b602c9b.caliyang-portfolio.pages.dev'};
+const targets={main:'https://caliyang.cn',fixed:'https://4fa711d1.caliyang-portfolio.pages.dev',candidate:'https://4b602c9b.caliyang-portfolio.pages.dev',engine:'https://54236496.caliyang-portfolio.pages.dev'};
 const target=targets[label];if(!target)throw Error('Unknown baseline URL');
 const mobile=process.argv[2]==='mobile';
 const exe=process.env.CHROME_BIN;
@@ -23,7 +23,7 @@ const curl=url=>spawnSync('curl',['-fsSL','--noproxy','*','--connect-timeout','6
     await new Promise(done=>setTimeout(done,5000));
   }
   if(!matched)throw Error('Original source and HTML origin gate not satisfied');
-  b=await pp.launch({executablePath:exe,headless:true,protocolTimeout:307000,args:['--no-proxy-server','--enable-unsafe-swiftshader','--use-angle=swiftshader','--disable-background-timer-throttling','--disable-backgrounding-occluded-windows','--disable-renderer-backgrounding']});
+  b=await pp.launch({executablePath:exe,headless:true,protocolTimeout:307000,timeout:65000,args:['--no-proxy-server','--enable-unsafe-swiftshader','--use-angle=swiftshader','--disable-background-timer-throttling','--disable-backgrounding-occluded-windows','--disable-renderer-backgrounding']});
   const page=await b.newPage();await page.bringToFront();await page.setViewport(mobile?{width:390,height:844,deviceScaleFactor:2,isMobile:true,hasTouch:true}:{width:1280,height:800,deviceScaleFactor:1});out.browser=await b.version();
   page.on('pageerror',e=>errs.push(String(e)));
   page.on('requestfailed',r=>{reqFails.push([r.resourceType(),new URL(r.url()).pathname,r.failure()?.errorText]);});
@@ -90,6 +90,7 @@ const curl=url=>spawnSync('curl',['-fsSL','--noproxy','*','--connect-timeout','6
     return {...native,renderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):null,visible:document.visibilityState,contextLost:gl?.isContextLost(),ttfb:nav.responseStart,
       fcp:performance.getEntriesByName('first-contentful-paint')[0]?.startTime,
       glFrameStats:{count:ms.length,fps:ms.length?1000*ms.length/ms.reduce((a,b)=>a+b):0,p95:ordered[Math.floor(.95*(ordered.length-1))],above50:ms.filter(x=>x>50).length},
+      engine:performance.getEntriesByType('resource').filter(x=>/\/(3fdd2d7d62473348|7f8209a3d544c539)\.js(?:$|\?)/.test(x.name)).map(x=>({path:new URL(x.name).pathname,initiator:x.initiatorType,start:x.startTime,end:x.responseEnd,transfer:x.transferSize,encoded:x.encodedBodySize})),
       models:performance.getEntriesByType('resource').filter(x=>x.name.includes('/model/')).map(x=>({path:new URL(x.name).pathname,start:x.startTime,end:x.responseEnd,encoded:x.encodedBodySize}))};
   });
   await page.screenshot({path:path.join(dir,label+'.png')});
