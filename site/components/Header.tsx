@@ -192,20 +192,17 @@ export default function Header() {
       <div className="flex justify-between items-center px-4 lg:px-14 py-4 lg:py-7 text-base max-lg:bg-b1/70 max-lg:backdrop-blur-md">
         <TransitionLink
           href="/"
-          className={`${dotted} p-2 font-sans font-bold uppercase pointer-events-auto ${ARROW_FULLSCREEN_DOM_COLOR_TRANSITION} `}
-          style={{ fontVariationSettings: '"wght" 700, "wdth" 120' }}
+          aria-label={lang === "zh" ? "YZS 作品集首页" : "YZS portfolio home"}
+          className={`${dotted} inline-flex min-h-11 items-center p-2 pointer-events-auto`}
         >
-          <AsciiScramble
-            readableOnEntry
-            text="zishuo"
-            startDelayMs={300}
-            scrambleColors={false}
-          />
-          <AsciiScramble
-            readableOnEntry
-            text=".design"
-            startDelayMs={300}
-            scrambleColors={false}
+          <span
+            aria-hidden="true"
+            className="block h-5 lg:h-6 bg-current"
+            style={{
+              aspectRatio: "10266 / 3098",
+              mask: `url(${asset("/img/yzs-nav-mark.webp")}) center / contain no-repeat`,
+              WebkitMask: `url(${asset("/img/yzs-nav-mark.webp")}) center / contain no-repeat`,
+            }}
           />
         </TransitionLink>
 
