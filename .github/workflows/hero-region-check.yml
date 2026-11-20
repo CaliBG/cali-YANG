@@ -1,0 +1,31 @@
+name: Hero browser measurement
+on:
+  push:
+    branches: [qa/hero-render-20261121]
+permissions:
+  contents: read
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        viewport: [desktop, mobile]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: tools/region-check
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Browser client
+        run: npm install --no-audit --no-fund --ignore-scripts --prefix "$RUNNER_TEMP/hero-test" puppeteer-core@25.18.1
+      - name: Cold browser visit
+        env:
+          VIEWPORT: ${{ matrix.viewport }}
+        run: |
+          export CHROME_BIN="$(command -v google-chrome)"
+          export PUPPETEER_MODULE="$RUNNER_TEMP/hero-test/node_modules/puppeteer-core"
+          node tools/region-check/measure.cjs "$VIEWPORT"
