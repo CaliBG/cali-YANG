@@ -14,6 +14,8 @@ import HyperSpace from "@/components/home/HyperSpace";
 import HomeFooter from "@/components/home/HomeFooter";
 import HomeScene from "@/components/webgl/DeferredHomeScene";
 
+export const metadata = { alternates: { canonical: "https://caliyang.cn/" } };
+
 export default function Home() {
   return (
     <div>

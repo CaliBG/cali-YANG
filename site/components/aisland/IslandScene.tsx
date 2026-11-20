@@ -8,7 +8,7 @@ import styles from "./island.module.css";
 import feature from "../vanod/feature.module.css";
 
 export const media=(file:string)=>asset("/projects/aisland/"+file);
-export const website="https://calibg.github.io/agent-island/";
+export const website="https://aisland.caliyang.cn/";
 
 export default function IslandScene({featured = false}: {featured?: boolean}){
   const ref=useRef<HTMLDivElement>(null), container=useContainerEl(), id=useId().replace(/:/g,"");

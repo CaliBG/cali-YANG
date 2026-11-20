@@ -2,12 +2,13 @@
 
 个人设计作品集，基于 Next.js 16、React 19、Three.js / React Three Fiber、Tailwind CSS 和 Lenis 构建。
 
-- **主站（Cloudflare Pages）**：[caliyang.dpdns.org](https://caliyang.dpdns.org/)
+- **作品集主站（GitHub Pages）**：[caliyang.cn](https://caliyang.cn/)
+- **旧域名（Cloudflare Pages）**：[caliyang.dpdns.org](https://caliyang.dpdns.org/)
 - **独立备用站（Netlify）**：[caliyang-portfolio.netlify.app](https://caliyang-portfolio.netlify.app/)
 - **源码仓库**：[CaliBG/cali-YANG](https://github.com/CaliBG/cali-YANG)
 - **Cloudflare 发布地址**：[caliyang-portfolio.pages.dev](https://caliyang-portfolio.pages.dev/)
 
-**目标部署架构；须完成下面的首次部署与域名绑定后生效。** 原域名由 Cloudflare Pages 直接托管，Netlify 保留独立地址作为备用，不作为原域名的来源。GitHub `main` 保存源码，`gh-pages` 保存同一份静态构建副本。本文描述配置目标，不代表迁移已经完成。
+腾讯云 DNSPod 负责 `caliyang.cn` 的解析。`www` 指向 GitHub Pages。原域名及其 `www` 别名由 Cloudflare Pages 转发到新域名，保留作品路径和查询参数。产品官网独立部署在 [aisland.caliyang.cn](https://aisland.caliyang.cn/)。
 
 ## 本地开发
 
@@ -50,6 +51,7 @@ npm run deploy
 
 ```bash
 node scripts/verify-release.mjs "$(git rev-parse HEAD)" \
+  https://caliyang.cn \
   https://caliyang.dpdns.org \
   https://caliyang-portfolio.pages.dev \
   https://caliyang-portfolio.netlify.app

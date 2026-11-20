@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PaperPageProps): Promise<Meta
   return {
     title: `${paper.title} | YZS Research`,
     description: paper.description.en,
-    alternates: { canonical: `https://caliyang.dpdns.org/research/${paper.slug}/` },
+    alternates: { canonical: `https://caliyang.cn/research/${paper.slug}/` },
   };
 }
 

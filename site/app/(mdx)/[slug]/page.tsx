@@ -34,20 +34,20 @@ export async function generateMetadata({
     title: article.title,
     ...(slug === "tongkuang" ? {
       description: "同框 Tongkuang — 两个视角，一个故事。杨子硕的独立相机产品设计与开发：体验三种拍摄模式、滚动交互、视频与 Keynote 演示。",
-      alternates: {canonical:"https://caliyang.dpdns.org/tongkuang/"},
-      openGraph: {title:article.title, description:"Product, interaction, camera and storytelling — an independent project by Zishuo Yang.", images:["https://caliyang.dpdns.org/projects/tongkuang/design-expanded.webp"]},
+      alternates: {canonical:"https://caliyang.cn/tongkuang/"},
+      openGraph: {title:article.title, description:"Product, interaction, camera and storytelling — an independent project by Zishuo Yang.", images:["https://caliyang.cn/projects/tongkuang/design-expanded.webp"]},
     } : slug === "vanod" ? {
       description: "Vanod 品牌与数字产品设计 — 中英文品牌手册各 38 页，统一版式网格、V 标志尺规制图、App 界面、小组件、动效与 Slate 硬件概念。杨子硕的独立设计与开发项目。",
-      alternates: {canonical:"https://caliyang.dpdns.org/vanod/"},
-      openGraph: {title:article.title, description:"Vanod — 38-page Chinese and English brand guidelines, interfaces, widgets and a hardware wallet concept by Zishuo Yang.", images:["https://caliyang.dpdns.org/projects/vanod/hero.webp"]},
+      alternates: {canonical:"https://caliyang.cn/vanod/"},
+      openGraph: {title:article.title, description:"Vanod — 38-page Chinese and English brand guidelines, interfaces, widgets and a hardware wallet concept by Zishuo Yang.", images:["https://caliyang.cn/projects/vanod/hero.webp"]},
     } : slug === "aisland" ? {
       description: "AISLAND 桌面灵动岛设计案例：从切换 Agent 窗口打断阅读的痛点，到会话分支、光带动效、原会话续发与跨设备同步。",
-      alternates: {canonical:"https://caliyang.dpdns.org/aisland/"},
-      openGraph: {title:article.title, description:"How AISLAND brings agent progress and follow-up tasks into the screen edge. A case study in interaction, motion and implementation.", images:["https://caliyang.dpdns.org/projects/aisland/desktop-appearance.webp"]},
+      alternates: {canonical:"https://caliyang.cn/aisland/"},
+      openGraph: {title:article.title, description:"How AISLAND brings agent progress and follow-up tasks into the screen edge. A case study in interaction, motion and implementation.", images:["https://caliyang.cn/projects/aisland/desktop-appearance.webp"]},
     } : slug === "unt-yzs" ? {
       description: "UNT × YZS 留白发生 — 毋名咖啡与 Yet Zero Sense 的商业联名。随滚动体验气球升降，浏览后期海报、完整视频与现场照片。",
-      alternates: {canonical:"https://caliyang.dpdns.org/unt-yzs/"},
-      openGraph: {title:article.title, description:"Reset to blank — a coffee and design collaboration. Campaign artwork, films, photographs and interactive balloons.", images:["https://caliyang.dpdns.org/projects/unt-yzs/banner-02.webp"]},
+      alternates: {canonical:"https://caliyang.cn/unt-yzs/"},
+      openGraph: {title:article.title, description:"Reset to blank — a coffee and design collaboration. Campaign artwork, films, photographs and interactive balloons.", images:["https://caliyang.cn/projects/unt-yzs/banner-02.webp"]},
     } : {}),
   } : {};
 }

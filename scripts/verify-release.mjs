@@ -13,12 +13,21 @@ async function verifyRelease(origin) {
     url.searchParams.set('source', sourceCommit);
     url.searchParams.set('check', `${Date.now()}-${attempt}`);
     try {
-      const response = await fetch(url, {
+      const options = {
         cache: 'no-store',
-        redirect: 'error',
+        redirect: 'manual',
         headers: { 'Cache-Control': 'no-cache', Accept: 'application/json' },
         signal: AbortSignal.timeout(15000),
-      });
+      };
+      let response = await fetch(url, options);
+      if (url.hostname === 'caliyang.dpdns.org') {
+        const expected = new URL(url);
+        expected.host = 'caliyang.cn';
+        if (response.status !== 301 || response.headers.get('location') !== expected.href) {
+          throw new Error('旧网址未按原路径与查询参数跳至新域名');
+        }
+        response = await fetch(expected, options);
+      }
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const release = await response.json();
       if (release.sourceCommit !== sourceCommit) {

@@ -83,7 +83,7 @@ echo "📦 正在构建源码 $SOURCE_SHA 的静态全量导出..."
 NEXT_PUBLIC_BASE_PATH="" npm --prefix site run build
 check_source
 touch site/out/.nojekyll
-echo "caliyang.dpdns.org" > site/out/CNAME
+[[ "$(cat site/out/CNAME)" == "caliyang.cn" ]] || fail "构建中的 CNAME 必须与 GitHub Pages 作品集域名一致。"
 node - "$SOURCE_SHA" <<'NODE'
 const fs = require('node:fs');
 fs.writeFileSync('site/out/release.json', JSON.stringify({
@@ -148,7 +148,10 @@ fi
 PAGES_SHA="$(git -C "$PAGES_WORKTREE" rev-parse HEAD)"
 check_source
 
-DEPLOY_STAGE="发布 Cloudflare Pages 主站"
+DEPLOY_STAGE="确认新域名可通过 HTTPS 访问本次作品集"
+node scripts/verify-release.mjs "$SOURCE_SHA" "https://caliyang.cn"
+
+DEPLOY_STAGE="发布 Cloudflare Pages 旧域名入口"
 echo "🌐 发布 Cloudflare Pages 主站..."
 wrangler pages deploy "$DEPLOY_DIR" \
   --project-name "$CLOUDFLARE_PROJECT" \
@@ -169,7 +172,7 @@ netlify deploy \
 check_source
 
 DEPLOY_STAGE="核对原域名、Cloudflare 与 Netlify 的线上版本"
-node scripts/verify-release.mjs "$SOURCE_SHA" "https://caliyang.dpdns.org" "$CLOUDFLARE_URL" "$NETLIFY_URL"
+node scripts/verify-release.mjs "$SOURCE_SHA" "https://caliyang.cn" "https://caliyang.dpdns.org" "$CLOUDFLARE_URL" "$NETLIFY_URL"
 
 DEPLOY_STAGE="核对 GitHub 远端版本"
 REMOTE_REFS="$(git ls-remote --exit-code origin refs/heads/main refs/heads/gh-pages)"
@@ -186,7 +189,7 @@ done <<< "$REMOTE_REFS"
 check_source
 
 echo "✅ GitHub 源码与构建副本已同步，原域名、Cloudflare 发布地址与 Netlify 的 release.json 均已核验为 ${SOURCE_SHA}。"
-echo "   Cloudflare 主站：https://caliyang.dpdns.org/ （须先完成一次性域名绑定）"
+echo "   作品集主站：https://caliyang.cn/"
 echo "   Cloudflare 发布地址：$CLOUDFLARE_URL/"
 echo "   Netlify 独立备用站：$NETLIFY_URL/"
 echo "   GitHub Pages 分支已同步，其服务生效以平台发布状态为准。"
