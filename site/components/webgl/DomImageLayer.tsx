@@ -47,6 +47,7 @@ export default function DomImageLayer({
       map: { value: null as THREE.Texture | null },
       mapHover: { value: null as THREE.Texture | null },
       uRect: { value: new THREE.Vector4(0, 0, 1, 1) },
+      uCornerRadius: { value: 0 },
       uCurlStrength: { value: 0 },
       uPolarityPositive: { value: 0 },
       uLayerOpacity: { value: 1 },
@@ -65,6 +66,17 @@ export default function DomImageLayer({
   const hoverStateRef = useRef({ hovering: false, progress: 0 });
   const polarityRef = useRef({ started: false, t: 0 });
   const readyFiredRef = useRef(false);
+
+  // The image is painted on a separate canvas, outside the DOM clip.
+  useEffect(() => {
+    const syncRadius = () => {
+      uniforms.uCornerRadius.value = parseFloat(getComputedStyle(layer.el).borderTopLeftRadius) || 0;
+    };
+    syncRadius();
+    const observer = new ResizeObserver(syncRadius);
+    observer.observe(layer.el);
+    return () => observer.disconnect();
+  }, [layer.el, uniforms]);
 
   // 纹理加载 + ready 上报（失败也上报，避免加载门死锁）
   useEffect(() => {

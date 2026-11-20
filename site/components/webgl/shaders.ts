@@ -846,6 +846,7 @@ vec2 applyCurl(vec2 screenUv) {
 uniform sampler2D map;
 uniform sampler2D mapHover;
 uniform vec4 uRect;
+uniform float uCornerRadius;
 uniform float uPolarityPositive;
 uniform float uLayerOpacity;
 uniform float uRevealProgress;
@@ -948,6 +949,14 @@ void main() {
   float hoverCov = hoverDotCoverage(vUv);
   vec4 sourceColor = sampleSourceRgba(localUv, hoverCov);
   float inside = edgeAaMask(localUv, aa);
+  if (uCornerRadius > 0.0) {
+    vec2 size = uRect.zw * uViewportPx;
+    float radius = min(uCornerRadius, 0.5 * min(size.x, size.y));
+    vec2 corner = (abs(localUv - 0.5) - 0.5) * size + radius;
+    float distanceToEdge = length(max(corner, 0.0)) + min(max(corner.x, corner.y), 0.0) - radius;
+    float feather = max(fwidth(distanceToEdge), 0.001);
+    inside *= 1.0 - smoothstep(-0.5 * feather, 0.5 * feather, distanceToEdge);
+  }
   float outA = sourceColor.a * inside * revealMask * clamp(uLayerOpacity, 0.0, 1.0);
   if (outA < 0.001) {
     discard;

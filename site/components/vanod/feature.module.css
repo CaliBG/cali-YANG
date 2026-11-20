@@ -8,7 +8,7 @@
   background: #0b0d12;
   aspect-ratio: 16 / 9;
 }
-.feature .stage { width: 100%; }
+.feature .stage { width: 100%; border-radius: var(--work-preview-radius); }
 @media (max-width: 760px), (max-height: 540px) {
   .stage { width: 100%; }
 }
