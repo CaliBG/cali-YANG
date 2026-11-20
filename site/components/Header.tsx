@@ -182,18 +182,13 @@ export default function Header() {
   const { lang } = useLanguage();
 
   return (
-    <header
-      data-shell-header
-      className={`z-50 fixed inset-0 flex flex-col justify-between font-mono-2 pointer-events-none ${ARROW_FULLSCREEN_DOM_COLOR_TRANSITION} ${
-        past ? "text-white" : "text-l1"
-      }`}
-    >
-      {/* 顶行（移动端加半透明底 + 模糊：固定 logo 不再与滚动正文/图片互叠） */}
-      <div className="flex justify-between items-center px-4 lg:px-14 py-4 lg:py-7 text-base max-lg:bg-b1/70 max-lg:backdrop-blur-md">
+    <header data-shell-header>
+      {/* Blend at page level so the mark samples the actual artwork beneath it. */}
+      <div className="fixed top-4 left-4 z-50 mix-blend-difference lg:top-7 lg:left-14">
         <TransitionLink
           href="/"
           aria-label={lang === "zh" ? "YZS 作品集首页" : "YZS portfolio home"}
-          className={`${dotted} inline-flex min-h-11 items-center p-2 pointer-events-auto`}
+          className={`${DOTTED_BORDER_BASE_WHITE} inline-flex min-h-11 items-center p-2 text-white`}
         >
           <span
             aria-hidden="true"
@@ -205,93 +200,100 @@ export default function Header() {
             }}
           />
         </TransitionLink>
+      </div>
+      <div
+        className={`z-50 fixed inset-0 flex flex-col justify-between font-mono-2 pointer-events-none ${ARROW_FULLSCREEN_DOM_COLOR_TRANSITION} ${
+          past ? "text-white" : "text-l1"
+        }`}
+      >
+        <div className="flex min-h-[76px] justify-end items-center px-4 lg:px-14 py-4 lg:py-7 text-base max-lg:bg-b1/70 max-lg:backdrop-blur-md max-lg:mask-[linear-gradient(to_right,transparent_7rem,black_11rem)] lg:min-h-[100px]">
+          {/* 桌面导航和显示设置保持同一行 */}
+          <div className="hidden lg:flex flex-nowrap justify-between items-center gap-x-3 whitespace-nowrap pointer-events-auto basis-1/2 xl:basis-2/5">
+            <button
+              type="button"
+              className={`${dotted} p-2 uppercase cursor-pointer`}
+              onClick={() => scrollToAnchor("#selected-work")}
+            >
+              <AsciiScramble
+                key={`work-${lang}`}
+                text={lang === "zh" ? "作品" : "Work"}
+                startDelayMs={300}
+                scrambleColors={false}
+              />
+            </button>
+            <button
+              type="button"
+              className={`${dotted} p-2 uppercase cursor-pointer`}
+              onClick={() => scrollToAnchor("#research")}
+            >
+              {lang === "zh" ? "研究与投稿" : "Research"}
+            </button>
+            <button
+              type="button"
+              className={`${dotted} p-2 uppercase cursor-pointer`}
+              onClick={() => scrollToAnchor("#contact")}
+            >
+              <AsciiScramble
+                key={`contact-${lang}`}
+                text={lang === "zh" ? "联系" : "Contact"}
+                startDelayMs={300}
+                scrambleColors={false}
+              />
+            </button>
+            <a href={asset("/resume/")} className={`${dotted} p-2 uppercase`}>
+              {lang === "zh" ? "简历" : "Résumé"}
+            </a>
+            <ThemeToggle dottedClass={dotted} {...hintHandlers} />
+            <SoundToggle dottedClass={dotted} {...hintHandlers} />
+            <LangToggle dottedClass={dotted} />
+          </div>
 
-        {/* 桌面导航和显示设置保持同一行 */}
-        <div className="hidden lg:flex flex-nowrap justify-between items-center gap-x-3 whitespace-nowrap pointer-events-auto basis-1/2 xl:basis-2/5">
-          <button
-            type="button"
-            className={`${dotted} p-2 uppercase cursor-pointer`}
-            onClick={() => scrollToAnchor("#selected-work")}
-          >
+        </div>
+        <details ref={menu} suppressHydrationWarning className="group lg:hidden absolute top-4 right-4 pointer-events-auto"
+          onToggle={event=>setMenuOpen(event.currentTarget.open)}>
+          <summary aria-label={menuOpen ? "Close menu" : "Open menu"} className="relative z-50 list-none p-2 cursor-pointer [&::-webkit-details-marker]:hidden">
+            <span aria-hidden="true" className="relative block w-6 h-6">
+              <span className="absolute left-0 top-[7px] w-full h-0.5 bg-current group-open:top-1/2 group-open:rotate-45"/>
+              <span className="absolute left-0 top-[15px] w-full h-0.5 bg-current group-open:top-1/2 group-open:-rotate-45"/>
+            </span>
+          </summary>
+          <MobileMenu onClose={closeMenu} onAnchor={scrollToAnchor} />
+        </details>
+
+        {/* 底行（移动端隐藏时钟/坐标 HUD：无背景的固定文字会压住滚动正文） */}
+        <div className="flex justify-between px-4 lg:px-14 py-4 lg:py-7 max-lg:hidden">
+          {isHome && nearBottom ? (
             <AsciiScramble
-              key={`work-${lang}`}
-              text={lang === "zh" ? "作品" : "Work"}
-              startDelayMs={300}
+              key="footer-credit"
+              text={`Zishuo Yang (c) ${new Date().getFullYear()}`}
+              letterDelayMs={40}
               scrambleColors={false}
+              className="p-2 uppercase"
             />
-          </button>
-          <button
-            type="button"
-            className={`${dotted} p-2 uppercase cursor-pointer`}
-            onClick={() => scrollToAnchor("#research")}
-          >
-            {lang === "zh" ? "研究与投稿" : "Research"}
-          </button>
-          <button
-            type="button"
-            className={`${dotted} p-2 uppercase cursor-pointer`}
-            onClick={() => scrollToAnchor("#contact")}
-          >
-            <AsciiScramble
-              key={`contact-${lang}`}
-              text={lang === "zh" ? "联系" : "Contact"}
-              startDelayMs={300}
-              scrambleColors={false}
-            />
-          </button>
-          <a href={asset("/resume/")} className={`${dotted} p-2 uppercase`}>
-            {lang === "zh" ? "简历" : "Résumé"}
-          </a>
-          <ThemeToggle dottedClass={dotted} {...hintHandlers} />
-          <SoundToggle dottedClass={dotted} {...hintHandlers} />
-          <LangToggle dottedClass={dotted} />
+          ) : (
+            <Clock />
+          )}
+          <PointerCoords dottedClass={dotted} {...hintHandlers} />
+          {(!isHome || readyToLoadHeavy) && <RotatingGlobe />}
+          {menuOpen && (
+            <div className="flex items-center gap-2 pointer-events-auto lg:hidden">
+              <ThemeToggle dottedClass={dotted} initialStartDelayMs={100} />
+              <SoundToggle dottedClass={dotted} initialStartDelayMs={100} />
+            </div>
+          )}
         </div>
 
+        {/* 导航提示面板（仅桌面） */}
+        <NavHintPanel visible={hintCount > 0} />
+
+
+
+        {/* 自定义滚动条 */}
+        <ScrollProgress hidden={menuOpen} />
+
+        {/* 首页背景网格线 */}
+        {isHome && readyToLoadHeavy && <GridLines />}
       </div>
-      <details ref={menu} suppressHydrationWarning className="group lg:hidden absolute top-4 right-4 pointer-events-auto"
-        onToggle={event=>setMenuOpen(event.currentTarget.open)}>
-        <summary aria-label={menuOpen ? "Close menu" : "Open menu"} className="relative z-50 list-none p-2 cursor-pointer [&::-webkit-details-marker]:hidden">
-          <span aria-hidden="true" className="relative block w-6 h-6">
-            <span className="absolute left-0 top-[7px] w-full h-0.5 bg-current group-open:top-1/2 group-open:rotate-45"/>
-            <span className="absolute left-0 top-[15px] w-full h-0.5 bg-current group-open:top-1/2 group-open:-rotate-45"/>
-          </span>
-        </summary>
-        <MobileMenu onClose={closeMenu} onAnchor={scrollToAnchor} />
-      </details>
-
-      {/* 底行（移动端隐藏时钟/坐标 HUD：无背景的固定文字会压住滚动正文） */}
-      <div className="flex justify-between px-4 lg:px-14 py-4 lg:py-7 max-lg:hidden">
-        {isHome && nearBottom ? (
-          <AsciiScramble
-            key="footer-credit"
-            text={`Zishuo Yang (c) ${new Date().getFullYear()}`}
-            letterDelayMs={40}
-            scrambleColors={false}
-            className="p-2 uppercase"
-          />
-        ) : (
-          <Clock />
-        )}
-        <PointerCoords dottedClass={dotted} {...hintHandlers} />
-        {(!isHome || readyToLoadHeavy) && <RotatingGlobe />}
-        {menuOpen && (
-          <div className="flex items-center gap-2 pointer-events-auto lg:hidden">
-            <ThemeToggle dottedClass={dotted} initialStartDelayMs={100} />
-            <SoundToggle dottedClass={dotted} initialStartDelayMs={100} />
-          </div>
-        )}
-      </div>
-
-      {/* 导航提示面板（仅桌面） */}
-      <NavHintPanel visible={hintCount > 0} />
-
-
-
-      {/* 自定义滚动条 */}
-      <ScrollProgress hidden={menuOpen} />
-
-      {/* 首页背景网格线 */}
-      {isHome && readyToLoadHeavy && <GridLines />}
     </header>
   );
 }
