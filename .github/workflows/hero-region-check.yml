@@ -1,4 +1,4 @@
-name: Hero browser measurement
+name: Paired original WebGL measurements
 on:
   push:
     branches: [qa/hero-render-20261121]
@@ -7,7 +7,7 @@ permissions:
 jobs:
   measure:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 22
     strategy:
       fail-fast: false
       matrix:
@@ -23,21 +23,26 @@ jobs:
           node-version: '24'
       - name: Browser client
         run: npm install --no-audit --no-fund --ignore-scripts --prefix "$RUNNER_TEMP/hero-test" puppeteer-core@25.18.1
-      - name: Cold browser visit
+      - name: Paired cold visits to the original export
         env:
           VIEWPORT: ${{ matrix.viewport }}
+          SAMPLE: ${{ matrix.sample }}
         run: |
           export CHROME_BIN="$(command -v google-chrome)"
-          export RESULT_JSON="$RUNNER_TEMP/hero-test/measure.json"
-          export SCENE_PNG="$RUNNER_TEMP/hero-test/scene.png"
           export PUPPETEER_MODULE="$RUNNER_TEMP/hero-test/node_modules/puppeteer-core"
-          node tools/region-check/measure.cjs "$VIEWPORT"
-      - name: Save observed scene and timings
+          export ORIGINAL_RESULT_DIR="$RUNNER_TEMP/original-pair"
+          export PAIR_ID="$VIEWPORT-$SAMPLE"
+          mkdir -p "$ORIGINAL_RESULT_DIR"
+          if [ "$SAMPLE" = 1 ]; then order="fixed main"; else order="main fixed"; fi
+          status=0
+          for host in $order; do
+            node tools/region-check/original.cjs "$VIEWPORT" "$host" || status=1
+          done
+          exit "$status"
+      - name: Save both browser observations
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: browser-${{ matrix.viewport }}-${{ matrix.sample }}
-          path: |
-            ${{ runner.temp }}/hero-test/measure.json
-            ${{ runner.temp }}/hero-test/scene.png
+          name: original-${{ matrix.viewport }}-${{ matrix.sample }}
+          path: ${{ runner.temp }}/original-pair
           retention-days: 7
