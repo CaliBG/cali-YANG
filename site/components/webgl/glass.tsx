@@ -208,7 +208,6 @@ export function GlassModel({
   tingColor,
   onReady,
 }: GlassModelProps) {
-  const { gl } = useThree();
   const env = useSceneEnv();
   const glass = useGlassContext();
   // model 传入可能是相对（"model/x.gltf"）或绝对（"/model/x.gltf"），
@@ -373,7 +372,7 @@ export function GlassModel({
     group.visible = visible;
 
     // onReady：模型加载完（useGLTF 已 resolve）累计 5 帧即触发。
-    // 不依赖可见性——footer 的 cnt 模型在页首不可见，按可见计数会使入场加载门死锁。
+    // 不依赖可见性，即便 banner 暂时移出视口，首屏加载进度仍可完成。
     if (!readyFiredRef.current) {
       readyFramesRef.current++;
       if (readyFramesRef.current >= 5) {
@@ -476,8 +475,6 @@ export function GlassModel({
     [beforeRotation]
   );
 
-  void gl;
-
   return (
     <group ref={groupRef} visible={false} position={modelPosition}>
       <group rotation={tiltRad}>
@@ -495,4 +492,3 @@ export function GlassModel({
 
 useGLTF.preload(asset("/model/hello.gltf"), DRACO_DECODER_PATH);
 useGLTF.preload(asset("/model/cursor.glb"), DRACO_DECODER_PATH);
-useGLTF.preload(asset("/model/cnt.gltf"), DRACO_DECODER_PATH);

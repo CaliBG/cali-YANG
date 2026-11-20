@@ -8,7 +8,7 @@ import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { IMG_VERT, IMG_FRAG } from "./shaders";
 import { useSceneEnv } from "./scene-env";
-import { frameState, TrackedRect, type WebGLImageLayerEntry } from "./store";
+import { frameState, setWebGLImagePainted, TrackedRect, type WebGLImageLayerEntry } from "./store";
 
 function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -66,6 +66,20 @@ export default function DomImageLayer({
   const hoverStateRef = useRef({ hovering: false, progress: 0 });
   const polarityRef = useRef({ started: false, t: 0 });
   const readyFiredRef = useRef(false);
+  const paintedRef = useRef(false);
+  const paintFrameRef = useRef<number | null>(null);
+
+  const onAfterRender = () => {
+    if (!uniforms.map.value || paintedRef.current || paintFrameRef.current !== null) return;
+    // The scene can first render into a refraction/postprocessing target. Wait
+    // until the completed frame has reached the canvas before removing the DOM image.
+    paintFrameRef.current = requestAnimationFrame(() => {
+      paintFrameRef.current = null;
+      if (!uniforms.map.value || gl.getContext().isContextLost()) return;
+      paintedRef.current = true;
+      setWebGLImagePainted(layer, true);
+    });
+  };
 
   // The image is painted on a separate canvas, outside the DOM clip.
   useEffect(() => {
@@ -84,9 +98,18 @@ export default function DomImageLayer({
     let disposed = false;
     let main: THREE.Texture | null = null;
     let hover: THREE.Texture | null = null;
+    readyFiredRef.current = false;
+    const showFallback = () => {
+      if (paintFrameRef.current !== null) cancelAnimationFrame(paintFrameRef.current);
+      paintFrameRef.current = null;
+      paintedRef.current = false;
+      setWebGLImagePainted(layer, false);
+    };
+    showFallback();
+    gl.domElement.addEventListener("webglcontextlost", showFallback);
 
     const fireReady = () => {
-      if (readyFiredRef.current) return;
+      if (disposed || readyFiredRef.current) return;
       readyFiredRef.current = true;
       envRef.current.onAssetReady(layer.key);
     };
@@ -122,12 +145,14 @@ export default function DomImageLayer({
 
     return () => {
       disposed = true;
+      gl.domElement.removeEventListener("webglcontextlost", showFallback);
+      showFallback();
       uniforms.map.value = null;
       uniforms.mapHover.value = null;
       main?.dispose();
       hover?.dispose();
     };
-  }, [layer.key, layer.imageUrl, layer.hoverImageUrl, gl, uniforms]);
+  }, [layer, gl, uniforms]);
 
   // hover：占位父元素 pointerenter/leave（仅有 hoverImageUrl 的层）
   useEffect(() => {
@@ -229,6 +254,7 @@ export default function DomImageLayer({
       frustumCulled={false}
       visible={false}
       material={material}
+      onAfterRender={onAfterRender}
     >
       <planeGeometry args={[2, 2]} />
     </mesh>

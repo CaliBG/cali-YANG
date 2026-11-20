@@ -1,11 +1,11 @@
 "use client";
 
-// §2.9 DOM 侧占位测量组件：渲染带 ref 的占位 div，
-// 把 rect 元素 + 纹理 url 注册进 WebGL 场景 store（真实像素由 Canvas B 绘制）。
+// §2.9 DOM 侧图像测量组件：先显示普通图片，再把 rect + 纹理 url 注册进场景。
+// 对应纹理实际绘制后才隐藏普通图片；场景或纹理失败时仍有内容可看。
 
 import { useEffect, useRef } from "react";
 import { mediaSize, responsive, textureSource } from "@/lib/media";
-import { registerWebGLImageLayer, useSceneUnavailable } from "./store";
+import { registerWebGLImageLayer, useSceneUnavailable, useWebGLImagePainted } from "./store";
 
 export interface WebGLImageSlotProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,6 +28,7 @@ export default function WebGLImageSlot({
 }: WebGLImageSlotProps) {
   const unavailable = useSceneUnavailable();
   const ref = useRef<HTMLDivElement>(null);
+  const painted = useWebGLImagePainted(imageKey ?? src, ref);
 
   useEffect(() => {
     const el = ref.current;
@@ -67,7 +68,13 @@ export default function WebGLImageSlot({
   }, [imageKey, src, hoverSrc, deferUntilNear]);
 
   return <div ref={ref} aria-hidden data-webgl-image={imageKey ?? src} {...rest}>
-    {unavailable && <img {...responsive(src,"auto, 90vw")} src={src} alt="" loading="lazy" className="w-full h-full object-contain" />}
+    <img {...responsive(src,"auto, 90vw")} src={src} alt="" loading="lazy" decoding="async"
+      onError={({ currentTarget: img }) => {
+        // If the selected thumbnail fails, let the browser try the original artwork.
+        if (img.srcset && img.currentSrc !== img.src) img.removeAttribute("srcset");
+      }}
+      className="block w-full h-full object-contain"
+      style={{visibility: painted && !unavailable ? "hidden" : "visible", borderRadius: "inherit"}} />
     {children}
   </div>;
 }

@@ -17,7 +17,11 @@ import { PerspectiveCamera } from "@react-three/drei";
 import { useThemeMode } from "@/lib/theme-mode";
 import { useFullscreenTransition } from "@/lib/fullscreen-transition";
 import { usePointerContext } from "@/lib/pointer";
-import { useIsMobile } from "@/lib/scroll-env";
+import {
+  useContainerEl,
+  useIsMobile,
+  useViewportSize,
+} from "@/lib/scroll-env";
 import {
   SceneEnvContext,
   usePrefersReducedMotion,
@@ -47,8 +51,8 @@ export {
   registerWebGLImageLayer,
 } from "./store";
 
-// c$：加载进度 key
-const HEAVY_MODEL_KEYS = ["hello", "h_star", "cnt"] as const;
+// 首屏加载进度只等待 banner 模型，页脚模型按滚动位置独立加载。
+const HEAVY_MODEL_KEYS = ["hello", "h_star"] as const;
 
 /** cH 等价物：useFrame(-1000) 每帧重置 section 布局缓存 / 更新滚动遮挡进度 sI */
 function FrameEnv() {
@@ -76,6 +80,53 @@ function HyperSpaceGate() {
   return <HyperSpaceArrow targetEl={el} scaleSpinDegrees={180} />;
 }
 
+/** 提前约两屏加载页脚模型；加载后保留，往返滚动不重建几何与材质。 */
+function FooterModelGate() {
+  useWebGLSectionsVersion();
+  const footer = getWebGLSectionEl("footer");
+  const container = useContainerEl();
+  const { height: viewportHeight } = useViewportSize();
+  const [requested, setRequested] = useState(false);
+
+  useEffect(() => {
+    if (
+      requested ||
+      !footer?.isConnected ||
+      !container ||
+      !container.contains(footer)
+    ) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        setRequested(true);
+        observer.disconnect();
+      },
+      {
+        root: container,
+        rootMargin: `${Math.max(container.clientHeight * 2, 960)}px 0px`,
+      }
+    );
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, [container, footer, requested, viewportHeight]);
+
+  if (!requested) return null;
+  return (
+    <Suspense fallback={null}>
+      <GlassModel
+        model="model/cnt.gltf"
+        beforeRotation={[-180, 0, 0]}
+        rotation={[0, 0, 0]}
+        scale={19}
+        sectionName="footer"
+        tintEnabled
+        tingColor={["#FFFFFF", "#009dff", "#8e9dc4", "#64c3ff"]}
+      />
+    </Suspense>
+  );
+}
+
 export default function HomeScene() {
   const { resolvedTheme } = useThemeMode();
   const { setReadyToLoadHeavy, setHeavyLoadProgress, readyToLoadHeavy } =
@@ -88,7 +139,7 @@ export default function HomeScene() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // §2.10 加载进度上报：3 个模型 key + 每个 DOM 图层纹理
+  // §2.10 加载进度上报：2 个首屏模型 key + 每个 DOM 图层纹理
   const readySetRef = useRef(new Set<string>());
   const keysRef = useRef<string[]>([...HEAVY_MODEL_KEYS]);
   keysRef.current = [...HEAVY_MODEL_KEYS, ...layers.map((l) => l.key)];
@@ -181,18 +232,7 @@ export default function HomeScene() {
                 />
               </Suspense>
               <GradientBackground />
-              <Suspense fallback={null}>
-                <GlassModel
-                  model="model/cnt.gltf"
-                  beforeRotation={[-180, 0, 0]}
-                  rotation={[0, 0, 0]}
-                  scale={19}
-                  sectionName="footer"
-                  tintEnabled
-                  tingColor={["#FFFFFF", "#009dff", "#8e9dc4", "#64c3ff"]}
-                  onReady={() => onAssetReady("cnt")}
-                />
-              </Suspense>
+              <FooterModelGate />
               <StickerParticles sectionName="banner" />
               {layers.map((layer) => (
                 <DomImageLayer key={layer.key} layer={layer} />

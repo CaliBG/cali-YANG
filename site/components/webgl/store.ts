@@ -6,7 +6,7 @@
 // - 每帧可变状态 frameState（sI、遮挡布尔、滚动速度等），WebGL 组件每帧直读
 // - sT / sD / sF / sR：滚动遮挡派生工具（模块 31713 附属）
 
-import { useCallback, useEffect, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useSyncExternalStore, type RefObject } from "react";
 import { scrollEnv } from "@/lib/scroll-env";
 
 // ---------------------------------------------------------------------------
@@ -97,11 +97,18 @@ export interface WebGLImageLayerEntry {
 
 const imageLayers = new Map<string, WebGLImageLayerEntry>();
 const imageListeners = new Set<() => void>();
+const paintedImageLayers = new WeakSet<WebGLImageLayerEntry>();
+const imagePaintListeners = new Set<() => void>();
 let imageLayersSnapshot: WebGLImageLayerEntry[] = [];
+
+function notifyImagePaint() {
+  imagePaintListeners.forEach((fn) => fn());
+}
 
 function notifyImages() {
   imageLayersSnapshot = Array.from(imageLayers.values());
   imageListeners.forEach((fn) => fn());
+  notifyImagePaint();
 }
 
 export function registerWebGLImageLayer(
@@ -112,6 +119,7 @@ export function registerWebGLImageLayer(
   return () => {
     if (imageLayers.get(entry.key) === entry) {
       imageLayers.delete(entry.key);
+      paintedImageLayers.delete(entry);
       notifyImages();
     }
   };
@@ -132,6 +140,27 @@ export function useWebGLImageLayers(): WebGLImageLayerEntry[] {
     () => imageLayersSnapshot,
     () => EMPTY_LAYERS
   );
+}
+
+/** A loaded texture is not enough: keep the DOM image until its mesh has drawn. */
+export function setWebGLImagePainted(entry: WebGLImageLayerEntry, painted: boolean) {
+  // Ignore a late render from an image replaced by a resize or route change.
+  if (imageLayers.get(entry.key) !== entry || paintedImageLayers.has(entry) === painted) return;
+  if (painted) paintedImageLayers.add(entry);
+  else paintedImageLayers.delete(entry);
+  notifyImagePaint();
+}
+
+function subscribeImagePaint(fn: () => void) {
+  imagePaintListeners.add(fn);
+  return () => { imagePaintListeners.delete(fn); };
+}
+
+export function useWebGLImagePainted(key: string, ref: RefObject<HTMLElement | null>): boolean {
+  return useSyncExternalStore(subscribeImagePaint, () => {
+    const entry = imageLayers.get(key);
+    return !!entry && entry.el === ref.current && paintedImageLayers.has(entry);
+  }, () => false);
 }
 
 // ---------------------------------------------------------------------------
