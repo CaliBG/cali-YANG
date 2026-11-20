@@ -1,4 +1,4 @@
-name: Paired original WebGL measurements
+name: Compare HTTP delivery of the original scene
 on:
   push:
     branches: [qa/hero-render-20261121]
@@ -12,7 +12,6 @@ jobs:
       fail-fast: false
       matrix:
         viewport: [desktop, mobile]
-        sample: [1, 2]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,14 +25,13 @@ jobs:
       - name: Paired cold visits to the original export
         env:
           VIEWPORT: ${{ matrix.viewport }}
-          SAMPLE: ${{ matrix.sample }}
         run: |
           export CHROME_BIN="$(command -v google-chrome)"
           export PUPPETEER_MODULE="$RUNNER_TEMP/hero-test/node_modules/puppeteer-core"
           export ORIGINAL_RESULT_DIR="$RUNNER_TEMP/original-pair"
-          export PAIR_ID="$VIEWPORT-$SAMPLE"
+          export PAIR_ID="triplet-$VIEWPORT"
           mkdir -p "$ORIGINAL_RESULT_DIR"
-          if [ "$SAMPLE" = 1 ]; then order="fixed main"; else order="main fixed"; fi
+          if [ "$VIEWPORT" = desktop ]; then order="candidate fixed main"; else order="main fixed candidate"; fi
           status=0
           for host in $order; do
             node tools/region-check/original.cjs "$VIEWPORT" "$host" || status=1
@@ -43,6 +41,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: original-${{ matrix.viewport }}-${{ matrix.sample }}
+          name: triplet-${{ matrix.viewport }}
           path: ${{ runner.temp }}/original-pair
           retention-days: 7

@@ -4,9 +4,11 @@ const expected=require('./original-digests.json');
 const source='9d5702934920af51f095225a0bf3fc1974eca736';
 const commit='a16244ab2ccfa7d6c609acd7adecc6346a2ddf4d';
 const dir=process.env.ORIGINAL_RESULT_DIR;
-const isPrimary=process.argv[3]==='main';
-const target=isPrimary?'https://caliyang.cn':'https://4fa711d1.caliyang-portfolio.pages.dev';
-const mobile=process.argv[2]==='mobile',label=isPrimary?'main':'fixed';
+const label=process.argv[3];
+const isPrimary=label==='main';
+const targets={main:'https://caliyang.cn',fixed:'https://4fa711d1.caliyang-portfolio.pages.dev',candidate:'https://4b602c9b.caliyang-portfolio.pages.dev'};
+const target=targets[label];if(!target)throw Error('Unknown baseline URL');
+const mobile=process.argv[2]==='mobile';
 const exe=process.env.CHROME_BIN;
 function hash(b){return crypto.createHash('sha256').update(b).digest('hex')}
 const curl=url=>spawnSync('curl',['-fsSL','--noproxy','*','--connect-timeout','6','--max-time','15',url],{encoding:'utf8'});
@@ -78,7 +80,7 @@ const curl=url=>spawnSync('curl',['-fsSL','--noproxy','*','--connect-timeout','6
   });
   const first=page.waitForResponse(r=>r.request().isNavigationRequest()&&r.request().frame()===page.mainFrame(),{timeout:60000});
   page.goto(target+'/',{waitUntil:'domcontentloaded',timeout:265000}).catch(e=>{out.navigationError=e.message});
-  const doc=await first;out.realURL=doc.url();out.status=doc.status();out.htmlSha=hash(await doc.buffer());out.htmlMatches=out.htmlSha===expected['index.html'];if(!out.htmlMatches)throw Error('HTML mismatch');
+  const doc=await first;out.realURL=doc.url();out.status=doc.status();out.documentDelivery={contentEncoding:doc.headers()['content-encoding'],link:doc.headers().link};out.htmlSha=hash(await doc.buffer());out.htmlMatches=out.htmlSha===expected['index.html'];if(!out.htmlMatches)throw Error('HTML mismatch');
   try{await page.waitForFunction(()=>{const v=window.__origObserver; const span=v?.glCompleteRafs?.at(-1)-v?.glCompleteRafs?.[0];return v?.firstOutput && (span>=3000&&!!v.cameraReachedOrigin||span>=6500);},{timeout:240000,polling:250})}catch(e){out.timeout=String(e)}
   out.perf=await page.evaluate(()=>{
     const gl=document.querySelector('canvas[data-engine]')?.getContext('webgl2');const ext=gl?.getExtension('WEBGL_debug_renderer_info');const native=window.__origObserver;
@@ -92,7 +94,7 @@ const curl=url=>spawnSync('curl',['-fsSL','--noproxy','*','--connect-timeout','6
   });
   await page.screenshot({path:path.join(dir,label+'.png')});
   out.assets=[];for(const r of res){const p=decodeURIComponent(new URL(r.url()).pathname).slice(1);
-    try{const bytes=await r.buffer();out.assets.push({p,bytes:bytes.length,sha:hash(bytes),matches:hash(bytes)===expected[p],server:r.headers().server,edge:r.headers()['cf-ray']})}catch(e){out.assets.push({p,error:String(e)})}
+    try{const bytes=await r.buffer();out.assets.push({p,bytes:bytes.length,sha:hash(bytes),matches:hash(bytes)===expected[p],server:r.headers().server,edge:r.headers()['cf-ray'],contentEncoding:r.headers()['content-encoding']})}catch(e){out.assets.push({p,error:String(e)})}
   }
   out.errors=errs;out.failedRequests=reqFails;out.ok=out.assets.every(a=>a.matches)&&['model/hello.gltf','model/cursor.glb'].every(p=>out.assets.some(a=>a.p===p&&a.matches))&&out.perf.firstOutput!=null;
  }catch(e){out.fatal=String(e);out.ok=false}finally{if(b)await b.close();fs.writeFileSync(path.join(dir,label+'.json'),JSON.stringify(out,null,2));if(!out.ok)process.exitCode=1;console.log(JSON.stringify({label,target,device:out.device,ok:out.ok,geo:out.geo,html:out.htmlMatches,assets:out.assets?.length,perf:{firstBoth:out.perf?.firstBoth,firstOutput:out.perf?.firstOutput,render:out.perf?.renderer,cameraEnd:out.perf?.cameraReachedOrigin,z0:out.perf?.firstCameraZ,z1:out.perf?.lastCameraZ,marker:out.perf?.marker,fcp:out.perf?.fcp},fatal:out.fatal,timeout:out.timeout}));}
