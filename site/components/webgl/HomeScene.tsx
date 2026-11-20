@@ -17,6 +17,7 @@ import { PerspectiveCamera } from "@react-three/drei";
 import { useThemeMode } from "@/lib/theme-mode";
 import { useFullscreenTransition } from "@/lib/fullscreen-transition";
 import { usePointerContext } from "@/lib/pointer";
+import { getHeroModelPath } from "@/lib/hero-model";
 import {
   useContainerEl,
   useIsMobile,
@@ -202,7 +203,7 @@ export default function HomeScene() {
             <GlassProvider>
               <Suspense fallback={null}>
                 <GlassModel
-                  model="model/hello.gltf"
+                  model={getHeroModelPath()}
                   scrollSyncFactor={0.72}
                   modelPosition={[-0.1, 0, 2]}
                   beforeRotation={[0, 240, 0]}

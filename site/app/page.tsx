@@ -13,12 +13,15 @@ import ResearchSubmissions from "@/components/home/ResearchSubmissions";
 import HyperSpace from "@/components/home/HyperSpace";
 import HomeFooter from "@/components/home/HomeFooter";
 import HomeScene from "@/components/webgl/DeferredHomeScene";
+import { asset } from "@/lib/asset";
+import { HERO_MODEL_PATH } from "@/lib/hero-model";
 
 export const metadata = { alternates: { canonical: "https://caliyang.cn/" } };
 
 export default function Home() {
   return (
     <div>
+      <link rel="preload" as="fetch" href={asset(HERO_MODEL_PATH)} crossOrigin="anonymous" fetchPriority="high" />
       <Hero />
       <SignatureIntro />
       <SelectedWork />

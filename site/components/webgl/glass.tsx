@@ -25,6 +25,7 @@ import {
   type WebGLSectionName,
 } from "./store";
 import { asset } from "@/lib/asset";
+import { getHeroModelPath } from "@/lib/hero-model";
 
 export const DRACO_DECODER_PATH =
   "https://www.gstatic.com/draco/versioned/decoders/1.5.5/";
@@ -490,5 +491,5 @@ export function GlassModel({
   );
 }
 
-useGLTF.preload(asset("/model/hello.gltf"), DRACO_DECODER_PATH);
+useGLTF.preload(asset(getHeroModelPath()), DRACO_DECODER_PATH);
 useGLTF.preload(asset("/model/cursor.glb"), DRACO_DECODER_PATH);

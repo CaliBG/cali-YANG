@@ -65,10 +65,12 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
         root.style.visibility="visible";setReady(true);
       }catch{if(!disposed){root.remove();setFailed(true);}}
     };
-    const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){void load();observer.disconnect();}},{root:container,rootMargin:"1200px 0px"});
+    // Keep the homepage's layered artwork from competing with the hero model.
+    const preloadDistance=featured?Math.min(400,container?.clientHeight??window.innerHeight):1200;
+    const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){void load();observer.disconnect();}},{root:container,rootMargin:`${preloadDistance}px 0px`});
     observer.observe(stage);
     return()=>{disposed=true;observer.disconnect();sizes.disconnect();rendererRef.current=null;renderer?.destroy();root?.remove();};
-  },[container,scene,retry]);
+  },[container,scene,retry,featured]);
 
   return <section ref={sectionRef} className={`${styles.scrollStory} ${featured?styles.featured:""}`} aria-label={scene==="0"?(zh?"双摄滚动交互演示":"Dual-camera scroll experience"):(zh?"同框设计展开交互":"Tongkuang design scroll showcase")}>
     <div className={styles.stickyStory}>
