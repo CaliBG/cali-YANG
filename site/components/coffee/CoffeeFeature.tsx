@@ -9,7 +9,7 @@ export default function CoffeeFeature() {
   const zh = lang === "zh";
   return <section className={styles.feature} id="unt-yzs-work" aria-labelledby="coffee-feature-heading">
     <header className={styles.featureHeading}>
-      <div><span className={styles.eyebrow}>SELECTED WORK / 03</span><h2 id="coffee-feature-heading">{zh ? "UNT × YZS / 留白发生" : "UNT × YZS / Reset to blank"}</h2></div>
+      <div><h2 id="coffee-feature-heading">{zh ? "UNT × YZS / 留白发生" : "UNT × YZS / Reset to blank"}</h2></div>
       <TransitionLink href="/unt-yzs" className={styles.textLink}>{zh ? "探索完整项目" : "Explore the project"} <span aria-hidden="true">↗</span></TransitionLink>
     </header>
     <BalloonScene compact />

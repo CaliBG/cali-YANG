@@ -25,7 +25,7 @@ export default function VanodFeature() {
 
   return <section id="vanod-work" className={styles.feature} aria-labelledby="vanod-feature-heading">
     <header className={styles.heading}>
-      <div><span className={styles.eyebrow}>SELECTED WORK / 02</span><h2 id="vanod-feature-heading">Vanod</h2></div>
+      <div><h2 id="vanod-feature-heading">Vanod</h2></div>
       <TransitionLink href="/vanod" className={styles.projectLink}>{zh ? "探索完整项目" : "Explore the project"} <span aria-hidden="true">↗</span></TransitionLink>
     </header>
     <div className={styles.stage} data-film={view.id === "film"} id="vanod-preview" role="tabpanel" aria-labelledby={`vanod-view-${view.id}`}>

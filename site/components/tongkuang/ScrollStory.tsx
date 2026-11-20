@@ -26,8 +26,8 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
     const update=()=>{
       const viewport=container?.clientHeight??innerHeight;
       const top=section.getBoundingClientRect().top-(container?.getBoundingClientRect().top??0);
-      const travel=Math.max(1,section.offsetHeight-viewport);
-      const value=query.matches?1:Math.max(0,Math.min(1,(96-top)/travel));
+      const travel=featured ? viewport + section.offsetHeight : Math.max(1,section.offsetHeight-viewport);
+      const value=query.matches?1:Math.max(0,Math.min(1,((featured ? viewport : 96)-top)/travel));
       if (progress.current !== value) {
         progress.current=value;
         rendererRef.current?.render(value);
@@ -44,7 +44,7 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
     query.addEventListener("change",preference);
     const sizes=new ResizeObserver(request);sizes.observe(section);
     return()=>{cancelAnimationFrame(frame);sizes.disconnect();target.removeEventListener("scroll",request);window.removeEventListener("resize",request);window.visualViewport?.removeEventListener("resize",request);query.removeEventListener("change",preference);};
-  },[container]);
+  },[container,featured]);
 
   useEffect(()=>{
     const stage=stageRef.current;if(!stage)return;
@@ -65,17 +65,15 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
         root.style.visibility="visible";setReady(true);
       }catch{if(!disposed){root.remove();setFailed(true);}}
     };
-    // Start the featured scene during initial hydration; detail scenes warm up as the reader approaches.
-    if(featured) void load();
     const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){void load();observer.disconnect();}},{root:container,rootMargin:"1200px 0px"});
     observer.observe(stage);
     return()=>{disposed=true;observer.disconnect();sizes.disconnect();rendererRef.current=null;renderer?.destroy();root?.remove();};
-  },[container,scene,retry,featured]);
+  },[container,scene,retry]);
 
   return <section ref={sectionRef} className={`${styles.scrollStory} ${featured?styles.featured:""}`} aria-label={scene==="0"?(zh?"双摄滚动交互演示":"Dual-camera scroll experience"):(zh?"同框设计展开交互":"Tongkuang design scroll showcase")}>
     <div className={styles.stickyStory}>
       <div className={styles.storyHeading}>
-        <div><span className={styles.eyebrow}>{featured?"SELECTED WORK / 01":scene==="0"?"INTERACTIVE / 01":"INTERACTIVE / 02"}</span>
+        <div>{!featured && <span className={styles.eyebrow}>{scene==="0"?"INTERACTIVE / 01":"INTERACTIVE / 02"}</span>}
           <h2>{featured?"Tongkuang / 同框":scene==="0"?(zh?"同一刻，两个视角。":"One moment. Two perspectives."):(zh?"从一部相机，展开完整过程。":"From one camera to the full picture.")}</h2></div>
         {featured?<div className={vanod.links}><a href="https://tongkuang.netlify.app/" target="_blank" rel="noopener noreferrer">{zh?"访问同框官网":"Visit Tongkuang"} ↗</a><TransitionLink href="/tongkuang" className={styles.textLink}>{zh?"探索完整项目":"Explore the project"} <span aria-hidden="true">↗</span></TransitionLink></div>:<span className={styles.mono}>{scene==="0"?(zh?"来自第 36 页":"From slide 36"):(zh?"来自第 39–40 页":"From slides 39–40")}</span>}
       </div>

@@ -71,3 +71,22 @@
 }
 @media(max-height:580px) and (min-width:641px){.scene{height:calc(100svh - 100px);min-height:220px;top:66px}.sceneControls{top:calc(100svh - 32px)}.sceneTrack{height:200svh}}
 @media(prefers-reduced-motion:reduce){.sceneTrack,.compactTrack{height:auto}.scene{position:relative;top:0}.sceneControls{position:static}.caseStudy *,.feature *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.physicalBalloons{will-change:auto}}
+
+.feature .compactTrack { height: auto; margin: 0; }
+.compactTrack .scene {
+  position: relative;
+  top: auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: 16 / 10;
+  background: #e5dfd3;
+  border-radius: 8px;
+  isolation: isolate;
+}
+.cafePhoto { position: absolute; inset: 0 auto 0 0; width: 49%; height: 100%; object-fit: cover; object-position: center 64%; }
+.compactTrack .physicalBalloons { left: 49%; width: 51%; }
+.compactTrack .sceneControls { position: static; }
+.feature .featureHeading { flex-wrap: wrap; gap: 6px 16px; margin-bottom: 14px; }
+.feature .featureFoot { padding-top: 8px; }

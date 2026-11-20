@@ -20,7 +20,6 @@ export interface WorkItem {
   presentation?: AppPresentation;
   coverScreen?: string;
   passcodeProtected?: boolean;
-  gridClass: string;
 }
 
 const WORK_ITEMS_RAW: WorkItem[] = [
@@ -32,8 +31,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/yzs-merch",
     year: "2026",
     type: "post",
-    gridClass:
-      "col-span-12 lg:col-start-2 lg:col-span-5 xl:col-start-2 xl:col-span-4",
   },
   {
     name: "43+1 — Force & Balance",
@@ -43,8 +40,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/force-balance",
     year: "2025",
     type: "post",
-    gridClass:
-      "col-span-12 lg:col-start-8 lg:col-span-5 xl:col-start-8 xl:col-span-4",
   },
   {
     name: "Memory of the Flesh",
@@ -54,7 +49,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     href: "/memory-of-the-flesh",
     year: "2025",
     type: "post",
-    gridClass: "col-span-12 lg:col-start-1 lg:col-span-6 xl:col-span-5",
   },
   {
     name: "Tongkuang Dual Camera",
@@ -65,8 +59,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     year: "2026",
     type: "post",
     codingProject: true,
-    gridClass:
-      "col-span-12 lg:col-start-9 lg:col-span-4 xl:col-start-9 xl:col-span-4",
   },
   {
     name: "Magic Note",
@@ -79,8 +71,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     year: "2026",
     type: "post",
     codingProject: true,
-    gridClass:
-      "col-span-12 lg:col-start-1 lg:col-span-6 xl:col-start-1 xl:col-span-6",
   },
   {
     name: "AILY AI Assistant",
@@ -93,8 +83,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     year: "2026",
     type: "post",
     codingProject: true,
-    gridClass:
-      "col-span-12 lg:col-start-7 lg:col-span-6 xl:col-start-7 xl:col-span-6",
   },
   {
     name: "LongUse",
@@ -105,7 +93,6 @@ const WORK_ITEMS_RAW: WorkItem[] = [
     year: "2026",
     type: "post",
     codingProject: true,
-    gridClass: "col-span-12 lg:col-start-4 lg:col-span-6 xl:col-start-4 xl:col-span-6",
   },
 ];
 

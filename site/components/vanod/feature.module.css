@@ -28,3 +28,8 @@
 @media(prefers-reduced-motion:reduce){.feature *{transition:none!important;animation:none!important}}
 
 .stage[data-film=true]{aspect-ratio:16/9}
+
+.feature .stage { width: 100%; }
+.feature .heading { flex-wrap: wrap; gap: 8px 18px; margin-bottom: 14px; }
+.feature .bottom { padding-top: 10px; flex-wrap: wrap; gap: 4px 18px; }
+.feature .tabs { gap: 2px 16px; }

@@ -13,7 +13,6 @@ export default function AislandFeature() {
     <section id="aisland-work" className={feature.feature} aria-labelledby="aisland-feature-heading">
       <header className={feature.heading + " " + styles.featureHeading}>
         <div>
-          <span className={feature.eyebrow}>SELECTED WORK / 04</span>
           <h2 id="aisland-feature-heading">AISLAND</h2>
         </div>
         <nav className={styles.actions} aria-label={zh ? "AISLAND 项目链接" : "AISLAND project links"}>

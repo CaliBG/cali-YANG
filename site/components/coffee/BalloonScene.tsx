@@ -29,8 +29,8 @@ export default function BalloonScene({ compact = false }: { compact?: boolean })
       const viewport = container?.clientHeight ?? innerHeight;
       const offset = viewport < 580 ? 66 : 80;
       const top = root.getBoundingClientRect().top - (container?.getBoundingClientRect().top ?? 0);
-      const distance = Math.max(1, root.offsetHeight - canvas.offsetHeight - offset);
-      const progress = still || preference.matches ? .55 : Math.max(0, Math.min(1, (offset - top) / distance));
+      const distance = compact ? viewport + canvas.offsetHeight : Math.max(1, root.offsetHeight - canvas.offsetHeight - offset);
+      const progress = still || preference.matches ? .55 : Math.max(0, Math.min(1, ((compact ? viewport : offset) - top) / distance));
       // A single smooth, reversible journey. No accumulated transforms or time-based drift.
       const eased = progress * progress * (3 - 2 * progress);
       canvas.style.setProperty("--lift", `${(1 - eased) * 26 - 10}%`);
@@ -54,10 +54,11 @@ export default function BalloonScene({ compact = false }: { compact?: boolean })
       window.visualViewport?.removeEventListener("resize", request);
       preference.removeEventListener("change", change);
     };
-  }, [container, still]);
+  }, [container, still, compact]);
 
   return <div ref={section} className={`${styles.sceneTrack} ${compact ? styles.compactTrack : ""} ${still || reduced ? styles.stillTrack : ""}`}>
     <div ref={stage} className={styles.scene} data-coffee-scene data-progress="0" role={compact ? undefined : "img"} aria-label={compact ? undefined : zh ? "白色联名气球牵着咖啡，随向下滚动升起、向上滚动落下" : "White collaboration balloons carrying coffee rise as you scroll down and descend as you scroll back"}>
+      {compact && <img className={styles.cafePhoto} {...responsive(media("photo-cafe.webp"), "(max-width: 700px) 48vw, 34vw")} src={media("photo-cafe.webp")} alt={zh ? "咖啡吧台上的联名饮品" : "The collaboration coffee at the café counter"} loading="lazy" decoding="async" />}
       <div className={styles.physicalBalloons}>
         <img {...responsive(media("balloons-transparent.webp"), "(max-width: 700px) 65vw, 520px")} src={media("balloons-transparent.webp")} alt="" width={541} height={1059} decoding="async" loading={compact ? "lazy" : "eager"} />
       </div>
