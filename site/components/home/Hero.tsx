@@ -6,6 +6,7 @@
 // 本区块把容器注册为 WebGL section "banner"（components/webgl/store）。
 
 import { useWebGLSectionRef } from "@/components/webgl/store";
+import styles from "./hero.module.css";
 import AsciiScramble from "@/components/AsciiScramble";
 import { useLanguage } from "@/lib/language";
 
@@ -70,7 +71,7 @@ export default function Hero() {
         <HeroBrandLine />
       </div>
       <div
-        className="flex flex-col self-end order-1 lg:order-2 col-span-12 px-2 font-bold text-[7.2svw] lg:text-[6svw] 2xl:text-[5svw] xl:text-[5.6svw] uppercase leading-none"
+        className={`${styles.title} flex flex-col self-end order-1 lg:order-2 col-span-12 px-2 font-bold text-[7.2svw] lg:text-[6svw] 2xl:text-[5svw] xl:text-[5.6svw] uppercase leading-none`}
         style={{ fontVariationSettings: '"wdth" 120' }}
       >
         <AsciiScramble readableOnEntry
