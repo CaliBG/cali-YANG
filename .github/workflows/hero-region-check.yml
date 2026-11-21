@@ -1,7 +1,7 @@
-name: A/B test homepage preload on GitHub Pages
+name: Compare the two live portfolio entry points
 on:
   push:
-    branches: [qa/gh-home-preload-kdrch7-balanced]
+    branches: [qa/gh-home-preload-kdrch7-balanced-entries]
 permissions:
   contents: read
 jobs:
@@ -31,7 +31,7 @@ jobs:
           export ORIGINAL_RESULT_DIR="$RUNNER_TEMP/original-pair"
           export PAIR_ID="combined-$VIEWPORT"
           mkdir -p "$ORIGINAL_RESULT_DIR"
-          if [ "$VIEWPORT" = desktop ]; then order="warm A1 B1 L1 L2 B2 A2 B3 L3 A3"; else order="warm L1 B1 A1 A2 B2 L2 B3 A3 L3"; fi
+          if [ "$VIEWPORT" = desktop ]; then order="liveCFwarm liveGHwarm liveGH1 liveCF1 liveCF2 liveGH2"; else order="liveGHwarm liveCFwarm liveCF1 liveGH1 liveGH2 liveCF2"; fi
           curl -fsS --max-time 8 https://ipinfo.io/json | node -e 'let s="";process.stdin.on("data",c=>s+=c).on("end",()=>{try{const {city,region,country}=JSON.parse(s);console.log(JSON.stringify({city,region,country}))}catch{console.log("{}")}})' > "$ORIGINAL_RESULT_DIR/location.json" || true
           status=0
           for host in $order; do

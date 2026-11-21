@@ -2,12 +2,12 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
 const pp=require(process.env.PUPPETEER_MODULE || 'puppeteer-core');
 const expected=require('./original-digests.json');
 const source='9d5702934920af51f095225a0bf3fc1974eca736';
-const commit='a16244ab2ccfa7d6c609acd7adecc6346a2ddf4d';
+const commit='5e6aff6cdb5c39c1c462ad9937d89e69b1be52ff';
 const dir=process.env.ORIGINAL_RESULT_DIR;
 const label=process.argv[3];
 const isPrimary=label==='main';
 const targets={main:'https://caliyang.cn',fixed:'https://4fa711d1.caliyang-portfolio.pages.dev',candidate:'https://4b602c9b.caliyang-portfolio.pages.dev',engine:'https://54236496.caliyang-portfolio.pages.dev',combined:'https://bf3b1bb1.caliyang-portfolio.pages.dev'};
-const target='https://caliyang.cn'; 
+const target=label.startsWith('liveCF')?'https://route-cf.caliyang.cn':'https://caliyang.cn'; 
 const isHinted=/^[BL]/.test(label);
 const preloads=['3fdd2d7d62473348','7f8209a3d544c539'].map(id=>'<link rel="preload" as="script"'+(label.startsWith('L')?' fetchpriority="low"':'')+' href="/_next/static/chunks/'+id+'.js">').join('');
 const mobile=process.argv[2]==='mobile';
@@ -50,7 +50,7 @@ const curl=url=>spawnSync('curl',['-fsSL','--noproxy','*','--connect-timeout','6
     instrument('useProgram',(g,[p])=>{current(g).prog=p});
     instrument('bindFramebuffer',(g,[target,buf])=>{if(target===g.FRAMEBUFFER||target===g.DRAW_FRAMEBUFFER)current(g).fb=buf});
     const draw=(g,a,indexed)=>{
-      if(frame===null||mem.glCompleteRafs.length>=5400)return;
+      if(frame===null||mem.glCompleteRafs.length>=36000)return;
       const x=current(g);
       if(x.frame!==frame){x.frame=frame;x.indices=0;x.atTarget=0}
       const count=a[1];
@@ -81,26 +81,10 @@ const curl=url=>spawnSync('curl',['-fsSL','--noproxy','*','--connect-timeout','6
     new MutationObserver((records,observer)=>{if(document.querySelector('svg[viewBox="0 0 48 24"]')){mem.marker=performance.now();observer.disconnect()}}).observe(document,{subtree:true,childList:true});
     performance.setResourceTimingBufferSize(1800);
   });
-  if (!label.startsWith('live')) {
-   await client.send('Fetch.enable',{patterns:[{urlPattern:target+'/',resourceType:'Document',requestStage:'Response'}]});
-   client.on('Fetch.requestPaused',async e=>{
-    try{
-     if(e.responseStatusCode!==200) throw Error('Expected 200, got '+e.responseStatusCode);
-     const r=await client.send('Fetch.getResponseBody',{requestId:e.requestId});
-     const raw=Buffer.from(r.body,r.base64Encoded?'base64':'utf8');
-     if(hash(raw)!==expected['index.html']) throw Error('Upstream version changed');
-     const html=raw.toString('utf8');if(!html.includes('<head>')|| html.includes(preloads))throw Error('Unexpected homepage head');
-     const body=Buffer.from(isHinted?html.replace('<head>','<head>'+preloads):html);
-     out.expectedTestHash=hash(body);
-     const headers=e.responseHeaders.filter(h=>!['content-encoding','content-length','transfer-encoding'].includes(h.name.toLowerCase()));
-     await client.send('Fetch.fulfillRequest',{requestId:e.requestId,responseCode:200,responseHeaders:headers,body:body.toString('base64')});
-    } catch(err){out.interceptError=String(err);await client.send('Fetch.failRequest',{requestId:e.requestId,errorReason:'Failed'}).catch(()=>{});}
-   });
-  }
   const first=page.waitForResponse(r=>r.request().isNavigationRequest()&&r.request().frame()===page.mainFrame(),{timeout:60000});
   page.goto(target+'/',{waitUntil:'domcontentloaded',timeout:265000}).catch(e=>{out.navigationError=e.message});
-  const doc=await first;console.log("response", label, doc.status(), doc.remoteAddress());out.remoteAddress=doc.remoteAddress();out.realURL=doc.url();out.status=doc.status();out.documentDelivery={contentEncoding:doc.headers()['content-encoding'],link:doc.headers().link};out.htmlSha=hash(await doc.buffer());out.htmlMatches=out.htmlSha===(out.expectedTestHash||expected['index.html']);if(!out.htmlMatches)throw Error('HTML mismatch');
-  try{await page.waitForFunction(()=>{const v=window.__origObserver; const span=v?.glCompleteRafs?.at(-1)-v?.glCompleteRafs?.[0];return v?.firstOutput && (span>=3000&&!!v.cameraReachedOrigin||span>=48000);},{timeout:240000,polling:250})}catch(e){out.timeout=String(e)}
+  const doc=await first;console.log("response", label, doc.status(), doc.remoteAddress());out.remoteAddress=doc.remoteAddress();out.realURL=doc.url();out.status=doc.status();out.documentDelivery={contentEncoding:doc.headers()['content-encoding'],link:doc.headers().link};out.htmlSha=hash(await doc.buffer());out.htmlMatches=out.htmlSha===(label.startsWith('liveCF')?'c6e15dcb6637bb042d7588e6d95a6fd1ce897abfd2b747627c740e836d3cb9a8':'568a31f70e798ff2c077d213dee0f46a2c507d0f2a6e626837dc1a800fa8ec73');if(!out.htmlMatches)throw Error('HTML mismatch');
+  try{await page.waitForFunction(()=>{const v=window.__origObserver; const span=v?.glCompleteRafs?.at(-1)-v?.glCompleteRafs?.[0];return v?.firstOutput && (span>=3000&&!!v.cameraReachedOrigin||performance.now()-v.firstOutput.at>=120000);},{timeout:290000,polling:250})}catch(e){out.timeout=String(e)}
   out.perf=await page.evaluate(()=>{
     const gl=document.querySelector('canvas[data-engine]')?.getContext('webgl2');const ext=gl?.getExtension('WEBGL_debug_renderer_info');const native=window.__origObserver;
     const ms=native.glCompleteRafs.slice(1).map((x,i)=>x-native.glCompleteRafs[i]);
