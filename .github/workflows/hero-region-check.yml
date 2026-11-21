@@ -1,7 +1,7 @@
-name: Compare the two live portfolio entry points
+name: Verify the Cloudflare portfolio cutover
 on:
   push:
-    branches: [qa/gh-home-preload-kdrch7-balanced-entries]
+    branches: [qa/cloudflare-cutover-20261121]
 permissions:
   contents: read
 jobs:
