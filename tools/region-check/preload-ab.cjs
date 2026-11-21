@@ -8,8 +8,8 @@ const label=process.argv[3];
 const isPrimary=label==='main';
 const targets={main:'https://caliyang.cn',fixed:'https://4fa711d1.caliyang-portfolio.pages.dev',candidate:'https://4b602c9b.caliyang-portfolio.pages.dev',engine:'https://54236496.caliyang-portfolio.pages.dev',combined:'https://bf3b1bb1.caliyang-portfolio.pages.dev'};
 const target='https://caliyang.cn'; 
-const isHinted=label.startsWith('B');
-const preloads=['3fdd2d7d62473348','7f8209a3d544c539'].map(id=>'<link rel="preload" as="script" href="/_next/static/chunks/'+id+'.js">').join('');
+const isHinted=/^[BL]/.test(label);
+const preloads=['3fdd2d7d62473348','7f8209a3d544c539'].map(id=>'<link rel="preload" as="script"'+(label.startsWith('L')?' fetchpriority="low"':'')+' href="/_next/static/chunks/'+id+'.js">').join('');
 const mobile=process.argv[2]==='mobile';
 const exe=process.env.CHROME_BIN;
 function hash(b){return crypto.createHash('sha256').update(b).digest('hex')}
