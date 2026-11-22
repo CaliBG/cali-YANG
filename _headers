@@ -13,17 +13,3 @@
 
 /release.json
   Cache-Control: no-store
-
-/
-  Link: </_next/static/chunks/3fdd2d7d62473348.js>; rel=preload; as=script, </_next/static/chunks/7f8209a3d544c539.js>; rel=preload; as=script
-
-/model/hello.gltf
-  Content-Type: application/json
-  Cache-Control: public, max-age=3600, must-revalidate
-
-/model/cnt.gltf
-  Content-Type: application/json
-  Cache-Control: public, max-age=3600, must-revalidate
-
-/model/cursor.glb
-  Cache-Control: public, max-age=3600, must-revalidate
