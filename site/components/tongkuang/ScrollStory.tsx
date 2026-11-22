@@ -81,7 +81,7 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
         {scene==="2" && !reduced ? <div className={styles.scrubPreview} hidden={ready} role="img" aria-label={zh?"同框设计随滚动逐步展开":"Tongkuang design unfolding with scroll"}
           style={{backgroundImage:`url(${asset("/projects/tongkuang/design-preview.webp")})`,
             backgroundPosition:`${(Math.round(percent*24/100)%5)*25}% ${Math.floor(Math.round(percent*24/100)/5)*25}%`}}/> : <img src={asset(`/projects/tongkuang/${scene==="0"?"story-intro":"design-expanded"}.webp`)} alt={zh?"同框：从一部相机展开为设计、开发与发布的完整过程":"Tongkuang: camera, design, development and release"} loading="lazy" decoding="async" width={1280} height={720} hidden={ready}/>}
-        {featured && <PreviewLinks href="/tongkuang" name={zh ? "同框" : "Tongkuang"} website="https://tongkuang.netlify.app/" />}
+        {featured && <PreviewLinks href="/tongkuang" name={zh ? "同框" : "Tongkuang"} website="https://tongkuang.caliyang.cn/" />}
         {failed&&<button type="button" className={styles.retry} onClick={()=>setRetry(value=>value+1)}>{zh?"重新载入动画":"Reload animation"}</button>}
       </div>
       {featured ? <WorkCaption name={zh ? "同框" : "Tongkuang"} year="2026" /> : <div className={styles.storyCaption}>
