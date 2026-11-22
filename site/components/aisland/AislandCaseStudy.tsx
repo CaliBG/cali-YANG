@@ -10,6 +10,7 @@ const copy = {
     headline: "看一眼任务，接着读下去。",
     introduction: "AISLAND 是一个停在屏幕顶部的 Agent 工作台。在原来的窗口里，你就能知道哪个会话需要回应，也能给支持续发的会话安排下一步。",
     film: "产品短片",
+    walkthrough: "视频解说：在灵动岛里续发任务",
     visit: "访问 AISLAND 官网",
     facts: [["年份", "2026"], ["设计范围", "产品 · 交互 · 视觉 · 开发"], ["桌面", "macOS · Windows"], ["移动端", "iOS · Android"]],
     pain: "用户痛点",
@@ -52,6 +53,7 @@ const copy = {
     headline: "Check the task. Keep your place.",
     introduction: "AISLAND is an agent workspace at the top of the screen. From the window you’re already using, see which conversation needs a reply and send a follow-up to a supported agent.",
     film: "Product film",
+    walkthrough: "Video walkthrough: send a follow-up from the island",
     visit: "Visit the AISLAND website",
     facts: [["Year", "2026"], ["Scope", "Product · Interaction · Visual design · Development"], ["Desktop", "macOS · Windows"], ["Mobile", "iOS · Android"]],
     pain: "The problem",
@@ -134,6 +136,13 @@ export default function AislandCaseStudy() {
       <div className={s.heading}><p>{text.solution}</p><h2>{text.solutionTitle}</h2></div>
       <p className={s.intro}>{text.solutionBody}</p><IslandScene/>
       <p className={s.caption}>{text.solutionNote}</p>
+      <figure className={s.film} id="walkthrough">
+        <video controls playsInline preload="none" poster={media("walkthrough-poster.jpg")} width={1920} height={1080} aria-label={text.walkthrough}>
+          <source src={media("walkthrough.mp4")} type="video/mp4"/>
+          <a href={media("walkthrough.mp4")}>{text.walkthrough}</a>
+        </video>
+        <figcaption>{text.walkthrough}<span>0:42</span></figcaption>
+      </figure>
     </section>
 
     <section className={s.section} id="visuals">
