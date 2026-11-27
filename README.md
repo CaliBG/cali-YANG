@@ -2,12 +2,15 @@
 
 个人设计作品集，基于 Next.js 16、React 19、Three.js / React Three Fiber、Tailwind CSS 和 Lenis 构建。
 
-- **主站（Cloudflare Pages）**：[caliyang.dpdns.org](https://caliyang.dpdns.org/)
+- **主站（Cloudflare Pages）**：[caliyang.cn](https://caliyang.cn/)
+- **旧域名（同一 Cloudflare 项目）**：[caliyang.dpdns.org](https://caliyang.dpdns.org/)
 - **独立备用站（Netlify）**：[caliyang-portfolio.netlify.app](https://caliyang-portfolio.netlify.app/)
 - **源码仓库**：[CaliBG/cali-YANG](https://github.com/CaliBG/cali-YANG)
 - **Cloudflare 发布地址**：[caliyang-portfolio.pages.dev](https://caliyang-portfolio.pages.dev/)
 
-**目标部署架构；须完成下面的首次部署与域名绑定后生效。** 原域名由 Cloudflare Pages 直接托管，Netlify 保留独立地址作为备用，不作为原域名的来源。GitHub `main` 保存源码，`gh-pages` 保存同一份静态构建副本。本文描述配置目标，不代表迁移已经完成。
+2026-11-27 已核对：`caliyang.cn` 与旧域名都绑定在 Cloudflare Pages 的 `caliyang-portfolio` 项目，生产分支为 `main`。GitHub Pages 不是当前主域名的实际来源。
+
+当前发布源码分支为 `release/invitation-20261127`，基于线上已发布的 `e05f85e` 添加邀请码，保留原有视觉与动效。仓库 `main` 含有另一版首屏优化，不能直接作为当前视觉版本的替代品。以下旧的一键脚本要求检出 `main`，本次发布使用当前分支的构建，并通过 Wrangler `pages deploy site/out --project-name caliyang-portfolio --branch main` 上传。继续维护时以当前发布分支为准，或先有意识地整合两条分支。
 
 ## 本地开发
 
