@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode,
 import { useLanguage } from "@/lib/language";
 import { validInvitation } from "@/lib/invitation";
 import styles from "./invitation.module.css";
+import FallingGlass from "./FallingGlass";
 
 const WarmupContext = createContext(false);
 export const useInvitationWarmup = () => useContext(WarmupContext);
@@ -64,13 +65,6 @@ export default function InvitationGate({ children }: { children: ReactNode }) {
   }, [warmup]);
 
   useEffect(() => {
-    if (phase !== "opening") return;
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const timer = setTimeout(() => setPhase("open"), reduced ? 160 : 800);
-    return () => clearTimeout(timer);
-  }, [phase]);
-
-  useEffect(() => {
     if (phase !== "open") return;
     // Hand keyboard navigation back to the page, without jumping its scroll.
     const target = content.current?.querySelector<HTMLElement>("h1, main, article, a[href]");
@@ -82,13 +76,13 @@ export default function InvitationGate({ children }: { children: ReactNode }) {
     else target.setAttribute("tabindex", previous);
   }, [phase]);
 
-  const submit = () => {
+  const submit = (code = value) => {
     if (phase !== "locked") return;
     // Evaluate on every attempt, including tabs left open across midnight.
-    if (!validInvitation(value)) {
+    if (!validInvitation(code)) {
       setError(true);
       input.current?.focus({ preventScroll: true });
-      input.current?.select();
+      requestAnimationFrame(() => input.current?.select());
       return;
     }
     setError(false);
@@ -110,41 +104,35 @@ export default function InvitationGate({ children }: { children: ReactNode }) {
       {children}
     </div>
     {locked && <div ref={dialog} className={styles.gate} data-phase={phase} data-invitation-gate
-      role="dialog" aria-modal="true" aria-labelledby="invitation-title" aria-describedby="invitation-description"
+      role="dialog" aria-modal="true" aria-labelledby="invitation-title"
       onKeyDown={keyboard} onPointerUp={event => event.stopPropagation()}>
-      <div className={styles.glass} aria-hidden="true" />
-      <div className={styles.brand} aria-hidden="true">ZISHUO.DESIGN<span>SELECTED WORKS · 2026</span></div>
+      <FallingGlass opening={phase === "opening"} onComplete={() => setPhase("open")} />
       <div className={styles.panel}>
-        <div className={styles.emblem} aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14.5v2"/></svg>
-        </div>
-        <p className={styles.eyebrow}>A PRIVATE VIEWING</p>
-        <h1 id="invitation-title">{zh ? "凭邀入内。" : "By invitation."}</h1>
-        <p id="invitation-description" className={styles.description}>{zh ? "输入四位邀请码，开启作品集。" : "Enter your four-digit code to explore the portfolio."}</p>
         <form onSubmit={event => { event.preventDefault(); submit(); }} noValidate>
-          <label className={styles.label} htmlFor="invitation-code">{zh ? "邀请码" : "INVITATION CODE"}</label>
+          <label id="invitation-title" className={styles.label} htmlFor="invitation-code">{zh ? "请输入邀请码" : "Enter invitation code"}</label>
           <div className={styles.codeField} data-error={error || undefined}>
             <input ref={input} id="invitation-code" name="invitation-code" type="text" inputMode="numeric" pattern="[0-9]{4}"
               autoComplete="off" enterKeyHint="go" maxLength={4} spellCheck={false} value={value}
               disabled={!hydrated} readOnly={phase === "opening"} aria-invalid={error} aria-describedby="invitation-feedback"
               onPaste={event => {
                 event.preventDefault();
-                setValue(event.clipboardData.getData("text").normalize("NFKC").replace(/\D/g, "").slice(0, 4));
-                setError(false);
+                const next = event.clipboardData.getData("text").normalize("NFKC").replace(/\D/g, "").slice(0, 4);
+                setValue(next); setError(false);
+                if (next.length === 4) submit(next);
               }}
-              onChange={event => { setValue(event.target.value.normalize("NFKC").replace(/\D/g, "").slice(0, 4)); setError(false); }} />
+              onChange={event => {
+                const next = event.target.value.normalize("NFKC").replace(/\D/g, "").slice(0, 4);
+                setValue(next); setError(false);
+                if (next.length === 4) submit(next);
+              }} />
             <div className={styles.digits} aria-hidden="true">{[0, 1, 2, 3].map(i => <span key={i} data-active={value.length === i || undefined}>{value[i] || <i />}</span>)}</div>
           </div>
           <p id="invitation-feedback" className={styles.feedback} role="status" aria-live="polite">
-            {error ? (zh ? "邀请码不正确，请检查后重试。" : "That code isn’t valid. Please try again.") : phase === "opening" ? (zh ? "欢迎，正在为你开启。" : "Welcome. Make yourself at home.") : "\u00a0"}
+            {error ? (zh ? "邀请码不正确，请重试" : "Incorrect code. Please try again.") : "\u00a0"}
           </p>
-          <button className={styles.enter} type="submit" disabled={value.length !== 4 || phase === "opening"}>
-            <span>{phase === "opening" ? (zh ? "欢迎" : "Welcome") : (zh ? "进入作品集" : "Enter portfolio")}</span><span aria-hidden="true">{phase === "opening" ? "✓" : "↗"}</span>
-          </button>
         </form>
-        <noscript><p className={styles.description}>请启用 JavaScript 后输入邀请码。Please enable JavaScript to enter.</p></noscript>
+        <noscript><p>请启用 JavaScript。Please enable JavaScript.</p></noscript>
       </div>
-      <div className={styles.footer}><span>YET ZERO SENSE</span><span>{zh ? "设计 · 产品 · 探索" : "DESIGN · PRODUCTS · EXPLORATIONS"}</span></div>
     </div>}
   </WarmupContext.Provider>;
 }
