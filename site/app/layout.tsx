@@ -9,6 +9,7 @@ import TransitionOrchestrator from "@/components/TransitionOrchestrator";
 import CursorOverlay from "@/components/webgl/CursorOverlay";
 import Header from "@/components/Header";
 import ScrollShell from "@/components/ScrollShell";
+import InvitationGate from "@/components/invitation/InvitationGate";
 import { asset } from "@/lib/asset";
 import "./globals.css";
 
@@ -51,10 +52,12 @@ export default function RootLayout({
             <PointerProvider>
               <PasscodeAccessProvider initialAccess={{ "/2026": false }}>
                 <FullscreenTransitionProvider>
+                  <InvitationGate>
                   <CursorOverlay />
                   <TransitionOrchestrator />
                   <Header />
                   <ScrollShell>{children}</ScrollShell>
+                  </InvitationGate>
                 </FullscreenTransitionProvider>
               </PasscodeAccessProvider>
             </PointerProvider>

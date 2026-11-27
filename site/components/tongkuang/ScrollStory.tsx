@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import {asset} from "@/lib/asset";
 import {useLanguage} from "@/lib/language";
 import {useContainerEl} from "@/lib/scroll-env";
+import {useInvitationWarmup} from "@/components/invitation/InvitationGate";
 import WorkCaption from "@/components/home/WorkCaption";
 import PreviewLinks from "@/components/home/PreviewLinks";
 import styles from "./tongkuang.module.css";
@@ -14,6 +15,8 @@ type Renderer = {render:(progress:number)=>void; destroy:()=>void};
 export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2"; featured?:boolean}) {
   const {lang}=useLanguage(), zh=lang==="zh";
   const container=useContainerEl();
+  const invitationWarmup=useInvitationWarmup();
+  const preloadFeatured=featured&&invitationWarmup;
   const sectionRef=useRef<HTMLElement>(null),stageRef=useRef<HTMLDivElement>(null);
   const rendererRef=useRef<Renderer|null>(null),progress=useRef(0);
   const [percent,setPercent]=useState(0),[ready,setReady]=useState(false);
@@ -67,8 +70,9 @@ export default function ScrollStory({scene="2", featured=false}:{scene?:"0"|"2";
     };
     const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){void load();observer.disconnect();}},{root:container,rootMargin:"1200px 0px"});
     observer.observe(stage);
+    if(preloadFeatured)void load();
     return()=>{disposed=true;observer.disconnect();sizes.disconnect();rendererRef.current=null;renderer?.destroy();root?.remove();};
-  },[container,scene,retry]);
+  },[container,scene,retry,preloadFeatured]);
 
   return <section ref={sectionRef} className={`${styles.scrollStory} ${featured?styles.featured:""}`} aria-label={scene==="0"?(zh?"双摄滚动交互演示":"Dual-camera scroll experience"):(zh?"同框设计展开交互":"Tongkuang design scroll showcase")}>
     <div className={styles.stickyStory}>
