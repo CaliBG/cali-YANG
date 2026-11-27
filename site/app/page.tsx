@@ -13,10 +13,13 @@ import ResearchSubmissions from "@/components/home/ResearchSubmissions";
 import HyperSpace from "@/components/home/HyperSpace";
 import HomeFooter from "@/components/home/HomeFooter";
 import HomeScene from "@/components/webgl/DeferredHomeScene";
+import { asset } from "@/lib/asset";
 
 export default function Home() {
   return (
     <div>
+      <link rel="preload" as="fetch" href={asset("/model/hello.gltf")} crossOrigin="anonymous" fetchPriority="high" />
+      <link rel="preload" as="fetch" href={asset("/model/cursor.glb")} crossOrigin="anonymous" />
       <Hero />
       <SignatureIntro />
       <SelectedWork />
